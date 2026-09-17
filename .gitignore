@@ -1,0 +1,13 @@
+# Bilgisayara özel çalıştırma dosyaları
+runtime/
+backups/
+
+# Yerel ayarlar ve gizli anahtarlar
+.env
+.env.*
+!.env.example
+
+# Günlük ve işletim sistemi dosyaları
+*.log
+.DS_Store
+Thumbs.db
