@@ -14,6 +14,7 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: light-dark(#f4f6f8, #101720);
       border: 1px solid light-dark(#d8dee8, #2b3645);
+      position: relative;
       border-radius: 16px;
       overflow: hidden;
     }
@@ -390,7 +391,31 @@
       #csp-production-sketch .stock-image-modal img { max-height: 72vh; }
     }
   </style>
+  <style>
+    #csp-production-sketch.cloud-locked .shell { filter: blur(3px); pointer-events: none; user-select: none; }
+    #csp-production-sketch .cloud-auth-gate { position: absolute; inset: 0; z-index: 90; display: grid; place-items: center; padding: 18px; background: color-mix(in srgb, #0e3044 60%, transparent); }
+    #csp-production-sketch .cloud-auth-gate[hidden] { display: none; }
+    #csp-production-sketch .cloud-auth-card { width: min(100%, 390px); padding: 24px; color: #172033; background: #fff; border: 1px solid #bcd1da; border-radius: 14px; box-shadow: 0 18px 55px rgba(1, 24, 35, .34); }
+    #csp-production-sketch .cloud-auth-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    #csp-production-sketch .cloud-auth-brand img { width: 78px; height: 48px; object-fit: contain; }
+    #csp-production-sketch .cloud-auth-brand strong { display: block; color: #0b536e; font-size: 17px; }
+    #csp-production-sketch .cloud-auth-brand span { display: block; margin-top: 3px; color: #657485; font-size: 12px; }
+    #csp-production-sketch .cloud-auth-card label { display: grid; gap: 5px; margin: 12px 0; color: #445666; font-size: 12px; font-weight: 600; }
+    #csp-production-sketch .cloud-auth-card input { width: 100%; padding: 10px 11px; color: #172033; background: #fff; border: 1px solid #bdcbd4; border-radius: 8px; font: inherit; }
+    #csp-production-sketch .cloud-auth-actions { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+    #csp-production-sketch .cloud-auth-actions button { flex: 1; }
+    #csp-production-sketch .cloud-auth-status { min-height: 18px; margin: 12px 0 0; color: #a13c2f; font-size: 12px; }
+    #csp-production-sketch .cloud-auth-status.is-ok { color: #0b6d50; }
+    #csp-production-sketch .cloud-user-menu { display: grid; gap: 9px; }
+    #csp-production-sketch .cloud-user-menu p { margin: 0; color: #526371; font-size: 13px; }
+    #csp-production-sketch .user-access-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 8px; padding: 12px; background: #f5fafb; border: 1px solid #d5e5e9; border-radius: 9px; }
+    #csp-production-sketch .user-access-grid label { display: flex; align-items: center; gap: 7px; color: #344858; font-size: 13px; }
+    #csp-production-sketch .user-access-grid input { accent-color: #ef7b1a; }
+    #csp-production-sketch .cloud-sync-note { color: #bfe4ed; font-size: 11px; }
+    @media (max-width: 680px) { #csp-production-sketch .cloud-auth-card { padding: 19px; } }
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <header class="app-topbar">
     <div class="brand">
@@ -402,7 +427,7 @@
     </div>
     <div class="top-actions">
       <button class="top-button" type="button">Bildirimler</button>
-      <button class="top-button" type="button">Murat Y.</button>
+      <button class="top-button" id="cloud-session-button" type="button" aria-haspopup="dialog"><span id="cloud-session-label">Giriş yap</span></button>
     </div>
   </header>
 
@@ -425,6 +450,9 @@
       <button class="nav-button" type="button" data-view="imported-stock"><i data-lucide="package-open" aria-hidden="true"></i> İthal ürün stokları</button>
       <button class="nav-button" type="button" data-view="imported-stock-entry"><i data-lucide="package-plus" aria-hidden="true"></i> İthal ürün girişi</button>
       <button class="nav-button" type="button" data-view="imported-stock-exit"><i data-lucide="package-minus" aria-hidden="true"></i> İthal ürün çıkışı</button>
+      <button class="nav-button" type="button" data-view="imported-sales"><i data-lucide="shopping-cart" aria-hidden="true"></i> İthal ürün satışları</button>
+      <div class="nav-label" data-admin-only hidden>Yönetim</div>
+      <button class="nav-button" type="button" data-view="user-management" data-admin-only hidden><i data-lucide="users-round" aria-hidden="true"></i> Kullanıcı ve erişim</button>
     </nav>
 
     <main class="main">
@@ -556,6 +584,9 @@
         <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-exit-card">İthal ürün stok kartı</label><select id="imported-exit-card"></select></div><div class="field"><label for="imported-exit-date">Çıkış tarihi</label><input id="imported-exit-date" type="date" /></div><div class="field"><label for="imported-exit-quantity">Çıkış miktarı</label><input id="imported-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-exit-reference">İrsaliye / belge no</label><input id="imported-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-exit-partner">Çıkış yeri / teslim alan</label><input id="imported-exit-partner" placeholder="Bölüm, müşteri veya personel" /></div><div class="field span-two"><label for="imported-exit-note">Not</label><textarea id="imported-exit-note" placeholder="Çıkışla ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="exit">Çıkışı stoktan düş</button></div></section>
         <section class="section"><h2>Son ithal ürün çıkışları</h2><p class="table-hint">Çıkış miktarı mevcut stoktan fazla olamaz. Yanlış işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="imported-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Çıkış yeri / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-exit-movements-body"></tbody></table></div></section>
       </section>
+      <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>İthal stok kartlarından müşteri satış siparişi oluşturun. Sipariş kaydı stoğu hemen düşmez.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
+      <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin; stok çıkışı teslim/sevkiyat aşamasında ayrıca işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer">Müşteri</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="imported-sales-note">Not</label><textarea id="imported-sales-note" placeholder="Ödeme, teslimat veya müşteri notu"></textarea></div></div></section><section class="section"><h2>Satış kalemleri</h2><div class="form-grid"><div class="field span-two"><label for="imported-sales-card">İthal ürün stok kartı</label><select id="imported-sales-card"></select></div><div class="field"><label for="imported-sales-quantity">Miktar</label><input id="imported-sales-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-sales-price">Birim satış fiyatı (TL)</label><input id="imported-sales-price" type="number" min="0" step="0.01" placeholder="0" /></div></div><div class="form-actions"><button class="secondary-button" type="button" data-add-imported-sales-item>+ Satır ekle</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
+      <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
       <section class="view report-view" data-page="stock-report">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Stok raporu</h1><p>Stok kartlarının mevcut miktarını, kullanımını ve planlanan ihtiyacını raporlayın.</p></div></div></div>
         <div id="stock-report-page-slot"></div>
@@ -564,6 +595,22 @@
   </div>
   <div class="stock-image-modal" id="stock-image-modal" hidden role="dialog" aria-modal="true" aria-labelledby="stock-image-modal-title"><div class="stock-image-modal-card"><div class="stock-image-modal-head"><div class="stock-image-modal-title-area"><strong id="stock-image-modal-title">Stok görseli</strong><span class="stock-image-modal-meta" id="stock-image-modal-code"></span></div><div class="stock-image-modal-actions"><span class="stock-image-modal-share-status" id="stock-image-modal-share-status" aria-live="polite"></span><button class="primary-button" type="button" data-share-stock-image hidden>WhatsApp'ta paylaş</button><button class="secondary-button" type="button" data-close-stock-image>Görseli kapat</button></div></div><img id="stock-image-modal-image" alt="Büyütülmüş stok görseli" /></div></div>
   <div class="pdf-print-area" id="order-pdf-print"></div>
+  <div class="cloud-auth-gate" id="cloud-auth-gate" hidden>
+    <div class="cloud-auth-card">
+      <div class="cloud-auth-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz" /><div><strong>Güvenli panel girişi</strong><span>Üretim verilerine yetkinizle erişin.</span></div></div>
+      <form id="cloud-login-form" novalidate>
+        <label>Kullanıcı adı<input id="cloud-login-username" autocomplete="username" placeholder="Örn. murat" required /></label>
+        <label>Şifre<input id="cloud-login-password" type="password" autocomplete="current-password" placeholder="Şifreniz" required /></label>
+        <div class="cloud-auth-actions"><button class="primary-button" type="submit">Giriş yap</button></div>
+        <p class="cloud-auth-status" id="cloud-auth-status" aria-live="polite"></p>
+      </form>
+      <div class="cloud-user-menu" id="cloud-user-menu" hidden>
+        <p id="cloud-user-message"></p>
+        <button class="secondary-button" type="button" id="cloud-close-session">Panele dön</button>
+        <button class="primary-button" type="button" id="cloud-sign-out">Çıkış yap</button>
+      </div>
+    </div>
+  </div>
   <script>
     (() => {
       const root = document.getElementById('csp-production-sketch');
@@ -763,6 +810,7 @@
         if (page === 'imported-stock') renderImportedStock();
         if (page === 'imported-stock-entry') renderImportedMovementPage('entry');
         if (page === 'imported-stock-exit') renderImportedMovementPage('exit');
+        if (page === 'imported-sales') renderImportedSalesOrders();
         if (page === 'liner-widths') renderLinerWidths();
         if (page === 'shipping') renderShipping();
         if (page === 'settings') renderBackupStatus();
@@ -1828,6 +1876,7 @@
       const importedStockListBody = root.querySelector('#imported-stock-list-body');
       const importedEntryMovementsBody = root.querySelector('#imported-entry-movements-body');
       const importedExitMovementsBody = root.querySelector('#imported-exit-movements-body');
+      const importedSalesListBody = root.querySelector('#imported-sales-list-body');
       const workorderButton = root.querySelector('[data-generate-workorder]');
       let savedWorkorderId = 1;
       let activeOrderRow = null;
@@ -1949,6 +1998,10 @@
       let pendingImportedStockCardImage = '';
       const importedStockMovements = [];
       let nextImportedStockMovementId = 1;
+      const importedSalesOrders = [];
+      let nextImportedSalesOrderId = 1;
+      let editingImportedSalesOrderId = null;
+      let importedSalesDraftItems = [];
       const stockSummarySelectedIds = new Set();
       let stockSummaryAllRows = [];
       let stockSummaryFilteredRows = [];
@@ -2817,6 +2870,180 @@
         renderImportedMovementPage('exit');
         saveProductionState();
         if (status) status.textContent = 'Stok hareketi geri alındı ve miktar düzeltildi.';
+      };
+      const importedSalesOrderNumber = (id) => {
+        const year = new Date().getFullYear();
+        const number = Number(id) || nextImportedSalesOrderId;
+        return 'ITH-SAT-' + year + '-' + String(number).padStart(4, '0');
+      };
+      const importedSalesCurrency = (value) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Number(value) || 0);
+      const renderImportedSalesItemOptions = () => {
+        const select = root.querySelector('#imported-sales-card');
+        if (!select) return;
+        const previous = Number(select.value);
+        select.replaceChildren();
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = importedStockCards.length ? 'İthal ürün stok kartı seçin' : 'Önce ithal ürün stok kartı ekleyin';
+        select.appendChild(placeholder);
+        importedStockCards.forEach((card) => {
+          const option = document.createElement('option');
+          option.value = card.id;
+          option.textContent = card.code + ' · ' + importedCardLabel(card) + ' · Mevcut: ' + numberFormat(Number(card.onHand) || 0) + ' ' + card.unit;
+          option.selected = card.id === previous;
+          select.appendChild(option);
+        });
+        select.disabled = importedStockCards.length === 0;
+      };
+      const importedSalesDraftTotal = () => importedSalesDraftItems.reduce((total, item) => total + (Number(item.quantity) || 0) * (Number(item.unitPrice) || 0), 0);
+      const renderImportedSalesDraft = () => {
+        const body = root.querySelector('#imported-sales-draft-body');
+        const total = root.querySelector('#imported-sales-total');
+        if (!body) return;
+        body.replaceChildren();
+        if (!importedSalesDraftItems.length) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 6;
+          cell.className = 'empty-workorders';
+          cell.textContent = 'Henüz satış kalemi eklenmedi.';
+          row.appendChild(cell);
+          body.appendChild(row);
+        } else importedSalesDraftItems.forEach((item, index) => {
+          const row = document.createElement('tr');
+          [item.cardCode, item.cardLabel, numberFormat(Number(item.quantity) || 0) + ' ' + item.unit, importedSalesCurrency(item.unitPrice), importedSalesCurrency((Number(item.quantity) || 0) * (Number(item.unitPrice) || 0))].forEach((value, cellIndex) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (cellIndex === 0) cell.className = 'code';
+            if (cellIndex === 1) cell.classList.add('order');
+            row.appendChild(cell);
+          });
+          const actionCell = document.createElement('td');
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'row-action is-cancel';
+          remove.dataset.removeImportedSalesItem = String(index);
+          remove.textContent = 'Kaldır';
+          actionCell.appendChild(remove);
+          row.appendChild(actionCell);
+          body.appendChild(row);
+        });
+        if (total) total.textContent = importedSalesCurrency(importedSalesDraftTotal());
+      };
+      const resetImportedSalesForm = () => {
+        editingImportedSalesOrderId = null;
+        importedSalesDraftItems = [];
+        root.querySelector('#imported-sales-form-title').textContent = 'Yeni ithal ürün satış siparişi';
+        root.querySelector('#imported-sales-no').value = importedSalesOrderNumber();
+        root.querySelector('#imported-sales-date').value = importedMovementDate();
+        ['customer', 'contact', 'address', 'note', 'quantity', 'price'].forEach((field) => { root.querySelector('#imported-sales-' + field).value = ''; });
+        root.querySelector('#imported-sales-status-select').value = 'Taslak';
+        root.querySelector('#imported-sales-form-status').textContent = '';
+        renderImportedSalesItemOptions();
+        renderImportedSalesDraft();
+      };
+      const addImportedSalesItem = () => {
+        const status = root.querySelector('#imported-sales-form-status');
+        const card = importedStockCards.find((item) => item.id === Number(root.querySelector('#imported-sales-card').value));
+        const quantity = Number(root.querySelector('#imported-sales-quantity').value);
+        const unitPrice = Number(root.querySelector('#imported-sales-price').value);
+        if (!card) { status.textContent = 'Satışa eklenecek ithal ürün stok kartını seçin.'; return; }
+        if (!Number.isFinite(quantity) || quantity <= 0) { status.textContent = 'Sıfırdan büyük bir satış miktarı girin.'; return; }
+        if (!Number.isFinite(unitPrice) || unitPrice < 0) { status.textContent = 'Geçerli bir birim satış fiyatı girin.'; return; }
+        importedSalesDraftItems.push({ cardId: card.id, cardCode: card.code, cardLabel: importedCardLabel(card), unit: card.unit, quantity, unitPrice });
+        root.querySelector('#imported-sales-quantity').value = '';
+        root.querySelector('#imported-sales-price').value = '';
+        status.textContent = importedCardLabel(card) + ' satış siparişine eklendi.';
+        renderImportedSalesDraft();
+      };
+      const renderImportedSalesOrders = () => {
+        if (!importedSalesListBody) return;
+        importedSalesListBody.replaceChildren();
+        if (!importedSalesOrders.length) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 7;
+          cell.className = 'empty-workorders';
+          cell.textContent = 'Henüz ithal ürün satış siparişi kaydedilmedi.';
+          row.appendChild(cell);
+          importedSalesListBody.appendChild(row);
+        } else importedSalesOrders.slice().sort((left, right) => Number(right.id) - Number(left.id)).forEach((order) => {
+          const row = document.createElement('tr');
+          const products = (order.items || []).map((item) => item.cardLabel).join(' · ') || '—';
+          [order.orderNo, formatImportedMovementDate(order.date), order.customer || '—', products, importedSalesCurrency(order.total), order.status || 'Taslak'].forEach((value, index) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (index === 0) cell.className = 'code';
+            if (index === 2 || index === 3) cell.classList.add('order');
+            row.appendChild(cell);
+          });
+          const actionCell = document.createElement('td');
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'row-action';
+          edit.dataset.editImportedSales = order.id;
+          edit.textContent = 'Aç';
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'row-action is-cancel';
+          remove.dataset.deleteImportedSales = order.id;
+          remove.textContent = 'Sil';
+          actionCell.append(edit, remove);
+          row.appendChild(actionCell);
+          importedSalesListBody.appendChild(row);
+        });
+        const status = root.querySelector('#imported-sales-status');
+        if (status) status.textContent = importedSalesOrders.length ? String(importedSalesOrders.length) + ' ithal ürün satış siparişi listeleniyor.' : 'İthal ürün satış siparişleri burada listelenir.';
+        applyTableSearch('imported-sales-table');
+      };
+      const openImportedSalesForEdit = (order) => {
+        if (!order) return;
+        editingImportedSalesOrderId = order.id;
+        importedSalesDraftItems = (order.items || []).map((item) => ({ ...item }));
+        root.querySelector('#imported-sales-form-title').textContent = 'İthal ürün satış siparişini düzenle';
+        root.querySelector('#imported-sales-no').value = order.orderNo;
+        root.querySelector('#imported-sales-date').value = order.date || importedMovementDate();
+        root.querySelector('#imported-sales-customer').value = order.customer || '';
+        root.querySelector('#imported-sales-contact').value = order.contact || '';
+        root.querySelector('#imported-sales-address').value = order.address || '';
+        root.querySelector('#imported-sales-status-select').value = order.status || 'Taslak';
+        root.querySelector('#imported-sales-note').value = order.note || '';
+        root.querySelector('#imported-sales-form-status').textContent = '';
+        renderImportedSalesItemOptions();
+        renderImportedSalesDraft();
+        show('imported-sales-form');
+      };
+      const saveImportedSalesOrder = () => {
+        const status = root.querySelector('#imported-sales-form-status');
+        const customer = root.querySelector('#imported-sales-customer').value.trim();
+        if (!customer) { status.textContent = 'Müşteri adı girilmelidir.'; return; }
+        if (!importedSalesDraftItems.length) { status.textContent = 'En az bir satış kalemi ekleyin.'; return; }
+        const existing = importedSalesOrders.find((order) => order.id === editingImportedSalesOrderId);
+        const order = {
+          id: editingImportedSalesOrderId || nextImportedSalesOrderId++,
+          orderNo: root.querySelector('#imported-sales-no').value || importedSalesOrderNumber(),
+          date: root.querySelector('#imported-sales-date').value || importedMovementDate(),
+          customer,
+          contact: root.querySelector('#imported-sales-contact').value.trim(),
+          address: root.querySelector('#imported-sales-address').value.trim(),
+          status: root.querySelector('#imported-sales-status-select').value,
+          note: root.querySelector('#imported-sales-note').value.trim(),
+          items: importedSalesDraftItems.map((item) => ({ ...item })),
+          total: importedSalesDraftTotal()
+        };
+        if (existing) importedSalesOrders.splice(importedSalesOrders.indexOf(existing), 1, order);
+        else importedSalesOrders.unshift(order);
+        renderImportedSalesOrders();
+        saveProductionState();
+        show('imported-sales');
+      };
+      const deleteImportedSalesOrder = (id) => {
+        const index = importedSalesOrders.findIndex((order) => order.id === Number(id));
+        if (index === -1) return;
+        if (!window.confirm('Bu satış siparişi silinsin mi? Stokta herhangi bir değişiklik yapılmaz.')) return;
+        importedSalesOrders.splice(index, 1);
+        renderImportedSalesOrders();
+        saveProductionState();
       };
       const renderStockDemand = () => {
         stockDemandListBody.replaceChildren();
@@ -4213,6 +4440,7 @@
         stockCards: stockCards.map((card) => ({ ...card, image: card.imageKey ? '' : card.image })),
         importedStockCards: importedStockCards.map((card) => ({ ...card, image: card.imageKey ? '' : card.image })),
         importedStockMovements: importedStockMovements.map((movement) => ({ ...movement })),
+        importedSalesOrders: importedSalesOrders.map((order) => ({ ...order, items: (order.items || []).map((item) => ({ ...item })) })),
         workorderRecords: workorderRecords.map((record) => {
           const { orderRow, ...savedRecord } = record;
           return { ...savedRecord, orderId: orderRow?.dataset.orderId || '' };
@@ -4223,6 +4451,7 @@
         nextStockCardId,
         nextImportedStockCardId,
         nextImportedStockMovementId,
+        nextImportedSalesOrderId,
         linerStarterCardsImported,
         savedWorkorderId
       });
@@ -4303,6 +4532,8 @@
           nextImportedStockCardId = Math.max(Number(saved.nextImportedStockCardId) || 1, ...importedStockCards.map((card) => Number(card.id) + 1 || 1));
           importedStockMovements.splice(0, importedStockMovements.length, ...(Array.isArray(saved.importedStockMovements) ? saved.importedStockMovements : []));
           nextImportedStockMovementId = Math.max(Number(saved.nextImportedStockMovementId) || 1, ...importedStockMovements.map((movement) => Number(movement.id) + 1 || 1));
+          importedSalesOrders.splice(0, importedSalesOrders.length, ...(Array.isArray(saved.importedSalesOrders) ? saved.importedSalesOrders : []));
+          nextImportedSalesOrderId = Math.max(Number(saved.nextImportedSalesOrderId) || 1, ...importedSalesOrders.map((order) => Number(order.id) + 1 || 1));
           linerStarterCardsImported = Number(saved.linerStarterCardsImported) || 0;
           Object.entries(saved.series || {}).forEach(([type, value]) => {
             const input = productionSeries[type] && root.querySelector(`#${productionSeries[type].input}`);
@@ -4365,6 +4596,7 @@
       renderImportedStock();
       renderImportedMovementPage('entry');
       renderImportedMovementPage('exit');
+      renderImportedSalesOrders();
       void hydrateStockCardImages();
       void hydrateImportedStockCardImages();
       if (clearedReleasedCodeLabels || starterCardsImported.added || starterCardsImported.updated) saveProductionState();
@@ -4421,7 +4653,23 @@
         const downloadBackupButton = event.target.closest('[data-download-backup]');
         const backupToFolderButton = event.target.closest('[data-backup-to-folder]');
         const restoreBackupButton = event.target.closest('[data-restore-backup]');
+        const openImportedSalesButton = event.target.closest('[data-open-imported-sales]');
+        const addImportedSalesItemButton = event.target.closest('[data-add-imported-sales-item]');
+        const removeImportedSalesItemButton = event.target.closest('[data-remove-imported-sales-item]');
+        const saveImportedSalesButton = event.target.closest('[data-save-imported-sales]');
+        const editImportedSalesButton = event.target.closest('[data-edit-imported-sales]');
+        const deleteImportedSalesButton = event.target.closest('[data-delete-imported-sales]');
         const stockImageModal = root.querySelector('#stock-image-modal');
+        if (openImportedSalesButton) { resetImportedSalesForm(); show('imported-sales-form'); return; }
+        if (addImportedSalesItemButton) { addImportedSalesItem(); return; }
+        if (removeImportedSalesItemButton) {
+          importedSalesDraftItems.splice(Number(removeImportedSalesItemButton.dataset.removeImportedSalesItem), 1);
+          renderImportedSalesDraft();
+          return;
+        }
+        if (saveImportedSalesButton) { saveImportedSalesOrder(); return; }
+        if (editImportedSalesButton) { openImportedSalesForEdit(importedSalesOrders.find((order) => order.id === Number(editImportedSalesButton.dataset.editImportedSales))); return; }
+        if (deleteImportedSalesButton) { deleteImportedSalesOrder(deleteImportedSalesButton.dataset.deleteImportedSales); return; }
         if (openStockImageButton) {
           const image = openStockImageButton.querySelector('img');
           const modalImage = root.querySelector('#stock-image-modal-image');
@@ -4586,9 +4834,15 @@
         if (deleteImportedStockCardButton) {
           const cardId = Number(deleteImportedStockCardButton.dataset.deleteImportedStockCard);
           const hasMovement = importedStockMovements.some((movement) => Number(movement.cardId) === cardId);
+          const hasSalesOrder = importedSalesOrders.some((order) => (order.items || []).some((item) => Number(item.cardId) === cardId));
           if (hasMovement) {
             const status = root.querySelector('#imported-stock-status');
             if (status) status.textContent = 'Hareket kaydı olan stok kartı silinemez. Önce ilgili giriş ve çıkışları geri alın.';
+            return;
+          }
+          if (hasSalesOrder) {
+            const status = root.querySelector('#imported-stock-status');
+            if (status) status.textContent = 'Satış siparişinde kullanılan stok kartı silinemez. Önce ilgili satış siparişini silin.';
             return;
           }
           const index = importedStockCards.findIndex((item) => item.id === cardId);
@@ -5003,6 +5257,433 @@
         saveProductionState();
         show('orders');
       }));
+    })();
+  </script>
+  <script>
+    (() => {
+      const root = document.getElementById('csp-production-sketch');
+      const cloudHost = location.hostname === 'csp-prefabrik-havuz.github.io';
+      const publicStockMode = cloudHost && ['stok-ozeti', 'genel-stok'].includes(new URLSearchParams(location.search).get('sayfa'));
+      const cloudConfig = {
+        url: 'https://dmyvfcxirwecnupgsdtg.supabase.co',
+        publishableKey: 'sb_publishable_pxzY9XruTUBYKDRmYhTzjw_hu4mvA-K',
+        stateKey: 'csp-production-management-state-v2',
+        imageDatabase: 'csp-production-stock-images-v2',
+        imageStore: 'stock-images',
+        imageBucket: 'stock-images'
+      };
+      if (!root || !cloudHost || !window.supabase || !window.supabase.createClient) return;
+
+      const cloud = window.supabase.createClient(cloudConfig.url, cloudConfig.publishableKey, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+      });
+      const gate = root.querySelector('#cloud-auth-gate');
+      const loginForm = root.querySelector('#cloud-login-form');
+      const loginUsername = root.querySelector('#cloud-login-username');
+      const loginPassword = root.querySelector('#cloud-login-password');
+      const status = root.querySelector('#cloud-auth-status');
+      const sessionButton = root.querySelector('#cloud-session-button');
+      const sessionLabel = root.querySelector('#cloud-session-label');
+      const userMenu = root.querySelector('#cloud-user-menu');
+      const userMessage = root.querySelector('#cloud-user-message');
+      const nativeStorageSet = Storage.prototype.setItem;
+      let currentUser = null;
+      let currentProfile = null;
+      let syncTimer = 0;
+      let syncInProgress = false;
+      let suppressCloudSync = false;
+      let editingManagedUserId = '';
+      const managedUsers = new Map();
+      const pageAccessDefinitions = [
+        ['dashboard', 'Ana panel'], ['orders', 'Siparişler'], ['workorders', 'İş emirleri'], ['planning', 'Üretim planı'],
+        ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
+        ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['settings', 'Ayarlar ve yedek'],
+        ['imported-stock', 'İthal ürün stokları'], ['imported-stock-entry', 'İthal ürün girişi'], ['imported-stock-exit', 'İthal ürün çıkışı'], ['imported-sales', 'İthal ürün satışları']
+      ];
+      const pageAliases = { 'order-form': 'orders', 'workorder-select': 'workorders', 'workorder-form': 'workorders', 'imported-sales-form': 'imported-sales', 'user-management': 'user-management' };
+
+      const technicalEmail = (username) => {
+        const cleaned = String(username || '').trim().toLocaleLowerCase('tr-TR').replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u').replace(/[^a-z0-9._-]/g, '');
+        return cleaned ? cleaned + '@csp.local' : '';
+      };
+      const setStatus = (message, ok) => {
+        status.textContent = message || '';
+        status.classList.toggle('is-ok', Boolean(ok));
+      };
+      const setSessionLabel = (message) => { if (sessionLabel) sessionLabel.textContent = message; };
+      const hasState = (value) => Boolean(value && Array.isArray(value.orders) && Array.isArray(value.stockCards));
+      const safeJson = (value) => {
+        try { return JSON.parse(value || 'null'); } catch (error) { return null; }
+      };
+      const userTitle = () => currentProfile?.display_name || currentProfile?.username || 'Kullanıcı';
+      const showGate = (mode) => {
+        const signedIn = mode === 'session' && currentUser;
+        gate.hidden = false;
+        loginForm.hidden = Boolean(signedIn);
+        userMenu.hidden = !signedIn;
+        if (signedIn) {
+          root.classList.remove('cloud-locked');
+          userMessage.textContent = userTitle() + ' olarak giriş yaptınız.';
+          return;
+        }
+        root.classList.add('cloud-locked');
+        setStatus('');
+        window.setTimeout(() => loginUsername?.focus(), 0);
+      };
+      const closeGate = () => {
+        if (!currentUser) return;
+        gate.hidden = true;
+        root.classList.remove('cloud-locked');
+      };
+      const openImageDatabase = () => new Promise((resolve, reject) => {
+        if (!window.indexedDB) { reject(new Error('Tarayıcı görsel deposu desteklenmiyor.')); return; }
+        const request = window.indexedDB.open(cloudConfig.imageDatabase, 1);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('Görsel deposu açılamadı.'));
+      });
+      const readLocalImage = async (key) => {
+        if (!key) return '';
+        const database = await openImageDatabase();
+        return new Promise((resolve, reject) => {
+          const transaction = database.transaction(cloudConfig.imageStore, 'readonly');
+          const request = transaction.objectStore(cloudConfig.imageStore).get(key);
+          request.onsuccess = () => resolve(request.result?.image || '');
+          request.onerror = () => reject(request.error || new Error('Görsel okunamadı.'));
+        });
+      };
+      const imagePathFor = (card, type) => {
+        const filePart = String(card.code || card.id || 'gorsel').replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-');
+        return type + '/' + filePart + '.img';
+      };
+      const uploadImage = async (dataUrl, card, type) => {
+        if (!dataUrl || !String(dataUrl).startsWith('data:image/')) return '';
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+        const path = imagePathFor(card, type);
+        const result = await cloud.storage.from(cloudConfig.imageBucket).upload(path, blob, {
+          upsert: true,
+          contentType: blob.type || 'image/jpeg',
+          cacheControl: '3600'
+        });
+        if (result.error) throw result.error;
+        return cloud.storage.from(cloudConfig.imageBucket).getPublicUrl(path).data.publicUrl;
+      };
+      const enrichCards = async (cards, type) => {
+        if (!Array.isArray(cards)) return;
+        for (const card of cards) {
+          if (card.image && /^https?:\/\//.test(card.image)) { card.imageKey = ''; continue; }
+          if (!card.imageKey) continue;
+          try {
+            const image = await readLocalImage(card.imageKey);
+            if (image) {
+              card.image = await uploadImage(image, card, type);
+              card.imageKey = '';
+            }
+          } catch (error) {
+            // Görsel sonraki kayıt değişikliğinde tekrar denenir.
+          }
+        }
+      };
+      const enrichStateImages = async (state) => {
+        const payload = JSON.parse(JSON.stringify(state || {}));
+        await enrichCards(payload.stockCards, 'uretim');
+        await enrichCards(payload.importedStockCards, 'ithal');
+        return payload;
+      };
+      const pushState = async (state) => {
+        if (!currentUser || syncInProgress || !hasState(state)) return;
+        syncInProgress = true;
+        setSessionLabel('Eşitleniyor…');
+        try {
+          const payload = await enrichStateImages(state);
+          const result = await cloud.from('app_state').upsert({ id: 'main', data: payload, updated_by: currentUser.id });
+          if (result.error) throw result.error;
+          setSessionLabel(userTitle() + ' · çevrimiçi');
+        } catch (error) {
+          setSessionLabel('Eşitleme bekliyor');
+        } finally {
+          syncInProgress = false;
+        }
+      };
+      const queueCloudSync = (state) => {
+        if (suppressCloudSync || !currentUser || !hasState(state)) return;
+        window.clearTimeout(syncTimer);
+        syncTimer = window.setTimeout(() => { void pushState(state); }, 700);
+      };
+      Storage.prototype.setItem = function(key, value) {
+        nativeStorageSet.call(this, key, value);
+        if (this === window.localStorage && key === cloudConfig.stateKey) queueCloudSync(safeJson(value));
+      };
+      const pullState = async () => {
+        const response = await cloud.from('app_state').select('data').eq('id', 'main').maybeSingle();
+        if (response.error) throw response.error;
+        const remoteState = response.data?.data;
+        const localState = safeJson(window.localStorage.getItem(cloudConfig.stateKey));
+        if (hasState(remoteState)) {
+          if (JSON.stringify(remoteState) !== JSON.stringify(localState)) {
+            suppressCloudSync = true;
+            nativeStorageSet.call(window.localStorage, cloudConfig.stateKey, JSON.stringify(remoteState));
+            suppressCloudSync = false;
+            window.location.reload();
+            return true;
+          }
+          return false;
+        }
+        if (hasState(localState)) await pushState(localState);
+        return false;
+      };
+      const renderPublicStockSummary = async () => {
+        root.classList.remove('cloud-locked');
+        root.querySelector('.side-nav').hidden = true;
+        root.querySelectorAll('[data-page]').forEach((node) => node.classList.toggle('is-visible', node.dataset.page === 'stock-summary'));
+        root.querySelector('.stock-summary-report-actions')?.setAttribute('hidden', '');
+        root.querySelector('[data-page="stock-summary"] .table-search')?.setAttribute('hidden', '');
+        const heading = root.querySelector('[data-page="stock-summary"] h1');
+        const detail = root.querySelector('[data-page="stock-summary"] .page-head p');
+        if (heading) heading.textContent = 'Genel stok özeti';
+        if (detail) detail.textContent = 'Güncel ürün stoklarını şifresiz görüntüleyin.';
+        const body = root.querySelector('#stock-summary-list-body');
+        const notice = root.querySelector('#stock-summary-status');
+        const response = await cloud.from('public_stock_summary').select('*').order('stock_code');
+        if (response.error) { notice.textContent = 'Stok özeti şu anda yüklenemedi.'; return; }
+        body.replaceChildren();
+        (response.data || []).forEach((item) => {
+          const row = document.createElement('tr');
+          const values = [
+            '',
+            item.source,
+            [item.stock_group, item.category].filter(Boolean).join(' · ') || '—',
+            [item.material_name, item.variant].filter(Boolean).join(' · ') || '—',
+            Number(item.on_hand || 0).toLocaleString('tr-TR') + ' ' + (item.unit || '')
+          ];
+          values.forEach((value, index) => {
+            const cell = document.createElement('td');
+            if (index === 0 && item.image_url) {
+              const image = document.createElement('img');
+              image.src = item.image_url;
+              image.alt = (item.material_name || 'Ürün') + ' görseli';
+              image.style.cssText = 'width:44px;height:44px;object-fit:cover;border-radius:6px';
+              cell.appendChild(image);
+            } else cell.textContent = index === 0 ? '—' : value;
+            row.appendChild(cell);
+          });
+          body.appendChild(row);
+        });
+        notice.textContent = String((response.data || []).length) + ' ürün şifresiz görüntüleniyor. Yönetim için giriş yapın.';
+      };
+      const isPanelAdmin = () => currentProfile?.role === 'admin';
+      const canAccessPage = (page) => {
+        if (isPanelAdmin()) return true;
+        const permission = pageAliases[page] || page;
+        return Boolean(permission && (currentProfile?.allowed_pages || []).includes(permission));
+      };
+      const applyPageAccess = () => {
+        const admin = isPanelAdmin();
+        root.querySelectorAll('[data-admin-only]').forEach((node) => { node.hidden = !admin; });
+        root.querySelectorAll('.side-nav .nav-button[data-view]').forEach((button) => {
+          button.hidden = !canAccessPage(button.dataset.view);
+        });
+        const active = root.querySelector('.side-nav .nav-button.is-active');
+        if (active?.hidden) {
+          const firstAllowed = Array.from(root.querySelectorAll('.side-nav .nav-button[data-view]')).find((button) => !button.hidden);
+          firstAllowed?.click();
+        }
+      };
+      const accessLabel = (pages) => {
+        const names = pageAccessDefinitions.filter(([id]) => (pages || []).includes(id)).map(([, label]) => label);
+        return names.length ? names.join(', ') : 'Sayfa erişimi yok';
+      };
+      const userManagementStatus = (message, ok) => {
+        const node = root.querySelector('#user-management-status');
+        if (!node) return;
+        node.textContent = message || '';
+        node.classList.toggle('is-ok', Boolean(ok));
+      };
+      const renderManagedPageChoices = (selected = []) => {
+        const list = root.querySelector('#user-management-pages');
+        if (!list) return;
+        list.replaceChildren();
+        pageAccessDefinitions.forEach(([id, label]) => {
+          const item = document.createElement('label');
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.value = id;
+          input.checked = selected.includes(id);
+          item.append(input, document.createTextNode(label));
+          list.appendChild(item);
+        });
+      };
+      const currentManagedPages = () => Array.from(root.querySelectorAll('#user-management-pages input:checked')).map((input) => input.value);
+      const resetManagedUserForm = () => {
+        editingManagedUserId = '';
+        root.querySelector('#user-management-id').value = '';
+        root.querySelector('#user-management-form-title').textContent = 'Yeni kullanıcı';
+        root.querySelector('#user-management-username').value = '';
+        root.querySelector('#user-management-username').readOnly = false;
+        root.querySelector('#user-management-display-name').value = '';
+        root.querySelector('#user-management-department').value = '';
+        root.querySelector('#user-management-role').value = 'user';
+        root.querySelector('#user-management-password').value = '';
+        root.querySelector('#user-management-password').placeholder = 'En az 8 karakter';
+        root.querySelector('#user-management-active').value = 'true';
+        renderManagedPageChoices([]);
+        userManagementStatus('');
+      };
+      const invokeUserManagement = async (body) => {
+        const result = await cloud.functions.invoke('admin-users', { body });
+        if (result.error) throw result.error;
+        if (result.data?.error) throw new Error(result.data.error);
+        return result.data || {};
+      };
+      const renderManagedUsers = async () => {
+        if (!isPanelAdmin()) return;
+        const body = root.querySelector('#user-management-list');
+        if (!body) return;
+        body.replaceChildren();
+        try {
+          const result = await invokeUserManagement({ action: 'list' });
+          managedUsers.clear();
+          (result.users || []).forEach((user) => {
+            managedUsers.set(user.id, user);
+            const row = document.createElement('tr');
+            [user.username, user.display_name || '—', user.department || '—', user.role === 'admin' ? 'Yönetici' : 'Kullanıcı', accessLabel(user.allowed_pages), user.is_active ? 'Aktif' : 'Pasif'].forEach((value) => {
+              const cell = document.createElement('td');
+              cell.textContent = value;
+              row.appendChild(cell);
+            });
+            const action = document.createElement('td');
+            const edit = document.createElement('button');
+            edit.type = 'button';
+            edit.className = 'secondary-button compact-button';
+            edit.dataset.editManagedUser = user.id;
+            edit.textContent = 'Düzenle';
+            action.appendChild(edit);
+            row.appendChild(action);
+            body.appendChild(row);
+          });
+          if (!body.children.length) {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 7;
+            cell.textContent = 'Henüz kullanıcı bulunmuyor.';
+            row.appendChild(cell);
+            body.appendChild(row);
+          }
+        } catch (error) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 7;
+          cell.textContent = 'Kullanıcı listesi şu anda yüklenemedi.';
+          row.appendChild(cell);
+          body.appendChild(row);
+        }
+      };
+      const editManagedUser = (user) => {
+        if (!user) return;
+        editingManagedUserId = user.id;
+        root.querySelector('#user-management-id').value = user.id;
+        root.querySelector('#user-management-form-title').textContent = user.username + ' kullanıcısını düzenle';
+        root.querySelector('#user-management-username').value = user.username;
+        root.querySelector('#user-management-username').readOnly = true;
+        root.querySelector('#user-management-display-name').value = user.display_name || '';
+        root.querySelector('#user-management-department').value = user.department || '';
+        root.querySelector('#user-management-role').value = user.role === 'admin' ? 'admin' : 'user';
+        root.querySelector('#user-management-password').value = '';
+        root.querySelector('#user-management-password').placeholder = 'Değiştirmek için yeni şifre yazın';
+        root.querySelector('#user-management-active').value = user.is_active ? 'true' : 'false';
+        renderManagedPageChoices(user.allowed_pages || []);
+        userManagementStatus('Şifreyi boş bırakırsanız mevcut şifre korunur.');
+        root.querySelector('#user-management-username').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+      const saveManagedUser = async () => {
+        if (!isPanelAdmin()) return;
+        const username = root.querySelector('#user-management-username').value.trim();
+        const displayName = root.querySelector('#user-management-display-name').value.trim();
+        const password = root.querySelector('#user-management-password').value;
+        const payload = {
+          action: editingManagedUserId ? 'update' : 'create',
+          userId: editingManagedUserId,
+          username,
+          displayName,
+          department: root.querySelector('#user-management-department').value.trim(),
+          role: root.querySelector('#user-management-role').value,
+          allowedPages: currentManagedPages(),
+          isActive: root.querySelector('#user-management-active').value === 'true',
+          password
+        };
+        if (!editingManagedUserId && (!username || !password)) { userManagementStatus('Yeni kullanıcı için kullanıcı adı ve şifre girin.'); return; }
+        userManagementStatus('Kullanıcı bilgileri kaydediliyor…', true);
+        try {
+          await invokeUserManagement(payload);
+          resetManagedUserForm();
+          userManagementStatus('Kullanıcı ve erişim bilgileri kaydedildi.', true);
+          await renderManagedUsers();
+        } catch (error) {
+          userManagementStatus(error?.message || 'Kullanıcı bilgileri kaydedilemedi.');
+        }
+      };
+      root.addEventListener('click', (event) => {
+        const navigation = event.target.closest('[data-view], [data-view-button]');
+        const page = navigation?.dataset.view || navigation?.dataset.viewButton;
+        if (page && currentProfile && !canAccessPage(page)) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          setSessionLabel('Bu sayfa için erişiminiz yok');
+          return;
+        }
+        const edit = event.target.closest('[data-edit-managed-user]');
+        if (edit) { editManagedUser(managedUsers.get(edit.dataset.editManagedUser)); return; }
+        if (event.target.closest('[data-reset-managed-user]')) { resetManagedUserForm(); return; }
+        if (event.target.closest('[data-save-managed-user]')) { void saveManagedUser(); }
+      }, true);
+      const establishSession = async (session) => {
+        currentUser = session?.user || null;
+        if (!currentUser) { setSessionLabel('Giriş yap'); showGate('login'); return; }
+        const profileResponse = await cloud.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+        const profile = profileResponse.data;
+        if (profileResponse.error || !profile || !profile.is_active) {
+          await cloud.auth.signOut();
+          currentUser = null;
+          setSessionLabel('Giriş yap');
+          showGate('login');
+          setStatus('Bu kullanıcı için aktif panel erişimi tanımlı değil.');
+          return;
+        }
+        currentProfile = profile;
+        setSessionLabel(userTitle() + ' · çevrimiçi');
+        applyPageAccess();
+        if (isPanelAdmin()) {
+          resetManagedUserForm();
+          void renderManagedUsers();
+        }
+        closeGate();
+        await pullState();
+      };
+      loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = technicalEmail(loginUsername.value);
+        if (!email || !loginPassword.value) { setStatus('Kullanıcı adı ve şifre girin.'); return; }
+        setStatus('Giriş kontrol ediliyor…', true);
+        const response = await cloud.auth.signInWithPassword({ email, password: loginPassword.value });
+        if (response.error || !response.data.session) { setStatus('Kullanıcı adı veya şifre doğru değil.'); return; }
+        loginPassword.value = '';
+        await establishSession(response.data.session);
+      });
+      sessionButton.addEventListener('click', () => { if (currentUser) showGate('session'); else showGate('login'); });
+      root.querySelector('#cloud-close-session').addEventListener('click', closeGate);
+      root.querySelector('#cloud-sign-out').addEventListener('click', async () => {
+        await cloud.auth.signOut();
+        currentUser = null;
+        currentProfile = null;
+        setSessionLabel('Giriş yap');
+        showGate('login');
+      });
+      if (publicStockMode) {
+        gate.hidden = true;
+        void renderPublicStockSummary();
+      } else {
+        void cloud.auth.getSession().then((result) => establishSession(result.data.session)).catch(() => showGate('login'));
+      }
     })();
   </script>
 </div>
