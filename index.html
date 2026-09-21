@@ -45,7 +45,8 @@
     #csp-production-sketch .side-nav { padding: 15px 10px; background: light-dark(#ffffff, #17212d); border-right: 1px solid light-dark(#dde3eb, #2b3645); }
     #csp-production-sketch .nav-label { padding: 8px 10px 6px; color: light-dark(#697687, #a9b6c6); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
     #csp-production-sketch .nav-button { color: light-dark(#2b394a, #d7dfeb); width: 100%; text-align: left; margin: 2px 0; display: flex; align-items: center; gap: 10px; }
-    #csp-production-sketch .nav-button.is-active { color: light-dark(#083549, #e5fbff); background: light-dark(#d9f0f4, #19485a); font-weight: 500; }
+        #csp-production-sketch .side-nav .nav-button[hidden], #csp-production-sketch .side-nav .nav-label[hidden], #csp-production-sketch [data-admin-only][hidden] { display: none !important; }
+#csp-production-sketch .nav-button.is-active { color: light-dark(#083549, #e5fbff); background: light-dark(#d9f0f4, #19485a); font-weight: 500; }
     #csp-production-sketch .main { padding: 20px; min-width: 0; }
     #csp-production-sketch .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
     #csp-production-sketch .dashboard-actions, #csp-production-sketch .table-search { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
