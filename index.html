@@ -416,6 +416,14 @@
     #csp-production-sketch .user-access-grid label { display: flex; align-items: center; gap: 7px; color: #344858; font-size: 13px; }
     #csp-production-sketch .user-access-grid input { accent-color: #ef7b1a; }
     #csp-production-sketch .cloud-sync-note { color: #bfe4ed; font-size: 11px; }
+        #csp-production-sketch .public-access-section { border-top: 4px solid #ef7b1a; }
+    #csp-production-sketch .public-access-option { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: #fff8ef; border: 1px solid #f5c38f; border-radius: 10px; color: #344858; cursor: pointer; }
+    #csp-production-sketch .public-access-option input { margin-top: 3px; accent-color: #ef7b1a; }
+    #csp-production-sketch .public-access-option strong, #csp-production-sketch .public-access-option span span { display: block; }
+    #csp-production-sketch .public-access-option span span { margin-top: 4px; color: #667987; font-size: 12px; line-height: 1.45; }
+    #csp-production-sketch .public-link-row { display: flex; gap: 8px; margin-top: 12px; }
+    #csp-production-sketch .public-link-row input { flex: 1; min-width: 0; background: #f5fafb; }
+    @media (max-width: 680px) { #csp-production-sketch .public-link-row { flex-direction: column; } }
     @media (max-width: 680px) { #csp-production-sketch .cloud-auth-card { padding: 19px; } }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -591,7 +599,16 @@
       <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>İthal stok kartlarından müşteri satış siparişi oluşturun. Sipariş kaydı stoğu hemen düşmez.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin; stok çıkışı teslim/sevkiyat aşamasında ayrıca işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer">Müşteri</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="imported-sales-note">Not</label><textarea id="imported-sales-note" placeholder="Ödeme, teslimat veya müşteri notu"></textarea></div></div></section><section class="section"><h2>Satış kalemleri</h2><div class="form-grid"><div class="field span-two"><label for="imported-sales-card">İthal ürün stok kartı</label><select id="imported-sales-card"></select></div><div class="field"><label for="imported-sales-quantity">Miktar</label><input id="imported-sales-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-sales-price">Birim satış fiyatı (TL)</label><input id="imported-sales-price" type="number" min="0" step="0.01" placeholder="0" /></div></div><div class="form-actions"><button class="secondary-button" type="button" data-add-imported-sales-item>+ Satır ekle</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
       <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
-      <section class="view report-view" data-page="stock-report">
+            <section class="view report-view" data-page="user-management">
+        <section class="section public-access-section">
+          <h2>Şifresiz açık sayfalar</h2>
+          <p class="table-hint">Bu sayfalar, bağlantıyı bilen herkes tarafından görüntülenebilir. Güvenli paylaşım için şu an yalnızca Genel stok özeti şifresiz açılabilir; ekleme, düzenleme ve rapor alma kapalı kalır.</p>
+          <label class="public-access-option"><input id="public-stock-summary-enabled" type="checkbox" /><span><strong>Genel stok özetini şifresiz aç</strong><span>Ürün görselleri ve güncel stok miktarları giriş yapmadan, yalnızca görüntüleme amaçlı gösterilir.</span></span></label>
+          <div class="public-link-row"><input id="public-stock-summary-link" readonly aria-label="Şifresiz genel stok özeti bağlantısı" /><button class="secondary-button" type="button" data-copy-public-stock-link>Bağlantıyı kopyala</button></div>
+          <div class="form-actions"><span class="muted-note" id="public-access-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-public-access>Şifresiz erişimi kaydet</button></div>
+        </section>
+      </section>
+<section class="view report-view" data-page="stock-report">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Stok raporu</h1><p>Stok kartlarının mevcut miktarını, kullanımını ve planlanan ihtiyacını raporlayın.</p></div></div></div>
         <div id="stock-report-page-slot"></div>
       </section>
@@ -5274,7 +5291,9 @@
     (() => {
       const root = document.getElementById('csp-production-sketch');
       const cloudHost = location.hostname === 'csp-prefabrik-havuz.github.io';
-      const publicStockMode = cloudHost && ['stok-ozeti', 'genel-stok'].includes(new URLSearchParams(location.search).get('sayfa'));
+            const publicPageAliases = { 'stok-ozeti': 'stock-summary', 'genel-stok': 'stock-summary' };
+      const requestedPublicPage = cloudHost ? publicPageAliases[new URLSearchParams(location.search).get('sayfa')] : '';
+      const publicStockMode = requestedPublicPage === 'stock-summary';
       const cloudConfig = {
         url: 'https://dmyvfcxirwecnupgsdtg.supabase.co',
         publishableKey: 'sb_publishable_pxzY9XruTUBYKDRmYhTzjw_hu4mvA-K',
@@ -5309,6 +5328,7 @@
       let suppressCloudSync = false;
       let editingManagedUserId = '';
       const managedUsers = new Map();
+            const publicPageSettings = new Map();
       const pageAccessDefinitions = [
         ['dashboard', 'Ana panel'], ['orders', 'Siparişler'], ['workorders', 'İş emirleri'], ['planning', 'Üretim planı'],
         ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
@@ -5447,7 +5467,54 @@
         if (hasState(localState)) await pushState(localState);
         return false;
       };
-      const renderPublicStockSummary = async () => {
+            const publicStockSummaryLink = () => location.origin + location.pathname + '?sayfa=stok-ozeti';
+      const publicAccessStatus = (message, ok) => {
+        const node = root.querySelector('#public-access-status');
+        if (!node) return;
+        node.textContent = message || '';
+        node.classList.toggle('is-ok', Boolean(ok));
+      };
+      const renderPublicAccessControls = () => {
+        const enabled = root.querySelector('#public-stock-summary-enabled');
+        const link = root.querySelector('#public-stock-summary-link');
+        if (enabled) enabled.checked = Boolean(publicPageSettings.get('stock-summary'));
+        if (link) link.value = publicStockSummaryLink();
+      };
+      const loadPublicPageSettings = async () => {
+        const response = await cloud.from('public_page_settings').select('page_id, is_public');
+        if (response.error) throw response.error;
+        publicPageSettings.clear();
+        (response.data || []).forEach((item) => publicPageSettings.set(item.page_id, Boolean(item.is_public)));
+        renderPublicAccessControls();
+        return publicPageSettings;
+      };
+      const savePublicAccess = async () => {
+        if (!isPanelAdmin()) return;
+        const enabled = root.querySelector('#public-stock-summary-enabled');
+        if (!enabled) return;
+        publicAccessStatus('Şifresiz erişim ayarı kaydediliyor…', true);
+        const response = await cloud.from('public_page_settings').upsert({
+          page_id: 'stock-summary',
+          is_public: enabled.checked,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'page_id' });
+        if (response.error) { publicAccessStatus('Şifresiz erişim ayarı kaydedilemedi.'); return; }
+        publicPageSettings.set('stock-summary', enabled.checked);
+        publicAccessStatus(enabled.checked ? 'Genel stok özeti artık şifresiz açılabilir.' : 'Genel stok özeti yeniden giriş gerektiriyor.', true);
+      };
+      const copyPublicStockSummaryLink = async () => {
+        const link = publicStockSummaryLink();
+        try {
+          await navigator.clipboard.writeText(link);
+          publicAccessStatus('Bağlantı kopyalandı.', true);
+        } catch (error) {
+          const input = root.querySelector('#public-stock-summary-link');
+          input?.focus();
+          input?.select();
+          publicAccessStatus('Bağlantıyı seçtim; kopyalamak için Ctrl + C tuşlarına basın.');
+        }
+      };
+const renderPublicStockSummary = async () => {
         root.classList.remove('cloud-locked');
         root.querySelector('.side-nav').hidden = true;
         root.querySelectorAll('[data-page]').forEach((node) => node.classList.toggle('is-visible', node.dataset.page === 'stock-summary'));
@@ -5658,7 +5725,9 @@
         const edit = event.target.closest('[data-edit-managed-user]');
         if (edit) { editManagedUser(managedUsers.get(edit.dataset.editManagedUser)); return; }
         if (event.target.closest('[data-reset-managed-user]')) { resetManagedUserForm(); return; }
-        if (event.target.closest('[data-save-managed-user]')) { void saveManagedUser(); }
+                if (event.target.closest('[data-save-managed-user]')) { void saveManagedUser(); return; }
+        if (event.target.closest('[data-save-public-access]')) { void savePublicAccess(); return; }
+        if (event.target.closest('[data-copy-public-stock-link]')) { void copyPublicStockSummaryLink(); }
       }, true);
       const establishSession = async (session) => {
         currentUser = session?.user || null;
@@ -5679,6 +5748,7 @@
         if (isPanelAdmin()) {
           resetManagedUserForm();
           void renderManagedUsers();
+                    void loadPublicPageSettings().catch(() => publicAccessStatus('Şifresiz erişim ayarları şu anda yüklenemedi.'));
         }
         closeGate();
         await pullState();
@@ -5718,6 +5788,17 @@
         showGate('login');
       });
       if (publicStockMode) {
+                void loadPublicPageSettings().then((settings) => {
+          if (!settings.get(requestedPublicPage)) {
+            void cloud.auth.getSession().then((result) => establishSession(result.data.session)).catch(() => showGate('login'));
+            return;
+          }
+          gate.hidden = true;
+          void renderPublicStockSummary();
+        }).catch(() => {
+          void cloud.auth.getSession().then((result) => establishSession(result.data.session)).catch(() => showGate('login'));
+        });
+        return;
         gate.hidden = true;
         void renderPublicStockSummary();
       } else {
