@@ -5435,13 +5435,22 @@
         await enrichCards(payload.importedStockCards, 'ithal');
         return payload;
       };
+      const invokePanelState = async (body) => {
+        const sessionResult = await cloud.auth.getSession();
+        const accessToken = sessionResult.data.session?.access_token;
+        if (!accessToken) throw new Error('Oturum bulunamadı. Lütfen yeniden giriş yapın.');
+        return cloud.functions.invoke('panel-state', {
+          body,
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
+      };
       const pushState = async (state) => {
         if (!currentUser || syncInProgress || !hasState(state)) return;
         syncInProgress = true;
         setSessionLabel('Eşitleniyor…');
         try {
           const payload = await enrichStateImages(state);
-          const result = await cloud.functions.invoke('panel-state', { body: { action: 'push', state: payload } });
+          const result = await invokePanelState({ action: 'push', state: payload });
           if (result.error || result.data?.error) throw (result.error || new Error(result.data.error));
           setSessionLabel(userTitle() + ' · çevrimiçi');
         } catch (error) {
@@ -5460,7 +5469,7 @@
         if (key === cloudConfig.stateKey) queueCloudSync(safeJson(value));
       };
       const pullState = async () => {
-        const response = await cloud.functions.invoke('panel-state', { body: { action: 'pull' } });
+        const response = await invokePanelState({ action: 'pull' });
         if (response.error || response.data?.error) throw (response.error || new Error(response.data.error));
         const remoteState = response.data?.state;
         const localState = safeJson(window.localStorage.getItem(cloudConfig.stateKey));
