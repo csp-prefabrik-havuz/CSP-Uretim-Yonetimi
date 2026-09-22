@@ -5347,8 +5347,18 @@
       };
       const setSessionLabel = (message) => { if (sessionLabel) sessionLabel.textContent = message; };
       const hasState = (value) => Boolean(value && Array.isArray(value.orders) && Array.isArray(value.stockCards));
+      const hasMeaningfulRecords = (value) => Boolean(value && [
+        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'workorderRecords'
+      ].some((key) => Array.isArray(value[key]) && value[key].length));
       const safeJson = (value) => {
         try { return JSON.parse(value || 'null'); } catch (error) { return null; }
+      };
+      const stableStateJson = (value) => {
+        if (Array.isArray(value)) return '[' + value.map(stableStateJson).join(',') + ']';
+        if (value && typeof value === 'object') {
+          return '{' + Object.keys(value).sort().map((key) => JSON.stringify(key) + ':' + stableStateJson(value[key])).join(',') + '}';
+        }
+        return JSON.stringify(value);
       };
       const userTitle = () => currentProfile?.display_name || currentProfile?.username || 'Kullanıcı';
       const showGate = (mode) => {
@@ -5454,14 +5464,28 @@
         if (response.error || response.data?.error) throw (response.error || new Error(response.data.error));
         const remoteState = response.data?.state;
         const localState = safeJson(window.localStorage.getItem(cloudConfig.stateKey));
+        if (!response.data?.has_state) {
+          // İlk çevrimiçi geçişte yönetici bilgisayarındaki mevcut kayıtları buluta taşır.
+          // Böylece boş bulut verisi, bilgisayardaki stok kartlarını silmez.
+          if (isPanelAdmin() && hasMeaningfulRecords(localState)) await pushState(localState);
+          return false;
+        }
         if (hasState(remoteState)) {
-          if (JSON.stringify(remoteState) !== JSON.stringify(localState)) {
+          const remoteFingerprint = stableStateJson(remoteState);
+          const reloadKey = cloudConfig.stateKey + '-last-pull';
+          if (remoteFingerprint !== stableStateJson(localState)) {
             suppressCloudSync = true;
             nativeStorageSet.call(window.localStorage, cloudConfig.stateKey, JSON.stringify(remoteState));
             suppressCloudSync = false;
-            window.location.reload();
-            return true;
+            // Aynı bulut verisi ikinci kez gelirse yeniden yükleme döngüsüne girme.
+            if (window.sessionStorage.getItem(reloadKey) !== remoteFingerprint) {
+              window.sessionStorage.setItem(reloadKey, remoteFingerprint);
+              window.location.reload();
+              return true;
+            }
+            return false;
           }
+          window.sessionStorage.removeItem(reloadKey);
           return false;
         }
         if (hasState(localState)) await pushState(localState);
