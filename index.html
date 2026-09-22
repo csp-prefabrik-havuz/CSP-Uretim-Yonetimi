@@ -5457,7 +5457,7 @@
       };
       Storage.prototype.setItem = function(key, value) {
         nativeStorageSet.call(this, key, value);
-        if (this === window.localStorage && key === cloudConfig.stateKey) queueCloudSync(safeJson(value));
+        if (key === cloudConfig.stateKey) queueCloudSync(safeJson(value));
       };
       const pullState = async () => {
         const response = await cloud.functions.invoke('panel-state', { body: { action: 'pull' } });
