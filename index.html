@@ -5640,6 +5640,7 @@
       let currentUser = null;
       let currentProfile = null;
       let syncTimer = 0;
+      let cloudRefreshTimer = 0;
       let syncInProgress = false;
       let suppressCloudSync = false;
       let editingManagedUserId = '';
@@ -5807,6 +5808,17 @@
         }
         if (hasState(localState)) await pushState(localState);
         return false;
+      };
+      const startCloudRefresh = () => {
+        window.clearInterval(cloudRefreshTimer);
+        if (!currentUser) return;
+        // Açık kalan diğer bilgisayarlarda da silme ve stok değişiklikleri
+        // kısa süre içinde görünür. Yerel kaydetme sürerken uzaktan veri
+        // alınmaz; önce kullanıcının değişikliği buluta gönderilir.
+        cloudRefreshTimer = window.setInterval(() => {
+          if (!currentUser || syncInProgress || suppressCloudSync) return;
+          void pullState().catch(() => { /* Bağlantı geçici olarak kesik olabilir. */ });
+        }, 10000);
       };
       const publicStockSummaryLink = () => location.origin + location.pathname + '?sayfa=stok-ozeti';
       const publicAccessStatus = (message, ok) => {
@@ -6099,6 +6111,7 @@
         }
         closeGate();
         await pullState();
+        startCloudRefresh();
       };
       loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -6129,6 +6142,8 @@
       root.querySelector('#cloud-close-session').addEventListener('click', closeGate);
       root.querySelector('#cloud-sign-out').addEventListener('click', async () => {
         await cloud.auth.signOut();
+        window.clearInterval(cloudRefreshTimer);
+        cloudRefreshTimer = 0;
         currentUser = null;
         currentProfile = null;
         setSessionLabel('Giriş yap');
