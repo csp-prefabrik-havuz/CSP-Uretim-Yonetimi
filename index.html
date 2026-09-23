@@ -608,8 +608,8 @@
         </section>
       </section>
       <section class="view report-view" data-page="imported-stock">
-        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün stokları</h1><p>Üretim stoklarından bağımsız olarak ithal ürünlerinizi buradan takip edin.</p></div></div><div class="form-actions"><button class="primary-button" type="button" data-open-import-stock-card>+ Yeni ithal ürün</button></div></div>
-        <section class="section"><p class="table-hint" id="imported-stock-status" aria-live="polite">İthal ürün stok kartları burada listelenir.</p><div class="table-search"><input type="search" placeholder="İthal ürün stoklarında ara" data-table-search-input="imported-stock-table" aria-label="İthal ürün stoklarında ara" /><button class="secondary-button" type="button" data-table-search-button="imported-stock-table">Ara</button></div><div class="table-wrap"><table class="stock-table" id="imported-stock-table"><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Kategori</th><th>Ürün / varyant</th><th>Birim</th><th>İlk stok</th><th>Mevcut</th><th>Minimum</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-stock-list-body"></tbody></table></div></section>
+        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün stokları</h1><p>Üretim stoklarından bağımsız olarak ithal ürünlerinizi buradan takip edin.</p></div></div><div class="form-actions"><input id="imported-stock-import-file" type="file" accept=".xlsx,.xls,.csv" hidden data-imported-stock-import-file /><button class="secondary-button" type="button" data-import-imported-stock-cards>Excel'den al</button><button class="secondary-button" type="button" data-export-imported-stock-cards-excel>Excel'e aktar</button><button class="primary-button" type="button" data-open-import-stock-card>+ Yeni ithal ürün</button></div></div>
+        <section class="section"><p class="table-hint" id="imported-stock-status" aria-live="polite">İthal ürün stok kartları burada listelenir.</p><p class="muted-note">Excel aktarımında: Stok Kodu, Grup, Kategori, Ürün Adı, Varyant / Özellik, Birim, İlk Stok, Mevcut, Minimum ve Not sütunları kullanılabilir. Aynı stok kodu varsa kart güncellenir.</p><div class="table-search"><input type="search" placeholder="İthal ürün stoklarında ara" data-table-search-input="imported-stock-table" aria-label="İthal ürün stoklarında ara" /><button class="secondary-button" type="button" data-table-search-button="imported-stock-table">Ara</button></div><div class="table-wrap"><table class="stock-table" id="imported-stock-table"><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Kategori</th><th>Ürün / varyant</th><th>Birim</th><th>İlk stok</th><th>Mevcut</th><th>Minimum</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-stock-list-body"></tbody></table></div></section>
       </section>
       <section class="view" data-page="imported-stock-form">
         <div class="page-head"><div><h1 id="imported-stock-form-title">Yeni ithal ürün</h1><p>İthal ürüne ait stok kartını kaydedin.</p></div><button class="secondary-button" type="button" data-view-button="imported-stock">İthal ürün stoklarına dön</button></div>
@@ -2263,7 +2263,7 @@
         group: ['isemrigrubu', 'stokgrubu', 'grup'],
         category: ['kategori', 'urungrubu', 'malzemekategorisi'],
         name: ['malzemeadi', 'malzeme', 'urunadi', 'urun'],
-        variant: ['renkdesenozellik', 'desenrenkozellik', 'renkdesen', 'desenrenk', 'varyant', 'ozellik'],
+        variant: ['renkdesenozellik', 'desenrenkozellik', 'renkdesen', 'desenrenk', 'varyant', 'ozellik', 'varyantozellik'],
         unit: ['birim', 'olcubirimi'],
         initial: ['ilkstok', 'baslangicstogu', 'baslangicstok', 'ilkstokmiktari'],
         onHand: ['mevcut', 'mevcutmiktar', 'mevcutstok', 'toplamkalan', 'kalan', 'stokmiktari'],
@@ -2407,6 +2407,105 @@
           renderStock();
           saveProductionState();
           status.textContent = `${source.sheetName} sayfasından ${result.created} yeni kart eklendi, ${result.updated} kart güncellendi.${result.skipped ? ` ${result.skipped} satır atlandı.` : ''}${posted ? ` ${posted} iş emrinin stok işlemi tamamlandı.` : ''}`;
+        } catch (error) {
+          status.textContent = `Excel aktarımı yapılamadı: ${error.message || 'Dosya okunamadı.'}`;
+        }
+      };
+      const importedStockImportHeader = (rows) => {
+        for (let index = 0; index < Math.min(rows.length, 25); index += 1) {
+          const columns = stockImportColumnMap(rows[index]);
+          if (columns.has('name')) return { index, columns };
+        }
+        return null;
+      };
+      const importImportedStockCards = (rows, header) => {
+        let created = 0;
+        let updated = 0;
+        let skipped = 0;
+        rows.slice(header.index + 1).forEach((row) => {
+          if (!Array.isArray(row) || !row.some((value) => String(value ?? '').trim() !== '')) return;
+          const name = String(stockImportValue(row, header.columns, 'name')).trim();
+          if (!name) { skipped += 1; return; }
+          const suppliedCode = String(stockImportValue(row, header.columns, 'code')).trim();
+          const variant = String(stockImportValue(row, header.columns, 'variant')).trim();
+          const group = String(stockImportValue(row, header.columns, 'group')).trim();
+          const category = String(stockImportValue(row, header.columns, 'category')).trim();
+          const byCode = suppliedCode ? importedStockCards.find((card) => normaliseSearchText(card.code) === normaliseSearchText(suppliedCode)) : null;
+          const byIdentity = importedStockCards.find((card) => normaliseSearchText(card.name) === normaliseSearchText(name) && normaliseSearchText(card.variant) === normaliseSearchText(variant));
+          const current = byCode || byIdentity;
+          const code = suppliedCode || current?.code || suggestedImportedStockCode(name, current?.id || null);
+          const conflictingCard = importedStockCards.find((card) => normaliseSearchText(card.code) === normaliseSearchText(code) && card.id !== current?.id);
+          if (conflictingCard) { skipped += 1; return; }
+          const unit = stockImportHasValue(row, header.columns, 'unit') ? stockImportUnit(stockImportValue(row, header.columns, 'unit'), 'adet') : (current?.unit || 'adet');
+          const hasInitial = stockImportHasValue(row, header.columns, 'initial');
+          const hasOnHand = stockImportHasValue(row, header.columns, 'onHand');
+          const hasMinimum = stockImportHasValue(row, header.columns, 'minimum');
+          const hasNote = stockImportHasValue(row, header.columns, 'note');
+          const initialQuantity = hasInitial ? stockImportNumber(stockImportValue(row, header.columns, 'initial')) : (Number(current?.initialQuantity ?? current?.onHand) || 0);
+          const importedOnHand = hasOnHand ? stockImportNumber(stockImportValue(row, header.columns, 'onHand')) : null;
+          if (current) {
+            const previousInitial = Number(current.initialQuantity ?? current.onHand) || 0;
+            const previousOnHand = Number(current.onHand) || 0;
+            Object.assign(current, {
+              code,
+              group: group || current.group || '',
+              category: category || current.category || '',
+              name,
+              variant,
+              unit,
+              initialQuantity,
+              onHand: importedOnHand === null ? (hasInitial ? previousOnHand + initialQuantity - previousInitial : previousOnHand) : importedOnHand,
+              minimum: hasMinimum ? Math.max(0, stockImportNumber(stockImportValue(row, header.columns, 'minimum'))) : current.minimum,
+              note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : current.note
+            });
+            updated += 1;
+            return;
+          }
+          importedStockCards.unshift({
+            id: nextImportedStockCardId++,
+            code,
+            group,
+            category,
+            name,
+            variant,
+            unit,
+            initialQuantity,
+            onHand: importedOnHand === null ? initialQuantity : importedOnHand,
+            minimum: hasMinimum ? Math.max(0, stockImportNumber(stockImportValue(row, header.columns, 'minimum'))) : '',
+            note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : '',
+            image: ''
+          });
+          created += 1;
+        });
+        return { created, updated, skipped };
+      };
+      const importImportedStockFile = async (file) => {
+        const status = root.querySelector('#imported-stock-status');
+        const extension = String(file?.name || '').split('.').pop().toLocaleLowerCase('tr-TR');
+        if (!file) { status.textContent = 'Aktarılacak Excel dosyası seçilmedi.'; return; }
+        if (!['xlsx', 'xls', 'csv'].includes(extension)) {
+          status.textContent = 'Yalnızca .xlsx, .xls veya .csv uzantılı ithal ürün stok dosyaları aktarılabilir.';
+          return;
+        }
+        if (!file.size) { status.textContent = 'Seçilen dosya boş görünüyor. Lütfen dolu bir Excel dosyası seçin.'; return; }
+        if (!window.XLSX) {
+          status.textContent = 'Excel okuyucusu henüz hazırlanamadı. Sayfayı yenileyip tekrar deneyin; sorun sürerse internet bağlantınızı kontrol edin.';
+          return;
+        }
+        status.textContent = 'Excel dosyası okunuyor…';
+        try {
+          const workbook = window.XLSX.read(await file.arrayBuffer(), { type: 'array', cellDates: true });
+          if (!workbook.SheetNames?.length) throw new Error('Dosyada okunabilir bir sayfa bulunamadı.');
+          const source = workbook.SheetNames
+            .map((sheetName) => ({ sheetName, rows: window.XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, defval: '', raw: false }) }))
+            .map((sheet) => ({ ...sheet, header: importedStockImportHeader(sheet.rows) }))
+            .find((sheet) => sheet.header);
+          if (!source) throw new Error('Başlıklarda “Ürün Adı” bulunamadı. Başlıkların ilk 25 satırda olduğundan emin olun.');
+          const result = importImportedStockCards(source.rows, source.header);
+          if (!result.created && !result.updated) throw new Error('Aktarılacak geçerli ithal ürün stok satırı bulunamadı.');
+          renderImportedStock();
+          saveProductionState();
+          status.textContent = `${source.sheetName} sayfasından ${result.created} yeni kart eklendi, ${result.updated} kart güncellendi.${result.skipped ? ` ${result.skipped} satır atlandı.` : ''}`;
         } catch (error) {
           status.textContent = `Excel aktarımı yapılamadı: ${error.message || 'Dosya okunamadı.'}`;
         }
@@ -2610,6 +2709,14 @@
         const material = normaliseSearchText(name).replace(/[^a-z0-9]+/g, '').toLocaleUpperCase('tr-TR').slice(0, 9) || 'URUN';
         const base = `ITH-${material}`;
         const used = new Set(importedStockCards.filter((card) => card.id !== excludedId).map((card) => normaliseSearchText(card.code)));
+        // Silinmiş kartların kodları, eski bir bilgisayardaki kayıtla yeniden
+        // oluşmalarını engellemek için korunur. Yeni kart oluştururken bu
+        // kodları da dolu kabul edip sıradaki güvenli kodu üretiriz.
+        (deletedRecords.importedStockCards || []).forEach((identity) => {
+          const prefix = 'importedStockCards:code:';
+          const value = String(identity || '').trim();
+          if (value.startsWith(prefix)) used.add(normaliseSearchText(value.slice(prefix.length)));
+        });
         let sequence = 1;
         let code = `${base}-${String(sequence).padStart(3, '0')}`;
         while (used.has(normaliseSearchText(code))) code = `${base}-${String(++sequence).padStart(3, '0')}`;
@@ -4280,6 +4387,31 @@
         const status = root.querySelector('#stock-status');
         if (status) status.textContent = `${rows.length} stok kartı, yeniden içe aktarılabilir ${type === 'xlsx' ? 'Excel dosyası' : 'uyumlu .xls dosyası'} olarak indirildi.`;
       };
+      const exportImportedStockCardsExcel = () => {
+        const headers = ['Stok Kodu', 'Grup', 'Kategori', 'Ürün Adı', 'Varyant / Özellik', 'Birim', 'İlk Stok', 'Mevcut', 'Minimum', 'Not'];
+        const rows = importedStockCards.map((card) => [
+          card.code || '',
+          card.group || '',
+          card.category || '',
+          card.name || '',
+          card.variant || '',
+          card.unit || 'adet',
+          Number.isFinite(Number(card.initialQuantity)) ? Number(card.initialQuantity) : '',
+          Number.isFinite(Number(card.onHand)) ? Number(card.onHand) : '',
+          card.minimum === '' || card.minimum === null || card.minimum === undefined ? '' : Number(card.minimum),
+          card.note || ''
+        ]);
+        const type = exportExcelWorkbook({
+          title: 'CSP PREFABRİK HAVUZ · İTHAL ÜRÜN STOKLARI',
+          subtitle: `Dışa aktarım tarihi: ${new Intl.DateTimeFormat('tr-TR').format(new Date())} · Bu dosya İthal ürün stokları sayfasındaki Excel'den al düğmesiyle yeniden yüklenebilir.`,
+          headers,
+          rows,
+          fileName: `ithal-urun-stoklari-${stockReportFileDate()}`,
+          sheetName: 'İthal ürün stokları'
+        });
+        const status = root.querySelector('#imported-stock-status');
+        if (status) status.textContent = `${rows.length} ithal ürün stok kartı, yeniden içe aktarılabilir ${type === 'xlsx' ? 'Excel dosyası' : 'uyumlu .xls dosyası'} olarak indirildi.`;
+      };
       const exportStockReportPdf = async () => {
         setStockReportExportStatus('Görselleriyle birlikte PDF hazırlanıyor...');
         const pdf = makeCanvasPdf(await stockReportPdfCanvases(filteredStockReportCards()), 842, 595);
@@ -4950,8 +5082,10 @@
         const openStockCardButton = event.target.closest('[data-open-stock-card]');
         const openImportedStockCardButton = event.target.closest('[data-open-import-stock-card]');
         const importStockCardsButton = event.target.closest('[data-import-stock-cards]');
+        const importImportedStockCardsButton = event.target.closest('[data-import-imported-stock-cards]');
         const openBulkStockImagesButton = event.target.closest('[data-open-bulk-stock-images]');
         const exportStockCardsExcelButton = event.target.closest('[data-export-stock-cards-excel]');
+        const exportImportedStockCardsExcelButton = event.target.closest('[data-export-imported-stock-cards-excel]');
         const saveStockCardButton = event.target.closest('[data-save-stock-card]');
         const editStockCardButton = event.target.closest('[data-edit-stock-card]');
         const deleteStockCardButton = event.target.closest('[data-delete-stock-card]');
@@ -5121,6 +5255,7 @@
         if (exportPlanningOrdersPdfButton) { exportPlanningOrdersPdf(); return; }
         if (planningTabButton) { showPlanningTab(planningTabButton.dataset.planningTab); return; }
         if (exportStockCardsExcelButton) { exportStockCardsExcel(); return; }
+        if (exportImportedStockCardsExcelButton) { exportImportedStockCardsExcel(); return; }
         if (openBulkStockImagesButton) {
           const input = root.querySelector(`[data-bulk-stock-images="${openBulkStockImagesButton.dataset.openBulkStockImages}"]`);
           if (input) input.click();
@@ -5128,6 +5263,10 @@
         }
         if (importStockCardsButton) {
           root.querySelector('#stock-import-file').click();
+          return;
+        }
+        if (importImportedStockCardsButton) {
+          root.querySelector('#imported-stock-import-file').click();
           return;
         }
         if (clearStockCardImageButton) {
@@ -5419,6 +5558,13 @@
           const file = stockImportField.files?.[0];
           stockImportField.value = '';
           if (file) void importStockFile(file);
+          return;
+        }
+        const importedStockImportField = event.target.closest('[data-imported-stock-import-file]');
+        if (importedStockImportField) {
+          const file = importedStockImportField.files?.[0];
+          importedStockImportField.value = '';
+          if (file) void importImportedStockFile(file);
           return;
         }
         const bulkStockImageField = event.target.closest('[data-bulk-stock-images]');
