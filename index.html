@@ -232,6 +232,8 @@
     #csp-production-sketch .sales-picker-table { min-width: 760px; }
     #csp-production-sketch .sales-picker-table input[type="number"] { min-width: 92px; width: 100%; padding: 6px 8px; }
     #csp-production-sketch .sales-picker-empty { text-align: center; color: light-dark(#697687, #a9b6c6); }
+    #csp-production-sketch .stock-card-link { padding: 0; border: 0; background: transparent; color: light-dark(#087da8, #8fe3f3); font: inherit; font-weight: 600; text-align: left; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+    #csp-production-sketch .stock-card-link:hover { color: light-dark(#ef7b1a, #ffab68); }
     #csp-production-sketch .stock-report-table { min-width: 1160px; }
     #csp-production-sketch .table-hint { color: light-dark(#697687, #a9b6c6); font-size: 12px; margin: -4px 0 12px; }
     #csp-production-sketch .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
@@ -659,6 +661,7 @@
   </div>
   <div class="stock-image-modal" id="stock-image-modal" hidden role="dialog" aria-modal="true" aria-labelledby="stock-image-modal-title"><div class="stock-image-modal-card"><div class="stock-image-modal-head"><div class="stock-image-modal-title-area"><strong id="stock-image-modal-title">Stok görseli</strong><span class="stock-image-modal-meta" id="stock-image-modal-code"></span></div><div class="stock-image-modal-actions"><span class="stock-image-modal-share-status" id="stock-image-modal-share-status" aria-live="polite"></span><button class="primary-button" type="button" data-share-stock-image hidden>WhatsApp'ta paylaş</button><button class="secondary-button" type="button" data-close-stock-image>Görseli kapat</button></div></div><img id="stock-image-modal-image" alt="Büyütülmüş stok görseli" /></div></div>
   <div class="sales-picker-modal" id="imported-sales-picker-modal" hidden role="dialog" aria-modal="true" aria-labelledby="imported-sales-picker-title"><div class="sales-picker-card"><div class="sales-picker-head"><div><h2 id="imported-sales-picker-title">İthal ürün seç</h2><p class="table-hint">Stok kartlarını seçin; miktar ve satış fiyatını alttaki seçilen ürünler alanında girin.</p></div><button class="secondary-button" type="button" data-close-imported-sales-picker>Kapat</button></div><div class="table-search"><input id="imported-sales-picker-search" type="search" placeholder="Stok kodu, grup, kategori veya ürün ara" aria-label="İthal ürün ara" /></div><div class="table-wrap"><table class="sales-picker-table"><thead><tr><th>Seç</th><th>Stok kodu</th><th>Grup / kategori</th><th>Ürün</th><th>Kalan</th></tr></thead><tbody id="imported-sales-picker-list"></tbody></table></div><div class="sales-picker-section-head"><h3>Seçilen ürünler</h3><span class="muted-note" id="imported-sales-picker-status" aria-live="polite"></span></div><div class="table-wrap"><table class="sales-picker-table"><thead><tr><th>Stok kodu</th><th>Grup / kategori</th><th>Ürün</th><th>Kalan</th><th>Miktar</th><th>Birim fiyat (TL)</th><th>İşlem</th></tr></thead><tbody id="imported-sales-picker-selected-list"></tbody></table></div><div class="form-actions"><button class="secondary-button" type="button" data-close-imported-sales-picker>Vazgeç</button><button class="primary-button" type="button" data-apply-imported-sales-picker>Seçimleri ekle</button></div></div></div>
+  <div class="sales-picker-modal" id="imported-stock-history-modal" hidden role="dialog" aria-modal="true" aria-labelledby="imported-stock-history-title"><div class="sales-picker-card"><div class="sales-picker-head"><div><h2 id="imported-stock-history-title">İthal ürün hareketleri</h2><p class="table-hint" id="imported-stock-history-summary"></p></div><button class="secondary-button" type="button" data-close-imported-stock-history>Kapat</button></div><div class="table-wrap"><table class="sales-picker-table"><thead><tr><th>Tarih</th><th>Hareket</th><th>Miktar</th><th>Teslim alan / tedarikçi</th><th>Belge / sipariş no</th><th>Not</th></tr></thead><tbody id="imported-stock-history-list"></tbody></table></div></div></div>
   <div class="pdf-print-area" id="order-pdf-print"></div>
   <div class="cloud-auth-gate" id="cloud-auth-gate" hidden>
     <div class="cloud-auth-card">
@@ -2839,7 +2842,15 @@
                 status.textContent = state.label;
                 cell.appendChild(status);
               } else {
-                cell.textContent = value;
+                if (index === 3) {
+                  const product = document.createElement('button');
+                  product.type = 'button';
+                  product.className = 'stock-card-link';
+                  product.dataset.openImportedStockHistory = String(card.id);
+                  product.textContent = value;
+                  product.setAttribute('aria-label', `${value} hareketlerini göster`);
+                  cell.appendChild(product);
+                } else cell.textContent = value;
                 if (index === 0) cell.className = 'code';
                 if (index === 3) cell.classList.add('order');
               }
@@ -2944,6 +2955,52 @@
         if (!value) return '—';
         const date = new Date(`${value}T12:00:00`);
         return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat('tr-TR').format(date);
+      };
+      const importedStockHistoryModal = () => root.querySelector('#imported-stock-history-modal');
+      const renderImportedStockHistory = (card) => {
+        const title = root.querySelector('#imported-stock-history-title');
+        const summary = root.querySelector('#imported-stock-history-summary');
+        const body = root.querySelector('#imported-stock-history-list');
+        if (!card || !body) return;
+        if (title) title.textContent = `${importedCardLabel(card)} · hareketler`;
+        if (summary) summary.textContent = `${card.code} · Mevcut: ${numberFormat(Number(card.onHand) || 0)} ${card.unit} · İlk stok: ${numberFormat(Number(card.initialQuantity) || 0)} ${card.unit}`;
+        const movements = importedStockMovements.filter((movement) => Number(movement.cardId) === Number(card.id)).slice().sort((left, right) => {
+          const dateDifference = String(right.date || '').localeCompare(String(left.date || ''));
+          return dateDifference || Number(right.id) - Number(left.id);
+        });
+        body.replaceChildren();
+        if (!movements.length) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 6;
+          cell.className = 'sales-picker-empty';
+          cell.textContent = 'Bu ürün için henüz stok hareketi bulunmuyor.';
+          row.appendChild(cell);
+          body.appendChild(row);
+          return;
+        }
+        movements.forEach((movement) => {
+          const row = document.createElement('tr');
+          const type = movement.type === 'entry' ? 'Stok girişi' : movement.source === 'imported-sales' ? 'Satış teslimi' : 'Stok çıkışı';
+          const quantity = `${movement.type === 'entry' ? '+' : '−'}${numberFormat(Number(movement.quantity) || 0)} ${movement.unit || card.unit}`;
+          [formatImportedMovementDate(movement.date), type, quantity, movement.partner || '—', movement.reference || '—', movement.note || '—'].forEach((value, index) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (index === 2) cell.classList.add('stock-usage');
+            row.appendChild(cell);
+          });
+          body.appendChild(row);
+        });
+      };
+      const openImportedStockHistory = (card) => {
+        if (!card) return;
+        renderImportedStockHistory(card);
+        const modal = importedStockHistoryModal();
+        if (modal) modal.hidden = false;
+      };
+      const closeImportedStockHistory = () => {
+        const modal = importedStockHistoryModal();
+        if (modal) modal.hidden = true;
       };
       const renderImportedMovementOptions = (type) => {
         const select = root.querySelector(`#imported-${type}-card`);
@@ -5275,6 +5332,8 @@
         const saveImportedStockCardButton = event.target.closest('[data-save-import-stock-card]');
         const editImportedStockCardButton = event.target.closest('[data-edit-imported-stock-card]');
         const deleteImportedStockCardButton = event.target.closest('[data-delete-imported-stock-card]');
+        const openImportedStockHistoryButton = event.target.closest('[data-open-imported-stock-history]');
+        const closeImportedStockHistoryButton = event.target.closest('[data-close-imported-stock-history]');
         const saveImportedMovementButton = event.target.closest('[data-save-imported-movement]');
         const reverseImportedMovementButton = event.target.closest('[data-reverse-imported-movement]');
         const clearStockCardImageButton = event.target.closest('[data-clear-stock-card-image]');
@@ -5506,6 +5565,11 @@
           if (card) openImportedStockForEdit(card);
           return;
         }
+        if (openImportedStockHistoryButton) {
+          openImportedStockHistory(importedStockCards.find((item) => item.id === Number(openImportedStockHistoryButton.dataset.openImportedStockHistory)));
+          return;
+        }
+        if (closeImportedStockHistoryButton || event.target === importedStockHistoryModal()) { closeImportedStockHistory(); return; }
         if (deleteImportedStockCardButton) {
           const cardId = Number(deleteImportedStockCardButton.dataset.deleteImportedStockCard);
           const hasMovement = importedStockMovements.some((movement) => Number(movement.cardId) === cardId);
