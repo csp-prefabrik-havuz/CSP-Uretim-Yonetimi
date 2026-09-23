@@ -585,7 +585,7 @@
       <section class="view" data-page="planning"><div class="page-head"><div><h1>Üretim planı</h1><p>İş emirlerinin güncel durumunu veya sipariş bazlı ilerlemeyi takip edin.</p></div></div><div class="planning-tabs" role="tablist" aria-label="Üretim planı görünümü"><button class="planning-tab is-active" type="button" role="tab" aria-selected="true" data-planning-tab="current">Mevcut durum</button><button class="planning-tab" type="button" role="tab" aria-selected="false" data-planning-tab="orders">Sipariş durumu</button></div><div class="planning-pane" data-planning-pane="current"><section class="section"><p class="table-hint" id="planning-status" aria-live="polite">İş emri kaydedildiğinde plan satırı burada oluşur.</p><div class="table-search"><input type="search" placeholder="Üretim planında ara" data-table-search-input="planning-table" aria-label="Üretim planında ara" /><button class="secondary-button" type="button" data-table-search-button="planning-table">Ara</button></div><div class="table-wrap"><table class="planning-table" id="planning-table"><thead><tr><th>Planlanan tarih</th><th>Müşteri / ölçü</th><th>İş emri formu</th><th>Üretim hattı</th><th>Üretim kodu</th><th>Stok tüketimi</th><th>Sorumlu</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="planning-list-body"></tbody></table></div></section></div><div class="planning-pane" data-planning-pane="orders" hidden><section class="section"><p class="table-hint">Sipariş bilgileri ile iş emirlerinden gelen son durum aynı satırda gösterilir.</p><div class="table-search"><input type="search" placeholder="Sipariş durumunda ara" data-table-search-input="planning-orders-table" aria-label="Sipariş durumunda ara" /><button class="secondary-button" type="button" data-table-search-button="planning-orders-table">Ara</button></div><div class="table-wrap"><table class="planning-orders-table" id="planning-orders-table"><thead><tr><th>Müşteri</th><th>Adres</th><th>Ölçü</th><th>Şekil</th><th>Liner deseni</th><th>İş emirleri</th><th>Son durum</th></tr></thead><tbody id="planning-orders-list-body"></tbody></table></div></section></div></section>
       <section class="view report-view" data-page="stock">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Stok ve hammadde</h1><p>Stok kartları, iş emri ihtiyaçları ve güncel stok raporu tek ekranda.</p></div></div><div class="form-actions"><input id="stock-import-file" type="file" accept=".xlsx,.xls,.csv" hidden data-stock-import-file /><button class="secondary-button" type="button" data-import-stock-cards>Excel'den aktar</button><button class="secondary-button" type="button" data-export-stock-cards-excel>Excel'e aktar</button><button class="primary-button" type="button" data-open-stock-card>+ Yeni stok kartı</button></div></div>
-        <section class="section"><p class="table-hint" id="stock-status" aria-live="polite">İlk stok, mevcut miktar, kullanılan miktar ve minimum seviye birlikte takip edilir.</p><p class="muted-note">Aktarım için: İş Emri Grubu, Malzeme Adı, Renk / Desen / Özellik, Birim, İlk Stok, Mevcut, Minimum, Not ve Stok Kodu sütunları kullanılabilir.</p><div class="table-search"><input type="search" placeholder="Stok kartlarında ara" data-table-search-input="stock-cards-table" aria-label="Stok kartlarında ara" /><button class="secondary-button" type="button" data-table-search-button="stock-cards-table">Ara</button></div><div class="table-wrap"><table class="stock-table" id="stock-cards-table"><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Grup</th><th>Malzeme adı</th><th>Renk / desen / özellik</th><th>Birim</th><th>İlk stok</th><th>Mevcut</th><th>Kullanılan miktar</th><th>Planlanan tüketim</th><th>Plan sonrası kalan</th><th>Minimum</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="stock-list-body"></tbody></table></div></section>
+        <section class="section"><p class="table-hint" id="stock-status" aria-live="polite">İlk stok, mevcut miktar, kullanılan miktar ve minimum seviye birlikte takip edilir.</p><p class="muted-note">Aktarım için: İş Emri Grubu, Malzeme Adı, Renk / Desen / Özellik, Birim, İlk Stok, Mevcut, Minimum, Not, Stok Kodu ve Görsel Bağlantısı sütunları kullanılabilir. Görsel Bağlantısı alanına doğrudan görsel adresini yazın.</p><div class="table-search"><input type="search" placeholder="Stok kartlarında ara" data-table-search-input="stock-cards-table" aria-label="Stok kartlarında ara" /><button class="secondary-button" type="button" data-table-search-button="stock-cards-table">Ara</button></div><div class="table-wrap"><table class="stock-table" id="stock-cards-table"><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Grup</th><th>Malzeme adı</th><th>Renk / desen / özellik</th><th>Birim</th><th>İlk stok</th><th>Mevcut</th><th>Kullanılan miktar</th><th>Planlanan tüketim</th><th>Plan sonrası kalan</th><th>Minimum</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="stock-list-body"></tbody></table></div></section>
         <section class="section stock-demand-section"><h2>İş emri ihtiyacı</h2><p class="table-hint">Her iş emri kendi üretim durumu ile ayrı izlenir. Stoktan işlenen kalemler listeden otomatik kalkar.</p><div class="table-wrap"><table class="stock-table" id="stock-demand-table"><thead><tr><th>Müşteri / iş emri</th><th>Üretim durumu</th><th>Malzeme grubu</th><th>Birim</th><th>Açık ihtiyaç</th><th>Stok işlemi</th></tr></thead><tbody id="stock-demand-list-body"></tbody></table></div></section>
         <section class="section stock-report-section"><div class="section-head"><div><h2>Stok raporu</h2><p class="table-hint" id="stock-report-status" aria-live="polite">Stok kartı eklendikçe rapor güncellenir.</p></div><div class="form-actions"><button class="secondary-button" type="button" data-export-stock-report-excel>Excel al</button><button class="primary-button" type="button" data-export-stock-report-pdf>PDF al</button></div></div><p class="table-hint" id="stock-report-export-status" aria-live="polite"></p><div class="table-search"><input type="search" placeholder="Stok raporunda ara" data-table-search-input="stock-report-table" aria-label="Stok raporunda ara" /><button class="secondary-button" type="button" data-table-search-button="stock-report-table">Ara</button></div><div class="table-wrap"><table class="stock-table stock-report-table" id="stock-report-table"><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Grup</th><th>Malzeme / varyant</th><th>İlk stok</th><th>Mevcut</th><th>Kullanılan miktar</th><th>Planlanan tüketim</th><th>Plan sonrası kalan</th><th>Minimum</th><th>Durum</th></tr></thead><tbody id="stock-report-list-body"></tbody></table></div></section>
       </section>
@@ -623,7 +623,7 @@
       </section>
       <section class="view report-view" data-page="imported-stock">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün stokları</h1><p>Üretim stoklarından bağımsız olarak ithal ürünlerinizi buradan takip edin.</p></div></div><div class="form-actions"><input id="imported-stock-import-file" type="file" accept=".xlsx,.xls,.csv" hidden data-imported-stock-import-file /><button class="secondary-button" type="button" data-import-imported-stock-cards>Excel'den al</button><button class="secondary-button" type="button" data-export-imported-stock-cards-excel>Excel'e aktar</button><button class="primary-button" type="button" data-open-import-stock-card>+ Yeni ithal ürün</button></div></div>
-        <section class="section"><p class="table-hint" id="imported-stock-status" aria-live="polite">İthal ürün stok kartları burada listelenir.</p><p class="muted-note">Excel aktarımında: Stok Kodu, Grup, Kategori, Ürün Adı, Varyant / Özellik, Birim, İlk Stok, Mevcut, Minimum ve Not sütunları kullanılabilir. Aynı stok kodu varsa kart güncellenir.</p><div class="table-search"><input type="search" placeholder="İthal ürün stoklarında ara" data-table-search-input="imported-stock-table" aria-label="İthal ürün stoklarında ara" /><button class="secondary-button" type="button" data-table-search-button="imported-stock-table">Ara</button></div><div class="table-wrap"><table class="stock-table" id="imported-stock-table"><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Kategori</th><th>Ürün / varyant</th><th>Birim</th><th>İlk stok</th><th>Mevcut</th><th>Minimum</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-stock-list-body"></tbody></table></div></section>
+        <section class="section"><p class="table-hint" id="imported-stock-status" aria-live="polite">İthal ürün stok kartları burada listelenir.</p><p class="muted-note">Excel aktarımında: Stok Kodu, Grup, Kategori, Ürün Adı, Varyant / Özellik, Birim, İlk Stok, Mevcut, Minimum, Not ve Görsel Bağlantısı sütunları kullanılabilir. Görsel Bağlantısı alanına doğrudan görsel adresini yazın. Aynı stok kodu varsa kart güncellenir.</p><div class="table-search"><input type="search" placeholder="İthal ürün stoklarında ara" data-table-search-input="imported-stock-table" aria-label="İthal ürün stoklarında ara" /><button class="secondary-button" type="button" data-table-search-button="imported-stock-table">Ara</button></div><div class="table-wrap"><table class="stock-table" id="imported-stock-table"><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Kategori</th><th>Ürün / varyant</th><th>Birim</th><th>İlk stok</th><th>Mevcut</th><th>Minimum</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-stock-list-body"></tbody></table></div></section>
       </section>
       <section class="view" data-page="imported-stock-form">
         <div class="page-head"><div><h1 id="imported-stock-form-title">Yeni ithal ürün</h1><p>İthal ürüne ait stok kartını kaydedin.</p></div><button class="secondary-button" type="button" data-view-button="imported-stock">İthal ürün stoklarına dön</button></div>
@@ -735,6 +735,28 @@
         groupField.append(groupLabel, groupInput);
         importedStockCategoryField.closest('.field')?.after(groupField);
       }
+      const addExternalImageUrlField = ({ imageInputId, urlInputId, source }) => {
+        const imageInput = root.querySelector(`#${imageInputId}`);
+        if (!imageInput || root.querySelector(`#${urlInputId}`)) return;
+        const field = document.createElement('div');
+        field.className = 'field span-two';
+        const label = document.createElement('label');
+        label.htmlFor = urlInputId;
+        label.textContent = 'Dış görsel bağlantısı';
+        const input = document.createElement('input');
+        input.id = urlInputId;
+        input.type = 'url';
+        input.inputMode = 'url';
+        input.placeholder = 'https://siteadi.com/urun-gorseli.jpg';
+        input.dataset.externalStockImage = source;
+        const note = document.createElement('p');
+        note.className = 'muted-note';
+        note.textContent = 'Görsel başka bir siteden gösterilir; kullanıcı panelden ayrılmadan tıklayıp büyütebilir.';
+        field.append(label, input, note);
+        imageInput.closest('.field')?.after(field);
+      };
+      addExternalImageUrlField({ imageInputId: 'stock-card-image', urlInputId: 'stock-card-image-url', source: 'production' });
+      addExternalImageUrlField({ imageInputId: 'imported-stock-image', urlInputId: 'imported-stock-image-url', source: 'imported' });
       const importedStockHeader = root.querySelector('#imported-stock-table thead tr');
       if (importedStockHeader) {
         importedStockHeader.replaceChildren(...['Görsel', 'Stok kodu', 'Grup', 'Kategori', 'Ürün / varyant', 'Birim', 'İlk stok', 'Mevcut', 'Minimum', 'Durum', 'Not', 'İşlem'].map((label) => {
@@ -2259,6 +2281,17 @@
           preview.hidden = true;
         }
       };
+      const normaliseExternalImageUrl = (value) => {
+        const source = String(value || '').trim();
+        if (!source) return '';
+        try {
+          const url = new URL(source);
+          return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+        } catch (error) {
+          return '';
+        }
+      };
+      const isExternalImageUrl = (value) => Boolean(normaliseExternalImageUrl(value));
       const stockCodePrefixes = { liner: 'LIN', pvc: 'PVC', sac: 'SAC', panel: 'PAN' };
       const stockCodeText = (value) => String(value ?? '').trim().toLocaleUpperCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       const suggestedStockCode = (group, name, excludedId = null) => {
@@ -2284,7 +2317,8 @@
         initial: ['ilkstok', 'baslangicstogu', 'baslangicstok', 'ilkstokmiktari'],
         onHand: ['mevcut', 'mevcutmiktar', 'mevcutstok', 'toplamkalan', 'kalan', 'stokmiktari'],
         minimum: ['minimum', 'minimumseviye', 'minseviye'],
-        note: ['not', 'aciklama']
+        note: ['not', 'aciklama'],
+        image: ['gorselbaglantisi', 'gorselurl', 'gorsel', 'imageurl', 'image']
       };
       const stockImportKey = (value) => String(value ?? '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i').replace(/[^a-z0-9]+/g, '');
       const stockImportColumnMap = (headerRow) => {
@@ -2354,6 +2388,8 @@
           const hasOnHand = stockImportHasValue(row, header.columns, 'onHand');
           const hasMinimum = stockImportHasValue(row, header.columns, 'minimum');
           const hasNote = stockImportHasValue(row, header.columns, 'note');
+          const hasImage = stockImportHasValue(row, header.columns, 'image');
+          const image = hasImage ? normaliseExternalImageUrl(stockImportValue(row, header.columns, 'image')) : '';
           const initialQuantity = hasInitial ? stockImportNumber(stockImportValue(row, header.columns, 'initial')) : (Number(current?.initialQuantity ?? current?.onHand) || 0);
           const importedOnHand = hasOnHand ? stockImportNumber(stockImportValue(row, header.columns, 'onHand')) : null;
           if (current) {
@@ -2369,7 +2405,8 @@
               initialQuantity,
               onHand: importedOnHand === null ? (hasInitial ? previousOnHand + initialQuantity - previousInitial : previousOnHand) : importedOnHand,
               minimum: hasMinimum ? Math.max(0, stockImportNumber(stockImportValue(row, header.columns, 'minimum'))) : current.minimum,
-              note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : current.note
+              note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : current.note,
+              ...(hasImage && image ? { image, imageKey: '' } : {})
             });
             updated += 1;
             return;
@@ -2386,7 +2423,7 @@
             onHand: importedOnHand === null ? initialQuantity : importedOnHand,
             minimum: hasMinimum ? Math.max(0, stockImportNumber(stockImportValue(row, header.columns, 'minimum'))) : '',
             note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : '',
-            image: ''
+            image
           });
           created += 1;
         });
@@ -2457,6 +2494,8 @@
           const hasOnHand = stockImportHasValue(row, header.columns, 'onHand');
           const hasMinimum = stockImportHasValue(row, header.columns, 'minimum');
           const hasNote = stockImportHasValue(row, header.columns, 'note');
+          const hasImage = stockImportHasValue(row, header.columns, 'image');
+          const image = hasImage ? normaliseExternalImageUrl(stockImportValue(row, header.columns, 'image')) : '';
           const initialQuantity = hasInitial ? stockImportNumber(stockImportValue(row, header.columns, 'initial')) : (Number(current?.initialQuantity ?? current?.onHand) || 0);
           const importedOnHand = hasOnHand ? stockImportNumber(stockImportValue(row, header.columns, 'onHand')) : null;
           if (current) {
@@ -2472,7 +2511,8 @@
               initialQuantity,
               onHand: importedOnHand === null ? (hasInitial ? previousOnHand + initialQuantity - previousInitial : previousOnHand) : importedOnHand,
               minimum: hasMinimum ? Math.max(0, stockImportNumber(stockImportValue(row, header.columns, 'minimum'))) : current.minimum,
-              note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : current.note
+              note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : current.note,
+              ...(hasImage && image ? { image, imageKey: '' } : {})
             });
             updated += 1;
             return;
@@ -2489,7 +2529,7 @@
             onHand: importedOnHand === null ? initialQuantity : importedOnHand,
             minimum: hasMinimum ? Math.max(0, stockImportNumber(stockImportValue(row, header.columns, 'minimum'))) : '',
             note: hasNote ? String(stockImportValue(row, header.columns, 'note')).trim() : '',
-            image: ''
+            image
           });
           created += 1;
         });
@@ -2551,6 +2591,7 @@
         root.querySelector('#stock-card-minimum').value = '';
         root.querySelector('#stock-card-note').value = '';
         root.querySelector('#stock-card-image').value = '';
+        root.querySelector('#stock-card-image-url').value = '';
         updateStockCardImagePreview();
         root.querySelector('#stock-card-form-status').textContent = '';
       };
@@ -2570,6 +2611,7 @@
         root.querySelector('#stock-card-minimum').value = card.minimum;
         root.querySelector('#stock-card-note').value = card.note;
         root.querySelector('#stock-card-image').value = '';
+        root.querySelector('#stock-card-image-url').value = isExternalImageUrl(card.image) ? card.image : '';
         updateStockCardImagePreview();
         root.querySelector('#stock-card-form-status').textContent = '';
         show('stock-card-form');
@@ -2593,6 +2635,12 @@
         }
         const initialInput = root.querySelector('#stock-card-initial').value;
         const onHandInput = root.querySelector('#stock-card-onhand').value;
+        const externalImageInput = root.querySelector('#stock-card-image-url').value.trim();
+        const externalImage = normaliseExternalImageUrl(externalImageInput);
+        if (externalImageInput && !externalImage) {
+          status.textContent = 'Dış görsel bağlantısı geçerli bir http:// veya https:// adresi olmalıdır.';
+          return false;
+        }
         const onHand = onHandInput === '' ? Number(initialInput) || 0 : Number(onHandInput) || 0;
         const card = {
           id: editingStockCardId || nextStockCardId++,
@@ -2606,7 +2654,7 @@
           onHand,
           minimum: root.querySelector('#stock-card-minimum').value === '' ? '' : Math.max(0, Number(root.querySelector('#stock-card-minimum').value) || 0),
           note: root.querySelector('#stock-card-note').value.trim(),
-          image: pendingStockCardImage,
+          image: externalImage || pendingStockCardImage,
           imageKey: ''
         };
         const current = stockCards.find((item) => item.id === editingStockCardId);
@@ -2887,6 +2935,7 @@
         ['code', 'group', 'category', 'name', 'variant', 'initial', 'onhand', 'minimum', 'note'].forEach((field) => { root.querySelector(`#imported-stock-${field}`).value = ''; });
         root.querySelector('#imported-stock-unit').value = 'adet';
         root.querySelector('#imported-stock-image').value = '';
+        root.querySelector('#imported-stock-image-url').value = '';
         updateImportedStockCardImagePreview();
         root.querySelector('#imported-stock-form-status').textContent = '';
       };
@@ -2905,6 +2954,7 @@
         root.querySelector('#imported-stock-minimum').value = card.minimum;
         root.querySelector('#imported-stock-note').value = card.note || '';
         root.querySelector('#imported-stock-image').value = '';
+        root.querySelector('#imported-stock-image-url').value = isExternalImageUrl(card.image) ? card.image : '';
         updateImportedStockCardImagePreview();
         root.querySelector('#imported-stock-form-status').textContent = '';
         show('imported-stock-form');
@@ -2919,6 +2969,12 @@
         if (duplicate) { status.textContent = 'Bu stok kodu zaten kullanılıyor.'; return false; }
         const initialInput = root.querySelector('#imported-stock-initial').value;
         const onHandInput = root.querySelector('#imported-stock-onhand').value;
+        const externalImageInput = root.querySelector('#imported-stock-image-url').value.trim();
+        const externalImage = normaliseExternalImageUrl(externalImageInput);
+        if (externalImageInput && !externalImage) {
+          status.textContent = 'Dış görsel bağlantısı geçerli bir http:// veya https:// adresi olmalıdır.';
+          return false;
+        }
         const initialQuantity = initialInput === '' ? 0 : Number(initialInput) || 0;
         const card = {
           id: editingImportedStockCardId || nextImportedStockCardId++,
@@ -2932,7 +2988,7 @@
           onHand: onHandInput === '' ? initialQuantity : Number(onHandInput) || 0,
           minimum: root.querySelector('#imported-stock-minimum').value === '' ? '' : Math.max(0, Number(root.querySelector('#imported-stock-minimum').value) || 0),
           note: root.querySelector('#imported-stock-note').value.trim(),
-          image: pendingImportedStockCardImage,
+          image: externalImage || pendingImportedStockCardImage,
           imageKey: ''
         };
         const currentIndex = importedStockCards.findIndex((item) => item.id === editingImportedStockCardId);
@@ -4603,7 +4659,7 @@
         setStockReportExportStatus(type === 'xlsx' ? 'Excel raporu indirildi.' : 'Excel okuyucusu hazır olmadığı için uyumlu .xls raporu indirildi.');
       };
       const exportStockCardsExcel = () => {
-        const headers = ['Stok Kodu', 'İş Emri Grubu', 'Kategori', 'Malzeme Adı', 'Renk / Desen / Özellik', 'Birim', 'İlk Stok', 'Mevcut', 'Minimum', 'Not'];
+        const headers = ['Stok Kodu', 'İş Emri Grubu', 'Kategori', 'Malzeme Adı', 'Renk / Desen / Özellik', 'Birim', 'İlk Stok', 'Mevcut', 'Minimum', 'Not', 'Görsel Bağlantısı'];
         const rows = stockCards.map((card) => [
           card.code || '',
           stockGroup(card.group).label,
@@ -4614,7 +4670,8 @@
           Number.isFinite(Number(card.initialQuantity)) ? Number(card.initialQuantity) : '',
           Number.isFinite(Number(card.onHand)) ? Number(card.onHand) : '',
           card.minimum === '' || card.minimum === null || card.minimum === undefined ? '' : Number(card.minimum),
-          card.note || ''
+          card.note || '',
+          isExternalImageUrl(card.image) ? card.image : ''
         ]);
         const type = exportExcelWorkbook({
           title: 'CSP PREFABRİK HAVUZ · STOK KARTLARI',
@@ -4628,7 +4685,7 @@
         if (status) status.textContent = `${rows.length} stok kartı, yeniden içe aktarılabilir ${type === 'xlsx' ? 'Excel dosyası' : 'uyumlu .xls dosyası'} olarak indirildi.`;
       };
       const exportImportedStockCardsExcel = () => {
-        const headers = ['Stok Kodu', 'Grup', 'Kategori', 'Ürün Adı', 'Varyant / Özellik', 'Birim', 'İlk Stok', 'Mevcut', 'Minimum', 'Not'];
+        const headers = ['Stok Kodu', 'Grup', 'Kategori', 'Ürün Adı', 'Varyant / Özellik', 'Birim', 'İlk Stok', 'Mevcut', 'Minimum', 'Not', 'Görsel Bağlantısı'];
         const rows = importedStockCards.map((card) => [
           card.code || '',
           card.group || '',
@@ -4639,7 +4696,8 @@
           Number.isFinite(Number(card.initialQuantity)) ? Number(card.initialQuantity) : '',
           Number.isFinite(Number(card.onHand)) ? Number(card.onHand) : '',
           card.minimum === '' || card.minimum === null || card.minimum === undefined ? '' : Number(card.minimum),
-          card.note || ''
+          card.note || '',
+          isExternalImageUrl(card.image) ? card.image : ''
         ]);
         const type = exportExcelWorkbook({
           title: 'CSP PREFABRİK HAVUZ · İTHAL ÜRÜN STOKLARI',
@@ -5006,6 +5064,12 @@
       };
       const persistStockCardImage = async (card, previousKey = '') => {
         const key = stockImageKey(card);
+        if (isExternalImageUrl(card.image)) {
+          card.image = normaliseExternalImageUrl(card.image);
+          card.imageKey = '';
+          await removeStockImage(previousKey || key);
+          return;
+        }
         if (card.image) {
           card.imageKey = key;
           await writeStockImage(key, card.image);
@@ -5017,6 +5081,12 @@
       };
       const persistImportedStockCardImage = async (card, previousKey = '') => {
         const key = importedStockImageKey(card);
+        if (isExternalImageUrl(card.image)) {
+          card.image = normaliseExternalImageUrl(card.image);
+          card.imageKey = '';
+          await removeStockImage(previousKey || key);
+          return;
+        }
         if (card.image) {
           card.imageKey = key;
           await writeStockImage(key, card.image);
@@ -5029,7 +5099,7 @@
       const hydrateStockCardImages = async () => {
         try {
           let migrated = false;
-          const cardsWithEmbeddedImages = stockCards.filter((card) => card.image && !card.imageKey);
+          const cardsWithEmbeddedImages = stockCards.filter((card) => card.image && !card.imageKey && !isExternalImageUrl(card.image));
           await Promise.all(cardsWithEmbeddedImages.map(async (card) => {
             card.imageKey = stockImageKey(card);
             await writeStockImage(card.imageKey, card.image);
@@ -5046,7 +5116,7 @@
       const hydrateImportedStockCardImages = async () => {
         try {
           let migrated = false;
-          const cardsWithEmbeddedImages = importedStockCards.filter((card) => card.image && !card.imageKey);
+          const cardsWithEmbeddedImages = importedStockCards.filter((card) => card.image && !card.imageKey && !isExternalImageUrl(card.image));
           await Promise.all(cardsWithEmbeddedImages.map(async (card) => {
             card.imageKey = importedStockImageKey(card);
             await writeStockImage(card.imageKey, card.image);
@@ -5529,12 +5599,14 @@
         if (clearStockCardImageButton) {
           pendingStockCardImage = '';
           root.querySelector('#stock-card-image').value = '';
+          root.querySelector('#stock-card-image-url').value = '';
           updateStockCardImagePreview();
           return;
         }
         if (clearImportedStockCardImageButton) {
           pendingImportedStockCardImage = '';
           root.querySelector('#imported-stock-image').value = '';
+          root.querySelector('#imported-stock-image-url').value = '';
           updateImportedStockCardImagePreview();
           return;
         }
@@ -5891,6 +5963,28 @@
           updateOrderLinerPreview();
           return;
         }
+        const externalStockImageField = event.target.closest('[data-external-stock-image]');
+        if (externalStockImageField) {
+          const source = String(externalStockImageField.value || '').trim();
+          const imageUrl = normaliseExternalImageUrl(source);
+          const isImported = externalStockImageField.dataset.externalStockImage === 'imported';
+          const status = root.querySelector(isImported ? '#imported-stock-form-status' : '#stock-card-form-status');
+          if (source && !imageUrl) {
+            if (status) status.textContent = 'Lütfen http:// veya https:// ile başlayan geçerli bir görsel bağlantısı girin.';
+            return;
+          }
+          if (isImported) {
+            pendingImportedStockCardImage = imageUrl;
+            root.querySelector('#imported-stock-image').value = '';
+            updateImportedStockCardImagePreview();
+          } else {
+            pendingStockCardImage = imageUrl;
+            root.querySelector('#stock-card-image').value = '';
+            updateStockCardImagePreview();
+          }
+          if (status) status.textContent = imageUrl ? 'Dış görsel bağlantısı seçildi. Görsel panel içinde büyütülür; başka site açılmaz.' : '';
+          return;
+        }
         const stockImageField = event.target.closest('[data-stock-card-image]');
         if (stockImageField) {
           const file = stockImageField.files?.[0];
@@ -5898,6 +5992,7 @@
           const reader = new FileReader();
           reader.addEventListener('load', () => {
             pendingStockCardImage = String(reader.result || '');
+            root.querySelector('#stock-card-image-url').value = '';
             updateStockCardImagePreview();
           });
           reader.readAsDataURL(file);
@@ -5910,6 +6005,7 @@
           const reader = new FileReader();
           reader.addEventListener('load', () => {
             pendingImportedStockCardImage = String(reader.result || '');
+            root.querySelector('#imported-stock-image-url').value = '';
             updateImportedStockCardImagePreview();
           });
           reader.readAsDataURL(file);
