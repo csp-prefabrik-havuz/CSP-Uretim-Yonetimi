@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<script defer src="access-improvements.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CSP Üretim Yönetimi</title>
 </head>
 <body>
@@ -45,9 +45,21 @@
     #csp-production-sketch .side-nav { padding: 15px 10px; background: light-dark(#ffffff, #17212d); border-right: 1px solid light-dark(#dde3eb, #2b3645); }
     #csp-production-sketch .nav-label { padding: 8px 10px 6px; color: light-dark(#697687, #a9b6c6); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
     #csp-production-sketch .nav-button { color: light-dark(#2b394a, #d7dfeb); width: 100%; text-align: left; margin: 2px 0; display: flex; align-items: center; gap: 10px; }
-        #csp-production-sketch .side-nav .nav-button[hidden], #csp-production-sketch .side-nav .nav-label[hidden], #csp-production-sketch [data-admin-only][hidden] { display: none !important; }
-#csp-production-sketch .nav-button.is-active { color: light-dark(#083549, #e5fbff); background: light-dark(#d9f0f4, #19485a); font-weight: 500; }
+    /* Yetkisiz menüler JavaScript ile hidden durumuna alınır. Bu kural, nav-button'ın
+       display:flex tasarımının tarayıcının varsayılan hidden kuralını ezmesini önler. */
+    #csp-production-sketch .side-nav .nav-button[hidden], #csp-production-sketch .side-nav .nav-label[hidden], #csp-production-sketch [data-admin-only][hidden] { display: none !important; }
+    #csp-production-sketch .nav-button.is-active { color: light-dark(#083549, #e5fbff); background: light-dark(#d9f0f4, #19485a); font-weight: 500; }
     #csp-production-sketch .main { padding: 20px; min-width: 0; }
+    /* Şifresiz stok özeti, normal panelin sol menü alanını kullanmaz. */
+    #csp-production-sketch.public-stock-mode { max-width: 1320px; margin: 0 auto; border-radius: 0 0 16px 16px; }
+    #csp-production-sketch.public-stock-mode .shell { display: block; min-height: 0; }
+    #csp-production-sketch.public-stock-mode .main { padding: clamp(20px, 3vw, 38px); }
+    #csp-production-sketch.public-stock-mode .page-head { margin-bottom: 18px; }
+    #csp-production-sketch.public-stock-mode [data-page="stock-summary"] { max-width: 1240px; margin: 0 auto; }
+    #csp-production-sketch.public-stock-mode .stock-summary-filters { max-width: 860px; }
+    #csp-production-sketch.public-stock-mode .stock-scroll-window { max-height: none; }
+    #csp-production-sketch.public-stock-mode #stock-summary-table { min-width: 760px; }
+    #csp-production-sketch.public-stock-mode .app-topbar { padding-inline: clamp(18px, 3vw, 38px); }
     #csp-production-sketch .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
     #csp-production-sketch .dashboard-actions, #csp-production-sketch .table-search { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
     #csp-production-sketch .stock-summary-filters { display: grid; grid-template-columns: minmax(200px, 1.5fr) minmax(165px, .85fr) minmax(150px, .7fr); gap: 9px; margin: 14px 0 10px; }
@@ -211,6 +223,7 @@
     #csp-production-sketch .workorder-record-action-pair { display: grid; gap: 4px; }
     #csp-production-sketch .row-action { padding: 5px 7px; border: 0; border-radius: 6px; background: light-dark(#eaf0f3, #263746); color: light-dark(#365061, #d4e1ea); font-size: 12px; }
     #csp-production-sketch .row-action.is-cancel { color: light-dark(#a1403c, #ffaba7); }
+    #csp-production-sketch .imported-sales-status-select, #csp-production-sketch .warehouse-shipping-status-select { min-width: 130px; padding: 6px 8px; font-size: 12px; }
     #csp-production-sketch .report-brand { display: flex; align-items: center; gap: 12px; }
     #csp-production-sketch .report-brand img { width: 74px; height: 44px; object-fit: contain; background: #ffffff; border: 1px solid light-dark(#e2e8ed, #344656); border-radius: 7px; }
     #csp-production-sketch .report-view .page-head { position: relative; padding: 16px 18px; overflow: hidden; background: linear-gradient(110deg, light-dark(#fff9f4, #332317), light-dark(#f0faff, #102b39)); border-top: 4px solid light-dark(#ef7b1a, #ff9b4a); border-bottom: 2px solid light-dark(#00a0dc, #69d0f5); border-radius: 12px; }
@@ -416,7 +429,7 @@
     #csp-production-sketch .user-access-grid label { display: flex; align-items: center; gap: 7px; color: #344858; font-size: 13px; }
     #csp-production-sketch .user-access-grid input { accent-color: #ef7b1a; }
     #csp-production-sketch .cloud-sync-note { color: #bfe4ed; font-size: 11px; }
-        #csp-production-sketch .public-access-section { border-top: 4px solid #ef7b1a; }
+    #csp-production-sketch .public-access-section { border-top: 4px solid #ef7b1a; }
     #csp-production-sketch .public-access-option { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: #fff8ef; border: 1px solid #f5c38f; border-radius: 10px; color: #344858; cursor: pointer; }
     #csp-production-sketch .public-access-option input { margin-top: 3px; accent-color: #ef7b1a; }
     #csp-production-sketch .public-access-option strong, #csp-production-sketch .public-access-option span span { display: block; }
@@ -463,6 +476,8 @@
       <button class="nav-button" type="button" data-view="imported-stock-entry"><i data-lucide="package-plus" aria-hidden="true"></i> İthal ürün girişi</button>
       <button class="nav-button" type="button" data-view="imported-stock-exit"><i data-lucide="package-minus" aria-hidden="true"></i> İthal ürün çıkışı</button>
       <button class="nav-button" type="button" data-view="imported-sales"><i data-lucide="shopping-cart" aria-hidden="true"></i> İthal ürün satışları</button>
+      <div class="nav-label">Depo</div>
+      <button class="nav-button" type="button" data-view="warehouse-shipping"><i data-lucide="warehouse" aria-hidden="true"></i> Depo sevkiyat</button>
       <div class="nav-label" data-admin-only hidden>Yönetim</div>
       <button class="nav-button" type="button" data-view="user-management" data-admin-only hidden><i data-lucide="users-round" aria-hidden="true"></i> Kullanıcı ve erişim</button>
     </nav>
@@ -598,8 +613,10 @@
       </section>
       <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>İthal stok kartlarından müşteri satış siparişi oluşturun. Sipariş kaydı stoğu hemen düşmez.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Not</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin; stok çıkışı teslim/sevkiyat aşamasında ayrıca işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer">Müşteri</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="imported-sales-note">Not</label><textarea id="imported-sales-note" placeholder="Ödeme, teslimat veya müşteri notu"></textarea></div></div></section><section class="section"><h2>Satış kalemleri</h2><div class="form-grid"><div class="field span-two"><label for="imported-sales-card">İthal ürün stok kartı</label><select id="imported-sales-card"></select></div><div class="field"><label for="imported-sales-quantity">Miktar</label><input id="imported-sales-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-sales-price">Birim satış fiyatı (TL)</label><input id="imported-sales-price" type="number" min="0" step="0.01" placeholder="0" /></div></div><div class="form-actions"><button class="secondary-button" type="button" data-add-imported-sales-item>+ Satır ekle</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
+      <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Müşteri teslimatlarını ve ithal ürün sevkiyat kalemlerini depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürünler</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
+      <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi ve ithal ürün kalemlerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Sevkiyat tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div></section><section class="section"><h2>Sevkiyat kalemleri</h2><div class="form-grid"><div class="field span-two"><label for="warehouse-shipping-card">İthal ürün stok kartı</label><select id="warehouse-shipping-card"></select></div><div class="field"><label for="warehouse-shipping-quantity">Miktar</label><input id="warehouse-shipping-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div></div><div class="form-actions"><button class="secondary-button" type="button" data-add-warehouse-shipping-item>+ Satır ekle</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-draft-body"></tbody></table></div></section><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section>
       <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
-            <section class="view report-view" data-page="user-management">
+      <section class="view report-view" data-page="user-management">
         <section class="section public-access-section">
           <h2>Şifresiz açık sayfalar</h2>
           <p class="table-hint">Bu sayfalar, bağlantıyı bilen herkes tarafından görüntülenebilir. Güvenli paylaşım için şu an yalnızca Genel stok özeti şifresiz açılabilir; ekleme, düzenleme ve rapor alma kapalı kalır.</p>
@@ -608,7 +625,7 @@
           <div class="form-actions"><span class="muted-note" id="public-access-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-public-access>Şifresiz erişimi kaydet</button></div>
         </section>
       </section>
-<section class="view report-view" data-page="stock-report">
+      <section class="view report-view" data-page="stock-report">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Stok raporu</h1><p>Stok kartlarının mevcut miktarını, kullanımını ve planlanan ihtiyacını raporlayın.</p></div></div></div>
         <div id="stock-report-page-slot"></div>
       </section>
@@ -839,6 +856,7 @@
         if (page === 'imported-stock-entry') renderImportedMovementPage('entry');
         if (page === 'imported-stock-exit') renderImportedMovementPage('exit');
         if (page === 'imported-sales') renderImportedSalesOrders();
+        if (page === 'warehouse-shipping') renderWarehouseShipments();
         if (page === 'liner-widths') renderLinerWidths();
         if (page === 'shipping') renderShipping();
         if (page === 'settings') renderBackupStatus();
@@ -1905,6 +1923,7 @@
       const importedEntryMovementsBody = root.querySelector('#imported-entry-movements-body');
       const importedExitMovementsBody = root.querySelector('#imported-exit-movements-body');
       const importedSalesListBody = root.querySelector('#imported-sales-list-body');
+      const warehouseShippingListBody = root.querySelector('#warehouse-shipping-list-body');
       const workorderButton = root.querySelector('[data-generate-workorder]');
       let savedWorkorderId = 1;
       let activeOrderRow = null;
@@ -2030,6 +2049,10 @@
       let nextImportedSalesOrderId = 1;
       let editingImportedSalesOrderId = null;
       let importedSalesDraftItems = [];
+      const warehouseShipments = [];
+      let nextWarehouseShipmentId = 1;
+      let editingWarehouseShipmentId = null;
+      let warehouseShippingDraftItems = [];
       const stockSummarySelectedIds = new Set();
       let stockSummaryAllRows = [];
       let stockSummaryFilteredRows = [];
@@ -3008,7 +3031,8 @@
           const statusCell = document.createElement('td');
           const statusSelect = document.createElement('select');
           statusSelect.className = 'imported-sales-status-select';
-          statusSelect.setAttribute('aria-label', order.orderNo + ' sipariş durumu');
+          statusSelect.dataset.importedSalesStatus = order.id;
+          statusSelect.setAttribute('aria-label', `${order.orderNo} sipariş durumu`);
           const statuses = ['Taslak', 'Onaylandı', 'Sevke hazır', 'Teslim edildi', 'İptal edildi'];
           const selectedStatus = order.status || 'Taslak';
           if (!statuses.includes(selectedStatus)) statuses.push(selectedStatus);
@@ -3018,12 +3042,6 @@
             option.textContent = statusValue;
             option.selected = statusValue === selectedStatus;
             statusSelect.appendChild(option);
-          });
-          statusSelect.addEventListener('change', () => {
-            order.status = statusSelect.value;
-            saveProductionState();
-            const status = root.querySelector('#imported-sales-status');
-            if (status) status.textContent = order.orderNo + ' siparişinin durumu güncellendi.';
           });
           statusCell.appendChild(statusSelect);
           row.appendChild(statusCell);
@@ -3093,6 +3111,192 @@
         if (!window.confirm('Bu satış siparişi silinsin mi? Stokta herhangi bir değişiklik yapılmaz.')) return;
         importedSalesOrders.splice(index, 1);
         renderImportedSalesOrders();
+        saveProductionState();
+      };
+      const warehouseShippingNumber = (id) => {
+        const year = new Date().getFullYear();
+        const number = Number(id) || nextWarehouseShipmentId;
+        return 'DEP-SEVK-' + year + '-' + String(number).padStart(4, '0');
+      };
+      const renderWarehouseShippingItemOptions = () => {
+        const select = root.querySelector('#warehouse-shipping-card');
+        if (!select) return;
+        const previous = Number(select.value);
+        select.replaceChildren();
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = importedStockCards.length ? 'İthal ürün stok kartı seçin' : 'Önce ithal ürün stok kartı ekleyin';
+        select.appendChild(placeholder);
+        importedStockCards.forEach((card) => {
+          const option = document.createElement('option');
+          option.value = card.id;
+          option.textContent = card.code + ' · ' + importedCardLabel(card) + ' · Mevcut: ' + numberFormat(Number(card.onHand) || 0) + ' ' + card.unit;
+          option.selected = card.id === previous;
+          select.appendChild(option);
+        });
+        select.disabled = importedStockCards.length === 0;
+      };
+      const renderWarehouseShippingDraft = () => {
+        const body = root.querySelector('#warehouse-shipping-draft-body');
+        if (!body) return;
+        body.replaceChildren();
+        if (!warehouseShippingDraftItems.length) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 4;
+          cell.className = 'empty-workorders';
+          cell.textContent = 'Henüz sevkiyat kalemi eklenmedi.';
+          row.appendChild(cell);
+          body.appendChild(row);
+        } else warehouseShippingDraftItems.forEach((item, index) => {
+          const row = document.createElement('tr');
+          [item.cardCode, item.cardLabel, numberFormat(Number(item.quantity) || 0) + ' ' + item.unit].forEach((value, cellIndex) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (cellIndex === 0) cell.className = 'code';
+            if (cellIndex === 1) cell.classList.add('order');
+            row.appendChild(cell);
+          });
+          const actionCell = document.createElement('td');
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'row-action is-cancel';
+          remove.dataset.removeWarehouseShippingItem = String(index);
+          remove.textContent = 'Kaldır';
+          actionCell.appendChild(remove);
+          row.appendChild(actionCell);
+          body.appendChild(row);
+        });
+      };
+      const resetWarehouseShippingForm = () => {
+        editingWarehouseShipmentId = null;
+        warehouseShippingDraftItems = [];
+        root.querySelector('#warehouse-shipping-form-title').textContent = 'Yeni depo sevkiyatı';
+        root.querySelector('#warehouse-shipping-no').value = warehouseShippingNumber();
+        root.querySelector('#warehouse-shipping-date').value = importedMovementDate();
+        ['customer', 'address', 'note', 'quantity'].forEach((field) => { root.querySelector('#warehouse-shipping-' + field).value = ''; });
+        root.querySelector('#warehouse-shipping-status-select').value = 'Hazırlanıyor';
+        root.querySelector('#warehouse-shipping-form-status').textContent = '';
+        renderWarehouseShippingItemOptions();
+        renderWarehouseShippingDraft();
+      };
+      const addWarehouseShippingItem = () => {
+        const status = root.querySelector('#warehouse-shipping-form-status');
+        const card = importedStockCards.find((item) => item.id === Number(root.querySelector('#warehouse-shipping-card').value));
+        const quantity = Number(root.querySelector('#warehouse-shipping-quantity').value);
+        if (!card) { status.textContent = 'Sevkiyata eklenecek ithal ürün stok kartını seçin.'; return; }
+        if (!Number.isFinite(quantity) || quantity <= 0) { status.textContent = 'Sıfırdan büyük bir sevkiyat miktarı girin.'; return; }
+        warehouseShippingDraftItems.push({ cardId: card.id, cardCode: card.code, cardLabel: importedCardLabel(card), unit: card.unit, quantity });
+        root.querySelector('#warehouse-shipping-quantity').value = '';
+        status.textContent = importedCardLabel(card) + ' sevkiyata eklendi.';
+        renderWarehouseShippingDraft();
+      };
+      const renderWarehouseShipments = () => {
+        if (!warehouseShippingListBody) return;
+        warehouseShippingListBody.replaceChildren();
+        if (!warehouseShipments.length) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 8;
+          cell.className = 'empty-workorders';
+          cell.textContent = 'Henüz depo sevkiyatı kaydedilmedi.';
+          row.appendChild(cell);
+          warehouseShippingListBody.appendChild(row);
+        } else warehouseShipments.slice().sort((left, right) => Number(right.id) - Number(left.id)).forEach((shipment) => {
+          const row = document.createElement('tr');
+          const products = (shipment.items || []).map((item) => item.cardLabel + ' · ' + numberFormat(Number(item.quantity) || 0) + ' ' + item.unit).join(' · ') || '—';
+          [shipment.shippingNo, formatImportedMovementDate(shipment.date), shipment.customer || '—', shipment.address || '—', products].forEach((value, index) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (index === 0) cell.className = 'code';
+            if (index === 2 || index === 3 || index === 4) cell.classList.add('order');
+            row.appendChild(cell);
+          });
+          const statusCell = document.createElement('td');
+          const statusSelect = document.createElement('select');
+          statusSelect.className = 'warehouse-shipping-status-select';
+          statusSelect.dataset.warehouseShippingStatus = shipment.id;
+          statusSelect.setAttribute('aria-label', `${shipment.shippingNo} sevkiyat durumu`);
+          const statuses = ['Hazırlanıyor', 'Sevke hazır', 'Yolda', 'Teslim edildi', 'İptal edildi'];
+          const selectedStatus = shipment.status || 'Hazırlanıyor';
+          if (!statuses.includes(selectedStatus)) statuses.push(selectedStatus);
+          statuses.forEach((statusValue) => {
+            const option = document.createElement('option');
+            option.value = statusValue;
+            option.textContent = statusValue;
+            option.selected = statusValue === selectedStatus;
+            statusSelect.appendChild(option);
+          });
+          statusCell.appendChild(statusSelect);
+          row.appendChild(statusCell);
+          const noteCell = document.createElement('td');
+          noteCell.textContent = shipment.note || '—';
+          row.appendChild(noteCell);
+          const actionCell = document.createElement('td');
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'row-action';
+          edit.dataset.editWarehouseShipping = shipment.id;
+          edit.textContent = 'Aç';
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'row-action is-cancel';
+          remove.dataset.deleteWarehouseShipping = shipment.id;
+          remove.textContent = 'Sil';
+          actionCell.append(edit, remove);
+          row.appendChild(actionCell);
+          warehouseShippingListBody.appendChild(row);
+        });
+        const status = root.querySelector('#warehouse-shipping-status');
+        if (status) status.textContent = warehouseShipments.length ? String(warehouseShipments.length) + ' depo sevkiyatı listeleniyor. Kayıt, stoktan otomatik düşüm yapmaz.' : 'Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.';
+        applyTableSearch('warehouse-shipping-table');
+      };
+      const openWarehouseShippingForEdit = (shipment) => {
+        if (!shipment) return;
+        editingWarehouseShipmentId = shipment.id;
+        warehouseShippingDraftItems = (shipment.items || []).map((item) => ({ ...item }));
+        root.querySelector('#warehouse-shipping-form-title').textContent = 'Depo sevkiyatını düzenle';
+        root.querySelector('#warehouse-shipping-no').value = shipment.shippingNo;
+        root.querySelector('#warehouse-shipping-date').value = shipment.date || importedMovementDate();
+        root.querySelector('#warehouse-shipping-customer').value = shipment.customer || '';
+        root.querySelector('#warehouse-shipping-address').value = shipment.address || '';
+        root.querySelector('#warehouse-shipping-status-select').value = shipment.status || 'Hazırlanıyor';
+        root.querySelector('#warehouse-shipping-note').value = shipment.note || '';
+        root.querySelector('#warehouse-shipping-form-status').textContent = '';
+        renderWarehouseShippingItemOptions();
+        renderWarehouseShippingDraft();
+        show('warehouse-shipping-form');
+      };
+      const saveWarehouseShipping = () => {
+        const status = root.querySelector('#warehouse-shipping-form-status');
+        const customer = root.querySelector('#warehouse-shipping-customer').value.trim();
+        const address = root.querySelector('#warehouse-shipping-address').value.trim();
+        if (!customer) { status.textContent = 'Müşteri adı girilmelidir.'; return; }
+        if (!address) { status.textContent = 'Teslimat adresi girilmelidir.'; return; }
+        if (!warehouseShippingDraftItems.length) { status.textContent = 'En az bir sevkiyat kalemi ekleyin.'; return; }
+        const existing = warehouseShipments.find((shipment) => shipment.id === editingWarehouseShipmentId);
+        const shipment = {
+          id: editingWarehouseShipmentId || nextWarehouseShipmentId++,
+          shippingNo: root.querySelector('#warehouse-shipping-no').value || warehouseShippingNumber(),
+          date: root.querySelector('#warehouse-shipping-date').value || importedMovementDate(),
+          customer,
+          address,
+          status: root.querySelector('#warehouse-shipping-status-select').value,
+          note: root.querySelector('#warehouse-shipping-note').value.trim(),
+          items: warehouseShippingDraftItems.map((item) => ({ ...item })),
+        };
+        if (existing) warehouseShipments.splice(warehouseShipments.indexOf(existing), 1, shipment);
+        else warehouseShipments.unshift(shipment);
+        renderWarehouseShipments();
+        saveProductionState();
+        show('warehouse-shipping');
+      };
+      const deleteWarehouseShipping = (id) => {
+        const index = warehouseShipments.findIndex((shipment) => shipment.id === Number(id));
+        if (index === -1) return;
+        if (!window.confirm('Bu depo sevkiyatı silinsin mi? Stokta herhangi bir değişiklik yapılmaz.')) return;
+        warehouseShipments.splice(index, 1);
+        renderWarehouseShipments();
         saveProductionState();
       };
       const renderStockDemand = () => {
@@ -4310,6 +4514,52 @@
         list.innerHTML = templates.map((template) => `<button type="button" class="template-button" data-workorder-template="${template.id}"><strong>${template.label}</strong><span>${template.detail}</span></button>`).join('');
       };
       const persistentStateKey = 'csp-production-management-state-v2';
+      const deletionTrackedStateKeys = ['orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'warehouseShipments', 'workorderRecords'];
+      let deletedRecords = {};
+      let deletionBaseline = {};
+      const copyStateValue = (value) => JSON.parse(JSON.stringify(value));
+      const deletionIdentity = (area, value, index) => {
+        if (!value || typeof value !== 'object') return `${area}:value:${index}:${String(value ?? '')}`;
+        if ((area === 'stockCards' || area === 'importedStockCards') && String(value.code || '').trim()) {
+          return `${area}:code:${String(value.code).trim().toLocaleUpperCase('tr-TR')}`;
+        }
+        const id = String(value.id ?? value.orderId ?? value.code ?? value.number ?? '').trim();
+        return id ? `${area}:id:${id}` : `${area}:row:${index}`;
+      };
+      const normaliseDeletedRecords = (value) => {
+        const result = {};
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return result;
+        deletionTrackedStateKeys.forEach((key) => {
+          if (!Array.isArray(value[key])) return;
+          const identities = [...new Set(value[key].map((identity) => String(identity || '').trim()).filter(Boolean))];
+          if (identities.length) result[key] = identities;
+        });
+        return result;
+      };
+      const rememberDeletedRecords = (state) => {
+        const nextDeletedRecords = normaliseDeletedRecords(deletedRecords);
+        deletionTrackedStateKeys.forEach((key) => {
+          const before = Array.isArray(deletionBaseline[key]) ? deletionBaseline[key] : [];
+          const current = Array.isArray(state[key]) ? state[key] : [];
+          const currentIdentities = new Set(current.map((item, index) => deletionIdentity(key, item, index)));
+          const identities = new Set(nextDeletedRecords[key] || []);
+          before.forEach((item, index) => {
+            const identity = deletionIdentity(key, item, index);
+            if (!currentIdentities.has(identity)) identities.add(identity);
+          });
+          if (identities.size) nextDeletedRecords[key] = [...identities];
+          else delete nextDeletedRecords[key];
+          deletionBaseline[key] = copyStateValue(current);
+        });
+        deletedRecords = nextDeletedRecords;
+        state.deletedRecords = copyStateValue(deletedRecords);
+      };
+      const captureDeletionBaseline = () => {
+        const snapshot = productionStateSnapshot();
+        deletionTrackedStateKeys.forEach((key) => {
+          deletionBaseline[key] = copyStateValue(Array.isArray(snapshot[key]) ? snapshot[key] : []);
+        });
+      };
       const orderValuesFromRow = (row) => Array.from(row.cells).slice(0, 12).map((cell) => cell.textContent.trim());
       const stockImageDatabaseName = 'csp-production-stock-images-v2';
       const stockImageStoreName = 'stock-images';
@@ -4491,6 +4741,7 @@
         importedStockCards: importedStockCards.map((card) => ({ ...card, image: card.imageKey ? '' : card.image })),
         importedStockMovements: importedStockMovements.map((movement) => ({ ...movement })),
         importedSalesOrders: importedSalesOrders.map((order) => ({ ...order, items: (order.items || []).map((item) => ({ ...item })) })),
+        warehouseShipments: warehouseShipments.map((shipment) => ({ ...shipment, items: (shipment.items || []).map((item) => ({ ...item })) })),
         workorderRecords: workorderRecords.map((record) => {
           const { orderRow, ...savedRecord } = record;
           return { ...savedRecord, orderId: orderRow?.dataset.orderId || '' };
@@ -4502,8 +4753,10 @@
         nextImportedStockCardId,
         nextImportedStockMovementId,
         nextImportedSalesOrderId,
+        nextWarehouseShipmentId,
         linerStarterCardsImported,
-        savedWorkorderId
+        savedWorkorderId,
+        deletedRecords: copyStateValue(deletedRecords)
       });
       const productionBackupSnapshot = () => ({ ...productionStateSnapshot(), stockCards: stockCards.map((card) => ({ ...card })), importedStockCards: importedStockCards.map((card) => ({ ...card })) });
       const setBackupStatus = (message) => {
@@ -4562,6 +4815,7 @@
       const saveProductionState = () => {
         try {
           const state = productionStateSnapshot();
+          rememberDeletedRecords(state);
           window.localStorage.setItem(persistentStateKey, JSON.stringify(state));
           queueFolderBackup();
           return true;
@@ -4573,6 +4827,7 @@
         try {
           const saved = JSON.parse(window.localStorage.getItem(persistentStateKey) || 'null');
           if (!saved || !Array.isArray(saved.orders)) return false;
+          deletedRecords = normaliseDeletedRecords(saved.deletedRecords);
           saved.orders.forEach((order) => orderListBody.appendChild(createOrderRow(order.values, { id: order.id, linerCardId: order.linerCardId })));
           const highestOrderId = saved.orders.reduce((highest, order) => Math.max(highest, Number(String(order.id || '').match(/\d+$/)?.[0]) || 0), 0);
           nextOrderId = Math.max(Number(saved.nextOrderId) || 1, highestOrderId + 1);
@@ -4584,6 +4839,8 @@
           nextImportedStockMovementId = Math.max(Number(saved.nextImportedStockMovementId) || 1, ...importedStockMovements.map((movement) => Number(movement.id) + 1 || 1));
           importedSalesOrders.splice(0, importedSalesOrders.length, ...(Array.isArray(saved.importedSalesOrders) ? saved.importedSalesOrders : []));
           nextImportedSalesOrderId = Math.max(Number(saved.nextImportedSalesOrderId) || 1, ...importedSalesOrders.map((order) => Number(order.id) + 1 || 1));
+          warehouseShipments.splice(0, warehouseShipments.length, ...(Array.isArray(saved.warehouseShipments) ? saved.warehouseShipments : []));
+          nextWarehouseShipmentId = Math.max(Number(saved.nextWarehouseShipmentId) || 1, ...warehouseShipments.map((shipment) => Number(shipment.id) + 1 || 1));
           linerStarterCardsImported = Number(saved.linerStarterCardsImported) || 0;
           Object.entries(saved.series || {}).forEach(([type, value]) => {
             const input = productionSeries[type] && root.querySelector(`#${productionSeries[type].input}`);
@@ -4649,6 +4906,7 @@
       renderImportedSalesOrders();
       void hydrateStockCardImages();
       void hydrateImportedStockCardImages();
+      captureDeletionBaseline();
       if (clearedReleasedCodeLabels || starterCardsImported.added || starterCardsImported.updated) saveProductionState();
       root.addEventListener('click', (event) => {
         const editButton = event.target.closest('[data-edit-order]');
@@ -4709,6 +4967,12 @@
         const saveImportedSalesButton = event.target.closest('[data-save-imported-sales]');
         const editImportedSalesButton = event.target.closest('[data-edit-imported-sales]');
         const deleteImportedSalesButton = event.target.closest('[data-delete-imported-sales]');
+        const openWarehouseShippingButton = event.target.closest('[data-open-warehouse-shipping]');
+        const addWarehouseShippingItemButton = event.target.closest('[data-add-warehouse-shipping-item]');
+        const removeWarehouseShippingItemButton = event.target.closest('[data-remove-warehouse-shipping-item]');
+        const saveWarehouseShippingButton = event.target.closest('[data-save-warehouse-shipping]');
+        const editWarehouseShippingButton = event.target.closest('[data-edit-warehouse-shipping]');
+        const deleteWarehouseShippingButton = event.target.closest('[data-delete-warehouse-shipping]');
         const stockImageModal = root.querySelector('#stock-image-modal');
         if (openImportedSalesButton) { resetImportedSalesForm(); show('imported-sales-form'); return; }
         if (addImportedSalesItemButton) { addImportedSalesItem(); return; }
@@ -4720,6 +4984,16 @@
         if (saveImportedSalesButton) { saveImportedSalesOrder(); return; }
         if (editImportedSalesButton) { openImportedSalesForEdit(importedSalesOrders.find((order) => order.id === Number(editImportedSalesButton.dataset.editImportedSales))); return; }
         if (deleteImportedSalesButton) { deleteImportedSalesOrder(deleteImportedSalesButton.dataset.deleteImportedSales); return; }
+        if (openWarehouseShippingButton) { resetWarehouseShippingForm(); show('warehouse-shipping-form'); return; }
+        if (addWarehouseShippingItemButton) { addWarehouseShippingItem(); return; }
+        if (removeWarehouseShippingItemButton) {
+          warehouseShippingDraftItems.splice(Number(removeWarehouseShippingItemButton.dataset.removeWarehouseShippingItem), 1);
+          renderWarehouseShippingDraft();
+          return;
+        }
+        if (saveWarehouseShippingButton) { saveWarehouseShipping(); return; }
+        if (editWarehouseShippingButton) { openWarehouseShippingForEdit(warehouseShipments.find((shipment) => shipment.id === Number(editWarehouseShippingButton.dataset.editWarehouseShipping))); return; }
+        if (deleteWarehouseShippingButton) { deleteWarehouseShipping(deleteWarehouseShippingButton.dataset.deleteWarehouseShipping); return; }
         if (openStockImageButton) {
           const image = openStockImageButton.querySelector('img');
           const modalImage = root.querySelector('#stock-image-modal-image');
@@ -5094,6 +5368,26 @@
           renderStockSummary();
           return;
         }
+        const importedSalesStatusSelect = event.target.closest('[data-imported-sales-status]');
+        if (importedSalesStatusSelect) {
+          const order = importedSalesOrders.find((item) => item.id === Number(importedSalesStatusSelect.dataset.importedSalesStatus));
+          if (!order) return;
+          order.status = importedSalesStatusSelect.value;
+          saveProductionState();
+          const status = root.querySelector('#imported-sales-status');
+          if (status) status.textContent = `${order.orderNo} siparişinin durumu “${order.status}” olarak güncellendi.`;
+          return;
+        }
+        const warehouseShippingStatusSelect = event.target.closest('[data-warehouse-shipping-status]');
+        if (warehouseShippingStatusSelect) {
+          const shipment = warehouseShipments.find((item) => item.id === Number(warehouseShippingStatusSelect.dataset.warehouseShippingStatus));
+          if (!shipment) return;
+          shipment.status = warehouseShippingStatusSelect.value;
+          saveProductionState();
+          const status = root.querySelector('#warehouse-shipping-status');
+          if (status) status.textContent = `${shipment.shippingNo} sevkiyatının durumu “${shipment.status}” olarak güncellendi.`;
+          return;
+        }
         const tableFilterMode = event.target.closest('[data-table-filter-mode]');
         if (tableFilterMode) {
           updateTableFilterMode(tableFilterMode);
@@ -5313,7 +5607,7 @@
     (() => {
       const root = document.getElementById('csp-production-sketch');
       const cloudHost = location.hostname === 'csp-prefabrik-havuz.github.io';
-            const publicPageAliases = { 'stok-ozeti': 'stock-summary', 'genel-stok': 'stock-summary' };
+      const publicPageAliases = { 'stok-ozeti': 'stock-summary', 'genel-stok': 'stock-summary' };
       const requestedPublicPage = cloudHost ? publicPageAliases[new URLSearchParams(location.search).get('sayfa')] : '';
       const publicStockMode = requestedPublicPage === 'stock-summary';
       const cloudConfig = {
@@ -5350,14 +5644,15 @@
       let suppressCloudSync = false;
       let editingManagedUserId = '';
       const managedUsers = new Map();
-            const publicPageSettings = new Map();
+      const publicPageSettings = new Map();
       const pageAccessDefinitions = [
         ['dashboard', 'Ana panel'], ['orders', 'Siparişler'], ['workorders', 'İş emirleri'], ['planning', 'Üretim planı'],
         ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
         ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['settings', 'Ayarlar ve yedek'],
-        ['imported-stock', 'İthal ürün stokları'], ['imported-stock-entry', 'İthal ürün girişi'], ['imported-stock-exit', 'İthal ürün çıkışı'], ['imported-sales', 'İthal ürün satışları']
+        ['imported-stock', 'İthal ürün stokları'], ['imported-stock-entry', 'İthal ürün girişi'], ['imported-stock-exit', 'İthal ürün çıkışı'], ['imported-sales', 'İthal ürün satışları'],
+        ['warehouse-shipping', 'Depo sevkiyat']
       ];
-      const pageAliases = { 'order-form': 'orders', 'workorder-select': 'workorders', 'workorder-form': 'workorders', 'imported-sales-form': 'imported-sales', 'user-management': 'user-management' };
+      const pageAliases = { 'order-form': 'orders', 'workorder-select': 'workorders', 'workorder-form': 'workorders', 'imported-sales-form': 'imported-sales', 'warehouse-shipping-form': 'warehouse-shipping', 'user-management': 'user-management' };
 
       const technicalEmail = (username) => {
         const cleaned = String(username || '').trim().toLocaleLowerCase('tr-TR').replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u').replace(/[^a-z0-9._-]/g, '');
@@ -5370,7 +5665,7 @@
       const setSessionLabel = (message) => { if (sessionLabel) sessionLabel.textContent = message; };
       const hasState = (value) => Boolean(value && Array.isArray(value.orders) && Array.isArray(value.stockCards));
       const hasMeaningfulRecords = (value) => Boolean(value && [
-        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'workorderRecords'
+        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'warehouseShipments', 'workorderRecords'
       ].some((key) => Array.isArray(value[key]) && value[key].length));
       const safeJson = (value) => {
         try { return JSON.parse(value || 'null'); } catch (error) { return null; }
@@ -5457,22 +5752,13 @@
         await enrichCards(payload.importedStockCards, 'ithal');
         return payload;
       };
-      const invokePanelState = async (body) => {
-        const sessionResult = await cloud.auth.getSession();
-        const accessToken = sessionResult.data.session?.access_token;
-        if (!accessToken) throw new Error('Oturum bulunamadı. Lütfen yeniden giriş yapın.');
-        return cloud.functions.invoke('panel-state', {
-          body,
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
-      };
       const pushState = async (state) => {
         if (!currentUser || syncInProgress || !hasState(state)) return;
         syncInProgress = true;
         setSessionLabel('Eşitleniyor…');
         try {
           const payload = await enrichStateImages(state);
-          const result = await invokePanelState({ action: 'push', state: payload });
+          const result = await cloud.functions.invoke('panel-state', { body: { action: 'push', state: payload } });
           if (result.error || result.data?.error) throw (result.error || new Error(result.data.error));
           setSessionLabel(userTitle() + ' · çevrimiçi');
         } catch (error) {
@@ -5488,10 +5774,10 @@
       };
       Storage.prototype.setItem = function(key, value) {
         nativeStorageSet.call(this, key, value);
-        if (key === cloudConfig.stateKey) queueCloudSync(safeJson(value));
+        if (this === window.localStorage && key === cloudConfig.stateKey) queueCloudSync(safeJson(value));
       };
       const pullState = async () => {
-        const response = await invokePanelState({ action: 'pull' });
+        const response = await cloud.functions.invoke('panel-state', { body: { action: 'pull' } });
         if (response.error || response.data?.error) throw (response.error || new Error(response.data.error));
         const remoteState = response.data?.state;
         const localState = safeJson(window.localStorage.getItem(cloudConfig.stateKey));
@@ -5522,7 +5808,7 @@
         if (hasState(localState)) await pushState(localState);
         return false;
       };
-            const publicStockSummaryLink = () => location.origin + location.pathname + '?sayfa=stok-ozeti';
+      const publicStockSummaryLink = () => location.origin + location.pathname + '?sayfa=stok-ozeti';
       const publicAccessStatus = (message, ok) => {
         const node = root.querySelector('#public-access-status');
         if (!node) return;
@@ -5569,8 +5855,9 @@
           publicAccessStatus('Bağlantıyı seçtim; kopyalamak için Ctrl + C tuşlarına basın.');
         }
       };
-const renderPublicStockSummary = async () => {
+      const renderPublicStockSummary = async () => {
         root.classList.remove('cloud-locked');
+        root.classList.add('public-stock-mode');
         root.querySelector('.side-nav').hidden = true;
         root.querySelectorAll('[data-page]').forEach((node) => node.classList.toggle('is-visible', node.dataset.page === 'stock-summary'));
         root.querySelector('.stock-summary-report-actions')?.setAttribute('hidden', '');
@@ -5596,11 +5883,16 @@ const renderPublicStockSummary = async () => {
           values.forEach((value, index) => {
             const cell = document.createElement('td');
             if (index === 0 && item.image_url) {
+              const button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'stock-image-button';
+              button.dataset.openStockImage = '';
               const image = document.createElement('img');
               image.src = item.image_url;
               image.alt = (item.material_name || 'Ürün') + ' görseli';
               image.style.cssText = 'width:44px;height:44px;object-fit:cover;border-radius:6px';
-              cell.appendChild(image);
+              button.appendChild(image);
+              cell.appendChild(button);
             } else cell.textContent = index === 0 ? '—' : value;
             row.appendChild(cell);
           });
@@ -5780,7 +6072,7 @@ const renderPublicStockSummary = async () => {
         const edit = event.target.closest('[data-edit-managed-user]');
         if (edit) { editManagedUser(managedUsers.get(edit.dataset.editManagedUser)); return; }
         if (event.target.closest('[data-reset-managed-user]')) { resetManagedUserForm(); return; }
-                if (event.target.closest('[data-save-managed-user]')) { void saveManagedUser(); return; }
+        if (event.target.closest('[data-save-managed-user]')) { void saveManagedUser(); return; }
         if (event.target.closest('[data-save-public-access]')) { void savePublicAccess(); return; }
         if (event.target.closest('[data-copy-public-stock-link]')) { void copyPublicStockSummaryLink(); }
       }, true);
@@ -5803,7 +6095,7 @@ const renderPublicStockSummary = async () => {
         if (isPanelAdmin()) {
           resetManagedUserForm();
           void renderManagedUsers();
-                    void loadPublicPageSettings().catch(() => publicAccessStatus('Şifresiz erişim ayarları şu anda yüklenemedi.'));
+          void loadPublicPageSettings().catch(() => publicAccessStatus('Şifresiz erişim ayarları şu anda yüklenemedi.'));
         }
         closeGate();
         await pullState();
@@ -5843,7 +6135,7 @@ const renderPublicStockSummary = async () => {
         showGate('login');
       });
       if (publicStockMode) {
-                void loadPublicPageSettings().then((settings) => {
+        void loadPublicPageSettings().then((settings) => {
           if (!settings.get(requestedPublicPage)) {
             void cloud.auth.getSession().then((result) => establishSession(result.data.session)).catch(() => showGate('login'));
             return;
@@ -5853,9 +6145,6 @@ const renderPublicStockSummary = async () => {
         }).catch(() => {
           void cloud.auth.getSession().then((result) => establishSession(result.data.session)).catch(() => showGate('login'));
         });
-        return;
-        gate.hidden = true;
-        void renderPublicStockSummary();
       } else {
         void cloud.auth.getSession().then((result) => establishSession(result.data.session)).catch(() => showGate('login'));
       }
