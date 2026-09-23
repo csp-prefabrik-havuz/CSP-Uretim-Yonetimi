@@ -41,6 +41,15 @@
     }
     #csp-production-sketch .top-button { color: #e7f5f8; }
     #csp-production-sketch .top-button:hover, #csp-production-sketch .nav-button:hover, #csp-production-sketch .secondary-button:hover { background: light-dark(#e6edf1, #253444); }
+    #csp-production-sketch .top-button.is-alert { color: #fff3e4; background: rgba(239, 123, 26, .22); }
+    #csp-production-sketch .notification-badge { display: inline-grid; min-width: 17px; height: 17px; margin-left: 5px; padding: 0 4px; place-items: center; color: #fff; background: #ef7b1a; border-radius: 10px; font-size: 10px; font-weight: 700; }
+    #csp-production-sketch .panel-notifications { position: fixed; z-index: 95; top: 66px; right: 18px; width: min(390px, calc(100vw - 36px)); padding: 16px; color: #253646; background: #fff; border: 1px solid #bcd1da; border-top: 4px solid #ef7b1a; border-radius: 12px; box-shadow: 0 16px 42px rgba(1, 24, 35, .26); }
+    #csp-production-sketch .panel-notifications[hidden] { display: none; }
+    #csp-production-sketch .panel-notifications-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    #csp-production-sketch .panel-notifications h2 { margin: 0; color: #0b536e; font-size: 16px; }
+    #csp-production-sketch .panel-notification-item { margin: 13px 0; padding: 11px; background: #fff8ef; border: 1px solid #f5c38f; border-radius: 8px; font-size: 13px; line-height: 1.45; }
+    #csp-production-sketch .panel-notification-item strong { display: block; margin-bottom: 3px; color: #9d4a09; }
+    #csp-production-sketch .panel-notifications-actions { display: flex; justify-content: flex-end; gap: 8px; }
     #csp-production-sketch .shell { display: grid; grid-template-columns: 168px minmax(0, 1fr); min-height: 625px; }
     #csp-production-sketch .side-nav { padding: 15px 10px; background: light-dark(#ffffff, #17212d); border-right: 1px solid light-dark(#dde3eb, #2b3645); }
     #csp-production-sketch .nav-label { padding: 8px 10px 6px; color: light-dark(#697687, #a9b6c6); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
@@ -451,10 +460,15 @@
       </div>
     </div>
     <div class="top-actions">
-      <button class="top-button" type="button">Bildirimler</button>
+      <button class="top-button" id="notifications-button" type="button" aria-haspopup="dialog">Bildirimler<span class="notification-badge" id="notification-badge" hidden>1</span></button>
       <button class="top-button" id="cloud-session-button" type="button" aria-haspopup="dialog"><span id="cloud-session-label">Giriş yap</span></button>
     </div>
   </header>
+  <aside class="panel-notifications" id="panel-notifications" hidden role="dialog" aria-modal="false" aria-labelledby="panel-notifications-title">
+    <div class="panel-notifications-head"><h2 id="panel-notifications-title">Bildirimler</h2><button class="secondary-button" type="button" data-close-notifications>Kapat</button></div>
+    <div id="panel-notifications-list"></div>
+    <div class="panel-notifications-actions"><button class="primary-button" type="button" data-apply-pending-changes hidden>Şimdi güncelle</button></div>
+  </aside>
 
   <div class="shell">
     <nav class="side-nav" aria-label="Program menüsü">
@@ -5636,12 +5650,19 @@
       const newPassword = root.querySelector('#cloud-new-password');
       const newPasswordConfirm = root.querySelector('#cloud-new-password-confirm');
       const passwordStatus = root.querySelector('#cloud-password-status');
+      const notificationsButton = root.querySelector('#notifications-button');
+      const notificationsPanel = root.querySelector('#panel-notifications');
+      const notificationBadge = root.querySelector('#notification-badge');
+      const notificationsList = root.querySelector('#panel-notifications-list');
+      const applyPendingChangesButton = root.querySelector('[data-apply-pending-changes]');
       const nativeStorageSet = Storage.prototype.setItem;
       let currentUser = null;
       let currentProfile = null;
       let syncTimer = 0;
       let cloudRefreshTimer = 0;
       let syncInProgress = false;
+      let localSyncQueued = false;
+      let pendingRemoteUpdate = false;
       let suppressCloudSync = false;
       let editingManagedUserId = '';
       const managedUsers = new Map();
@@ -5654,6 +5675,37 @@
         ['warehouse-shipping', 'Depo sevkiyat']
       ];
       const pageAliases = { 'order-form': 'orders', 'workorder-select': 'workorders', 'workorder-form': 'workorders', 'imported-sales-form': 'imported-sales', 'warehouse-shipping-form': 'warehouse-shipping', 'user-management': 'user-management' };
+      const protectedFormPages = new Set(['order-form', 'workorder-select', 'workorder-form', 'stock-card-form', 'imported-stock-form', 'imported-sales-form', 'warehouse-shipping-form']);
+      const activePanelPage = () => root.querySelector('[data-page].is-visible')?.dataset.page || '';
+      const hasOpenForm = () => protectedFormPages.has(activePanelPage());
+      const renderNotifications = () => {
+        if (!notificationsList || !notificationBadge || !notificationsButton || !applyPendingChangesButton) return;
+        notificationsList.replaceChildren();
+        notificationBadge.hidden = !pendingRemoteUpdate;
+        notificationsButton.classList.toggle('is-alert', pendingRemoteUpdate);
+        applyPendingChangesButton.hidden = !pendingRemoteUpdate;
+        if (!pendingRemoteUpdate) {
+          const empty = document.createElement('p');
+          empty.className = 'muted-note';
+          empty.textContent = 'Yeni bildirim bulunmuyor.';
+          notificationsList.appendChild(empty);
+          return;
+        }
+        const item = document.createElement('div');
+        item.className = 'panel-notification-item';
+        const title = document.createElement('strong');
+        title.textContent = 'Yeni panel değişiklikleri hazır';
+        const detail = document.createElement('span');
+        detail.textContent = hasOpenForm()
+          ? 'Formda yaptığınız işlemler korunuyor. Kaydedip formdan çıktıktan sonra “Şimdi güncelle” ile diğer kullanıcıların değişikliklerini alın.'
+          : 'Başka bir kullanıcı stok, sipariş veya sevkiyat kaydı değiştirdi. Hazır olduğunuzda güncelleyebilirsiniz.';
+        item.append(title, detail);
+        notificationsList.appendChild(item);
+      };
+      const setPendingRemoteUpdate = (pending) => {
+        pendingRemoteUpdate = Boolean(pending);
+        renderNotifications();
+      };
 
       const technicalEmail = (username) => {
         const cleaned = String(username || '').trim().toLocaleLowerCase('tr-TR').replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u').replace(/[^a-z0-9._-]/g, '');
@@ -5754,24 +5806,39 @@
         return payload;
       };
       const pushState = async (state) => {
-        if (!currentUser || syncInProgress || !hasState(state)) return;
+        if (!currentUser || !hasState(state)) { localSyncQueued = false; return; }
+        if (syncInProgress) return;
+        let pushed = false;
         syncInProgress = true;
         setSessionLabel('Eşitleniyor…');
         try {
           const payload = await enrichStateImages(state);
           const result = await cloud.functions.invoke('panel-state', { body: { action: 'push', state: payload } });
           if (result.error || result.data?.error) throw (result.error || new Error(result.data.error));
+          pushed = true;
           setSessionLabel(userTitle() + ' · çevrimiçi');
         } catch (error) {
           setSessionLabel('Eşitleme bekliyor');
         } finally {
           syncInProgress = false;
+          if (pushed) {
+            localSyncQueued = false;
+            applyPendingRemoteUpdateIfSafe();
+          } else {
+            // Kullanıcının kaydı buluta ulaşamadıysa uzaktaki veriyi bunun
+            // üzerine yazmayız; aynı kayıt kısa süre sonra yeniden denenir.
+            localSyncQueued = true;
+            window.clearTimeout(syncTimer);
+            syncTimer = window.setTimeout(() => { syncTimer = 0; void pushState(state); }, 4000);
+            renderNotifications();
+          }
         }
       };
       const queueCloudSync = (state) => {
         if (suppressCloudSync || !currentUser || !hasState(state)) return;
+        localSyncQueued = true;
         window.clearTimeout(syncTimer);
-        syncTimer = window.setTimeout(() => { void pushState(state); }, 700);
+        syncTimer = window.setTimeout(() => { syncTimer = 0; void pushState(state); }, 700);
       };
       Storage.prototype.setItem = function(key, value) {
         nativeStorageSet.call(this, key, value);
@@ -5792,6 +5859,13 @@
           const remoteFingerprint = stableStateJson(remoteState);
           const reloadKey = cloudConfig.stateKey + '-last-pull';
           if (remoteFingerprint !== stableStateJson(localState)) {
+            // Sipariş veya kart formu açıkken yenileme yapılmaz. Böylece
+            // henüz kaydedilmemiş kullanıcı girdileri korunur.
+            if (hasOpenForm()) {
+              setPendingRemoteUpdate(true);
+              return false;
+            }
+            setPendingRemoteUpdate(false);
             suppressCloudSync = true;
             nativeStorageSet.call(window.localStorage, cloudConfig.stateKey, JSON.stringify(remoteState));
             suppressCloudSync = false;
@@ -5803,12 +5877,20 @@
             }
             return false;
           }
+          setPendingRemoteUpdate(false);
           window.sessionStorage.removeItem(reloadKey);
           return false;
         }
         if (hasState(localState)) await pushState(localState);
         return false;
       };
+      function applyPendingRemoteUpdateIfSafe() {
+        if (!pendingRemoteUpdate || hasOpenForm() || syncInProgress || localSyncQueued) {
+          renderNotifications();
+          return;
+        }
+        void pullState().catch(() => { renderNotifications(); });
+      }
       const startCloudRefresh = () => {
         window.clearInterval(cloudRefreshTimer);
         if (!currentUser) return;
@@ -5816,10 +5898,37 @@
         // kısa süre içinde görünür. Yerel kaydetme sürerken uzaktan veri
         // alınmaz; önce kullanıcının değişikliği buluta gönderilir.
         cloudRefreshTimer = window.setInterval(() => {
-          if (!currentUser || syncInProgress || suppressCloudSync) return;
+          if (!currentUser || syncInProgress || localSyncQueued || suppressCloudSync) return;
           void pullState().catch(() => { /* Bağlantı geçici olarak kesik olabilir. */ });
         }, 10000);
       };
+      notificationsButton?.addEventListener('click', () => {
+        if (!notificationsPanel) return;
+        notificationsPanel.hidden = !notificationsPanel.hidden;
+        renderNotifications();
+      });
+      root.addEventListener('click', (event) => {
+        if (event.target.closest('[data-close-notifications]')) {
+          if (notificationsPanel) notificationsPanel.hidden = true;
+          return;
+        }
+        if (event.target.closest('[data-apply-pending-changes]')) {
+          if (hasOpenForm()) {
+            if (notificationsPanel) notificationsPanel.hidden = false;
+            renderNotifications();
+            return;
+          }
+          applyPendingRemoteUpdateIfSafe();
+        }
+      });
+      // Form sayfasından çıkıldığında bekleyen değişiklikler, kullanıcının
+      // kendi kaydı buluta ulaştıktan sonra güvenle uygulanır.
+      new MutationObserver(() => { applyPendingRemoteUpdateIfSafe(); }).observe(root, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class']
+      });
+      renderNotifications();
       const publicStockSummaryLink = () => location.origin + location.pathname + '?sayfa=stok-ozeti';
       const publicAccessStatus = (message, ok) => {
         const node = root.querySelector('#public-access-status');
@@ -6144,6 +6253,10 @@
         await cloud.auth.signOut();
         window.clearInterval(cloudRefreshTimer);
         cloudRefreshTimer = 0;
+        window.clearTimeout(syncTimer);
+        syncTimer = 0;
+        localSyncQueued = false;
+        setPendingRemoteUpdate(false);
         currentUser = null;
         currentProfile = null;
         setSessionLabel('Giriş yap');
