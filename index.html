@@ -640,8 +640,8 @@
         <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-exit-card">İthal ürün stok kartı</label><select id="imported-exit-card"></select></div><div class="field"><label for="imported-exit-date">Çıkış tarihi</label><input id="imported-exit-date" type="date" /></div><div class="field"><label for="imported-exit-quantity">Çıkış miktarı</label><input id="imported-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-exit-reference">İrsaliye / belge no</label><input id="imported-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-exit-partner">Çıkış yeri / teslim alan</label><input id="imported-exit-partner" placeholder="Bölüm, müşteri veya personel" /></div><div class="field span-two"><label for="imported-exit-note">Not</label><textarea id="imported-exit-note" placeholder="Çıkışla ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="exit">Çıkışı stoktan düş</button></div></section>
         <section class="section"><h2>Son ithal ürün çıkışları</h2><p class="table-hint">Çıkış miktarı mevcut stoktan fazla olamaz. Yanlış işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="imported-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Çıkış yeri / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-exit-movements-body"></tbody></table></div></section>
       </section>
-      <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>Ürünler ithal stok kartlarından seçilir. Sipariş “Teslim edildi” olduğunda stok, ithal ürün çıkışına otomatik işlenir.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Seri no</th><th>Durum</th><th>Raporlar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
-      <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Teslim edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer">Müşteri</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
+      <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>Ürünler ithal stok kartlarından seçilir. Sipariş “Sevk edildi” olduğunda stok, ithal ürün çıkışına otomatik işlenir.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Seri no</th><th>Durum</th><th>Raporlar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
+      <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Sevk edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer">Müşteri</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Sevk edildi</option><option>İptal edildi</option></select></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
       <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Müşteri teslimatlarını ve ithal ürün sevkiyat kayıtlarını depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürün</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi, ürün ve durum bilgilerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Sevkiyat tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-product">Ürün</label><select id="warehouse-shipping-product"></select></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section></section>
       <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
@@ -3016,7 +3016,7 @@
         }
         movements.forEach((movement) => {
           const row = document.createElement('tr');
-          const type = movement.type === 'entry' ? 'Stok girişi' : movement.source === 'imported-sales' ? 'Satış teslimi' : 'Stok çıkışı';
+          const type = movement.type === 'entry' ? 'Stok girişi' : movement.source === 'imported-sales' ? 'Satış sevki' : 'Stok çıkışı';
           const quantity = `${movement.type === 'entry' ? '+' : '−'}${numberFormat(Number(movement.quantity) || 0)} ${movement.unit || card.unit}`;
           [formatImportedMovementDate(movement.date), type, quantity, movement.partner || '—', movement.reference || '—', movement.note || '—'].forEach((value, index) => {
             const cell = document.createElement('td');
@@ -3159,6 +3159,7 @@
         const number = Number(id) || nextImportedSalesOrderId;
         return 'ITH-SAT-' + year + '-' + String(number).padStart(4, '0');
       };
+      const normaliseImportedSalesStatus = (status) => status === 'Teslim edildi' ? 'Sevk edildi' : (status || 'Taslak');
       const importedSalesCurrency = (value) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Number(value) || 0);
       const importedSalesPickerModal = () => root.querySelector('#imported-sales-picker-modal');
       const importedSalesPickerItem = (card) => ({ cardId: card.id, cardCode: card.code, cardLabel: importedCardLabel(card), unit: card.unit, quantity: 1, unitPrice: 0 });
@@ -3340,7 +3341,7 @@
             quantity: line.quantity,
             reference: order.orderNo,
             partner: order.customer,
-            note: 'İthal ürün satış siparişi teslim edildi.',
+            note: 'İthal ürün satış siparişi sevk edildi.',
             source: 'imported-sales',
             sourceId: order.id
           };
@@ -3462,8 +3463,8 @@
           statusSelect.className = 'imported-sales-status-select';
           statusSelect.dataset.importedSalesStatus = order.id;
           statusSelect.setAttribute('aria-label', `${order.orderNo} sipariş durumu`);
-          const statuses = ['Taslak', 'Onaylandı', 'Sevke hazır', 'Teslim edildi', 'İptal edildi'];
-          const selectedStatus = order.status || 'Taslak';
+          const statuses = ['Taslak', 'Onaylandı', 'Sevke hazır', 'Sevk edildi', 'İptal edildi'];
+          const selectedStatus = normaliseImportedSalesStatus(order.status);
           if (!statuses.includes(selectedStatus)) statuses.push(selectedStatus);
           statuses.forEach((statusValue) => {
             const option = document.createElement('option');
@@ -3519,7 +3520,7 @@
         root.querySelector('#imported-sales-customer').value = order.customer || '';
         root.querySelector('#imported-sales-contact').value = order.contact || '';
         root.querySelector('#imported-sales-address').value = order.address || '';
-        root.querySelector('#imported-sales-status-select').value = order.status || 'Taslak';
+        root.querySelector('#imported-sales-status-select').value = normaliseImportedSalesStatus(order.status);
         root.querySelector('#imported-sales-serial-no').value = order.serialNo || '';
         root.querySelector('#imported-sales-form-status').textContent = '';
         renderImportedSalesDraft();
@@ -3545,7 +3546,7 @@
           stockPosted: false,
           stockPostingMovementIds: []
         };
-        if (order.status === 'Teslim edildi') {
+        if (order.status === 'Sevk edildi') {
           const validation = validateImportedSalesStock(order, existing?.stockPosted ? existing : null);
           if (!validation.ok) { status.textContent = validation.message; return; }
         }
@@ -3555,7 +3556,7 @@
         }
         if (existing) importedSalesOrders.splice(importedSalesOrders.indexOf(existing), 1, order);
         else importedSalesOrders.unshift(order);
-        if (order.status === 'Teslim edildi') {
+        if (order.status === 'Sevk edildi') {
           const posted = postImportedSalesStock(order);
           if (!posted.ok) {
             if (existing) {
@@ -4613,18 +4614,110 @@
         while (shortened.length > 1 && context.measureText(`${shortened}…`).width > maxWidth) shortened = shortened.slice(0, -1);
         context.fillText(`${shortened}…`, x, y);
       };
-      const loadStockSummaryJpgImage = (source) => new Promise((resolve) => {
-        if (!source) { resolve(null); return; }
+      const imageProxyEndpoint = 'https://dmyvfcxirwecnupgsdtg.supabase.co/functions/v1/image-proxy';
+      const imageProxyPublishableKey = 'sb_publishable_pxzY9XruTUBYKDRmYhTzjw_hu4mvA-K';
+      const shareImageCacheDatabase = 'csp-share-image-cache-v1';
+      const shareImageCacheStore = 'images';
+      const openShareImageCache = () => new Promise((resolve, reject) => {
+        if (!window.indexedDB) { reject(new Error('Tarayıcı görsel önbelleğini desteklemiyor.')); return; }
+        const request = window.indexedDB.open(shareImageCacheDatabase, 1);
+        request.onupgradeneeded = () => {
+          if (!request.result.objectStoreNames.contains(shareImageCacheStore)) request.result.createObjectStore(shareImageCacheStore);
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('Görsel önbelleği açılamadı.'));
+      });
+      const readShareImageCache = async (key) => {
+        const database = await openShareImageCache();
+        return new Promise((resolve, reject) => {
+          const request = database.transaction(shareImageCacheStore, 'readonly').objectStore(shareImageCacheStore).get(key);
+          request.onsuccess = () => resolve(request.result || null);
+          request.onerror = () => reject(request.error || new Error('Görsel önbelleği okunamadı.'));
+        });
+      };
+      const writeShareImageCache = async (key, image) => {
+        const database = await openShareImageCache();
+        return new Promise((resolve, reject) => {
+          const request = database.transaction(shareImageCacheStore, 'readwrite').objectStore(shareImageCacheStore).put(image, key);
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error || new Error('Görsel önbelleği yazılamadı.'));
+        });
+      };
+      const loadCanvasImage = (source, useCors = false) => new Promise((resolve) => {
         const image = new Image();
-        // Dış sitedeki bir görsel, JPG için canvas'a çizildiğinde kaynağın
-        // izin vermemesi tüm raporu engelleyebilir. Önce güvenli kullanım
-        // izniyle yüklemeyi deneriz; izin yoksa görsel atlanır, rapor yine
-        // ürün adı ve stok miktarlarıyla hazırlanır.
-        if (/^https?:\/\//i.test(String(source))) image.crossOrigin = 'anonymous';
+        if (useCors) image.crossOrigin = 'anonymous';
         image.addEventListener('load', () => resolve(image), { once: true });
         image.addEventListener('error', () => resolve(null), { once: true });
         image.src = source;
       });
+      const loadBlobCanvasImage = async (blob) => {
+        if (!(blob instanceof Blob)) return null;
+        const objectUrl = URL.createObjectURL(blob);
+        try {
+          return await loadCanvasImage(objectUrl);
+        } finally {
+          URL.revokeObjectURL(objectUrl);
+        }
+      };
+      const compactShareImage = (image) => new Promise((resolve) => {
+        if (!image?.naturalWidth || !image?.naturalHeight) { resolve(null); return; }
+        const longestSide = 1100;
+        const ratio = Math.min(1, longestSide / Math.max(image.naturalWidth, image.naturalHeight));
+        const width = Math.max(1, Math.round(image.naturalWidth * ratio));
+        const height = Math.max(1, Math.round(image.naturalHeight * ratio));
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#ffffff';
+        context.fillRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
+        canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.84);
+      });
+      const loadExternalImageThroughProxy = async (source) => {
+        try {
+          const cached = await readShareImageCache(source);
+          const cachedImage = await loadBlobCanvasImage(cached);
+          if (cachedImage) return cachedImage;
+        } catch (error) {
+          // Önbellek kapalı olsa da paylaşım bir kez indirerek devam eder.
+        }
+        const response = await fetch(imageProxyEndpoint, {
+          method: 'POST',
+          headers: {
+            apikey: imageProxyPublishableKey,
+            Authorization: `Bearer ${imageProxyPublishableKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ url: source })
+        });
+        if (!response.ok) throw new Error('Harici görsel okunamadı.');
+        const blob = await response.blob();
+        if (!blob.type.startsWith('image/')) throw new Error('Geçerli bir görsel alınamadı.');
+        const image = await loadBlobCanvasImage(blob);
+        if (!image) throw new Error('Harici görsel açılamadı.');
+        try {
+          const compacted = await compactShareImage(image);
+          if (compacted) await writeShareImageCache(source, compacted);
+        } catch (error) {
+          // Yerel saklama yapılamazsa ilk indirilen görsel yine rapora eklenir.
+        }
+        return image;
+      };
+      const loadStockSummaryJpgImage = async (source) => {
+        if (!source) return null;
+        const external = /^https?:\/\//i.test(String(source));
+        const directImage = await loadCanvasImage(source, external);
+        if (directImage || !external) return directImage;
+        // Harici siteler çoğu zaman resmi ekranda göstermeye izin verir,
+        // ancak canvas/JPG oluşturma izni vermez. Bu durumda resim
+        // depolanmadan yalnızca rapor anında güvenli ara uçtan okunur.
+        try {
+          return await loadExternalImageThroughProxy(source);
+        } catch (error) {
+          return null;
+        }
+      };
       const createStockSummaryJpg = async (items) => {
         const width = 1200;
         const rowHeight = 92;
@@ -6100,7 +6193,7 @@
           if (!order) return;
           const nextStatus = importedSalesStatusSelect.value;
           if (nextStatus === order.status) return;
-          if (nextStatus === 'Teslim edildi') {
+          if (nextStatus === 'Sevk edildi') {
             const posted = postImportedSalesStock(order);
             if (!posted.ok) {
               importedSalesStatusSelect.value = order.status || 'Taslak';
@@ -6111,7 +6204,7 @@
           } else if (order.stockPosted) {
             const reversed = reverseImportedSalesStock(order);
             if (!reversed.ok) {
-              importedSalesStatusSelect.value = order.status || 'Teslim edildi';
+              importedSalesStatusSelect.value = normaliseImportedSalesStatus(order.status);
               const status = root.querySelector('#imported-sales-status');
               if (status) status.textContent = reversed.message;
               return;
