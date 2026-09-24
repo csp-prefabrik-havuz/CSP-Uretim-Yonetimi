@@ -91,3 +91,53 @@
   }).observe(root, { childList: true, subtree: true });
   refresh();
 })();
+
+
+(() => {
+  'use strict';
+  const root = document.getElementById('csp-production-sketch');
+  if (!root) return;
+  let hideZeros = false;
+  const isStockRow = (row) => row && row.cells && row.cells.length === 5;
+  const isZeroStock = (row) => {
+    if (!isStockRow(row)) return false;
+    const value = String(row.cells[4].textContent || '').trim().replace(/[^0-9,.-]/g, '');
+    return Boolean(value) && Number(value.replace(/[.,]/g, '')) === 0;
+  };
+  const applyZeroStockFilter = () => {
+    const rows = Array.from(root.querySelectorAll('#stock-summary-list-body tr'));
+    let shown = 0;
+    let total = 0;
+    rows.forEach((row) => {
+      const hidden = hideZeros && isZeroStock(row);
+      row.hidden = hidden;
+      if (isStockRow(row)) {
+        total += 1;
+        if (!hidden) shown += 1;
+      }
+    });
+    const status = root.querySelector('#stock-summary-status');
+    if (status && hideZeros && total) status.textContent = shown + ' / ' + total + ' stok kartı listeleniyor; sıfır stoklar gizli.';
+  };
+  const addZeroStockButton = () => {
+    const actions = root.querySelector('.stock-summary-report-actions');
+    if (!actions || actions.querySelector('[data-toggle-zero-stock-summary]')) return;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'secondary-button';
+    button.dataset.toggleZeroStockSummary = 'true';
+    button.setAttribute('aria-pressed', 'false');
+    button.textContent = 'Sıfır stokları gösterme';
+    button.addEventListener('click', () => {
+      hideZeros = !hideZeros;
+      button.setAttribute('aria-pressed', String(hideZeros));
+      button.classList.toggle('is-active', hideZeros);
+      button.textContent = hideZeros ? 'Sıfır stoklar gizli' : 'Sıfır stokları gösterme';
+      applyZeroStockFilter();
+    });
+    actions.insertBefore(button, actions.querySelector('[data-export-stock-summary-jpg]'));
+  };
+  const refresh = () => { addZeroStockButton(); applyZeroStockFilter(); };
+  new MutationObserver(() => queueMicrotask(refresh)).observe(root, { childList: true, subtree: true });
+  refresh();
+})();
