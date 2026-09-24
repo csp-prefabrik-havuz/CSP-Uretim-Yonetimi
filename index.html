@@ -4397,6 +4397,11 @@
       const loadStockSummaryJpgImage = (source) => new Promise((resolve) => {
         if (!source) { resolve(null); return; }
         const image = new Image();
+        // Dış sitedeki bir görsel, JPG için canvas'a çizildiğinde kaynağın
+        // izin vermemesi tüm raporu engelleyebilir. Önce güvenli kullanım
+        // izniyle yüklemeyi deneriz; izin yoksa görsel atlanır, rapor yine
+        // ürün adı ve stok miktarlarıyla hazırlanır.
+        if (/^https?:\/\//i.test(String(source))) image.crossOrigin = 'anonymous';
         image.addEventListener('load', () => resolve(image), { once: true });
         image.addEventListener('error', () => resolve(null), { once: true });
         image.src = source;
