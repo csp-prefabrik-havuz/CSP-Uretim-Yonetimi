@@ -75,8 +75,6 @@
     #csp-production-sketch .stock-summary-filters input, #csp-production-sketch .stock-summary-filters select { width: 100%; min-width: 0; padding: 10px 12px; color: light-dark(#173f50, #d7eff6); background: light-dark(#f8fffb, #15261f); border: 1px solid light-dark(#c9dfd1, #315545); border-radius: 9px; font: inherit; font-size: 13px; }
     #csp-production-sketch .stock-summary-report-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
     #csp-production-sketch .stock-summary-report-actions .muted-note { margin-right: auto; }
-    #csp-production-sketch .stock-summary-select-cell { width: 48px; text-align: center; }
-    #csp-production-sketch .stock-summary-select-cell input, #csp-production-sketch .stock-summary-select-all { width: 17px; height: 17px; accent-color: #ef7b1a; cursor: pointer; vertical-align: middle; }
     #csp-production-sketch [data-page="stock-summary"] .table-search, #csp-production-sketch [data-page="stock-summary"] .table-filter-controls { display: none; }
     #csp-production-sketch .dashboard-actions { max-width: 440px; }
     #csp-production-sketch .table-search { margin: -3px 0 12px; }
@@ -592,7 +590,7 @@
       <section class="view" data-page="stock-card-form"><div class="page-head"><div><h1 id="stock-card-form-title">Yeni stok kartı</h1><p>Her kart, üretim hattına göre Liner, PVC, Sac veya Panel grubuna bağlanır.</p></div><button class="secondary-button" type="button" data-view-button="stock">Stok kartlarına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="stock-card-code">Stok kodu (otomatik)</label><input id="stock-card-code" placeholder="Malzeme adına göre otomatik oluşturulur" /></div><div class="field"><label for="stock-card-group">İş emri grubu</label><select id="stock-card-group" data-stock-card-group><option value="liner">Liner</option><option value="pvc">PVC</option><option value="sac">Sac</option><option value="panel">Panel</option></select></div><div class="field span-two"><label for="stock-card-name">Malzeme adı</label><input id="stock-card-name" placeholder="Örn. Alt ray, fitil, kilit veya panel" /></div><div class="field span-two"><label for="stock-card-variant">Renk / desen / özellik</label><input id="stock-card-variant" placeholder="Örn. Su deseni, mavi veya 1,5" /></div><div class="field span-two"><label for="stock-card-image">Ürün görseli</label><input id="stock-card-image" type="file" accept="image/*" data-stock-card-image /><div class="stock-card-image-preview" id="stock-card-image-preview" hidden><img id="stock-card-image-preview-image" alt="Stok kartı görseli" /><button class="secondary-button" type="button" data-clear-stock-card-image>Görseli kaldır</button></div></div><div class="field"><label for="stock-card-unit">Birim</label><select id="stock-card-unit"><option value="m²">m²</option><option value="m">m</option><option value="adet">adet</option><option value="kg">kg</option><option value="lt">lt</option><option value="takım">takım</option></select></div><div class="field"><label for="stock-card-initial">İlk stok miktarı</label><input id="stock-card-initial" type="number" step="0.01" placeholder="0" /></div><div class="field"><label for="stock-card-onhand">Mevcut miktar</label><input id="stock-card-onhand" type="number" step="0.01" placeholder="İlk stokla aynı" /></div><div class="field"><label for="stock-card-minimum">Minimum seviye</label><input id="stock-card-minimum" type="number" min="0" step="0.01" placeholder="0" /></div><div class="field span-two"><label for="stock-card-note">Not</label><textarea id="stock-card-note" placeholder="Tedarikçi, raf yeri veya açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="stock-card-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="stock">Vazgeç</button><button class="primary-button" type="button" data-save-stock-card>Stok kartını kaydet</button></div></section></section>
       <section class="view report-view" data-page="stock-summary">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Genel stok özeti</h1><p>Üretim ve ithal ürün stoklarının yalnızca güncel miktarlarını tek ekranda izleyin.</p></div></div></div>
-        <section class="section"><p class="table-hint" id="stock-summary-status" aria-live="polite">Tüm stoklar burada sade bir listede gösterilir. Görsele dokunarak büyütebilirsiniz.</p><div class="stock-summary-report-actions"><span class="muted-note" id="stock-summary-selection-status" aria-live="polite">Raporlamak için ürün seçin.</span><button class="secondary-button" type="button" data-export-stock-summary-jpg>Seçilenleri JPG al</button><button class="primary-button" type="button" data-share-stock-summary-jpg>WhatsApp'ta paylaş</button></div><div class="table-search"><input type="search" placeholder="Stok özetinde ara" data-table-search-input="stock-summary-table" aria-label="Stok özetinde ara" /><button class="secondary-button" type="button" data-table-search-button="stock-summary-table">Ara</button></div><div class="table-wrap"><table id="stock-summary-table"><thead><tr><th class="stock-summary-select-cell"><input class="stock-summary-select-all" type="checkbox" data-stock-summary-select-all aria-label="Listelenen ürünlerin tümünü seç" /></th><th>Görsel</th><th>Stok bölümü</th><th>Grup / kategori</th><th>Malzeme / ürün</th><th>Mevcut miktar</th></tr></thead><tbody id="stock-summary-list-body"></tbody></table></div></section>
+        <section class="section"><p class="table-hint" id="stock-summary-status" aria-live="polite">Tüm stoklar burada sade bir listede gösterilir. Görsele dokunarak büyütebilirsiniz.</p><div class="stock-summary-report-actions"><span class="muted-note" id="stock-summary-selection-status" aria-live="polite">Listelenen ürünlerin tamamı rapora dahil edilir.</span><button class="secondary-button" type="button" data-export-stock-summary-jpg>Görünenleri JPG al</button><button class="primary-button" type="button" data-share-stock-summary-jpg>WhatsApp'ta paylaş</button></div><div class="table-search"><input type="search" placeholder="Stok özetinde ara" data-table-search-input="stock-summary-table" aria-label="Stok özetinde ara" /><button class="secondary-button" type="button" data-table-search-button="stock-summary-table">Ara</button></div><div class="table-wrap"><table id="stock-summary-table"><thead><tr><th>Görsel</th><th>Stok bölümü</th><th>Grup / kategori</th><th>Malzeme / ürün</th><th>Mevcut miktar</th></tr></thead><tbody id="stock-summary-list-body"></tbody></table></div></section>
       </section>
       <section class="view report-view" data-page="liner-widths"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Liner genişlikleri</h1><p>Malzeme adı Liner olan stok kartlarına göre iş emri liner eni tanımlayın.</p></div></div></div><section class="section"><p class="table-hint" id="liner-width-status" aria-live="polite">Genişlik girildikten sonra ilgili liner iş emrinin toplam stok tüketimi otomatik hesaplanır.</p><div class="table-wrap"><table class="liner-width-table" id="liner-widths-table"><colgroup><col style="width:62px" /><col style="width:118px" /><col /><col style="width:112px" /><col style="width:150px" /></colgroup><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Liner desen / renk</th><th>Mevcut stok</th><th>Liner genişliği</th></tr></thead><tbody id="liner-width-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Sevkiyat</h1><p>Sevke hazır iş emirleri otomatik olarak bu listede görünür.</p></div></div><div class="shipping-report-actions"><button class="primary-button" type="button" data-export-shipping-pdf>PDF raporu al</button></div></div><section class="section"><p class="table-hint" id="shipping-status" aria-live="polite">Sevke hazır iş emirleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Sevkiyatlarda ara" data-table-search-input="shipping-table" aria-label="Sevkiyatlarda ara" /><button class="secondary-button" type="button" data-table-search-button="shipping-table">Ara</button></div><div class="table-wrap"><table id="shipping-table"><thead><tr><th>Sevk no</th><th>Müşteri</th><th>İş emri</th><th>Havuz / adres</th><th>Planlanan tarih</th><th>Durum</th></tr></thead><tbody id="shipping-list-body"></tbody></table></div></section></section>
@@ -2105,8 +2103,6 @@
       const warehouseShipments = [];
       let nextWarehouseShipmentId = 1;
       let editingWarehouseShipmentId = null;
-      const stockSummarySelectedIds = new Set();
-      let stockSummaryAllRows = [];
       let stockSummaryFilteredRows = [];
       const consumptionValue = (value, unit) => value === null || value === undefined || value === '' ? '—' : `${numberFormat(value)} ${unit}`;
       const workorderConsumption = (template, calculation) => {
@@ -2790,14 +2786,9 @@
         if (!stockSummaryListBody) return;
         stockSummaryListBody.replaceChildren();
         const allRows = [
-          ...stockCards.map((card) => ({ selectionId: `production-${card.id}`, card, source: 'Üretim stokları', group: stockCardGroupCategory(card), category: card.category || stockGroup(card.group).label, name: `${card.name}${card.variant ? ` · ${card.variant}` : ''}`, amount: Number(card.onHand) || 0, quantity: `${numberFormat(Number(card.onHand) || 0)} ${card.unit}` })),
-          ...importedStockCards.map((card) => ({ selectionId: `imported-${card.id}`, card, source: 'İthal ürünler', group: `${card.group || '—'}${card.category ? ` · ${card.category}` : ''}`, category: card.category || card.group || 'Kategorisiz', name: importedCardLabel(card), amount: Number(card.onHand) || 0, quantity: `${numberFormat(Number(card.onHand) || 0)} ${card.unit}` }))
+          ...stockCards.map((card) => ({ card, source: 'Üretim stokları', group: stockCardGroupCategory(card), category: card.category || stockGroup(card.group).label, name: `${card.name}${card.variant ? ` · ${card.variant}` : ''}`, amount: Number(card.onHand) || 0, quantity: `${numberFormat(Number(card.onHand) || 0)} ${card.unit}` })),
+          ...importedStockCards.map((card) => ({ card, source: 'İthal ürünler', group: `${card.group || '—'}${card.category ? ` · ${card.category}` : ''}`, category: card.category || card.group || 'Kategorisiz', name: importedCardLabel(card), amount: Number(card.onHand) || 0, quantity: `${numberFormat(Number(card.onHand) || 0)} ${card.unit}` }))
         ];
-        stockSummaryAllRows = allRows;
-        const availableIds = new Set(allRows.map((item) => item.selectionId));
-        [...stockSummarySelectedIds].forEach((selectionId) => {
-          if (!availableIds.has(selectionId)) stockSummarySelectedIds.delete(selectionId);
-        });
         const categoryFilter = root.querySelector('#stock-summary-category-filter');
         const selectedCategory = categoryFilter?.value || '';
         if (categoryFilter) {
@@ -2825,31 +2816,16 @@
           return left.name.localeCompare(right.name, 'tr');
         });
         stockSummaryFilteredRows = rows;
-        const selectAll = root.querySelector('[data-stock-summary-select-all]');
-        if (selectAll) {
-          const selectedVisibleCount = rows.filter((item) => stockSummarySelectedIds.has(item.selectionId)).length;
-          selectAll.checked = rows.length > 0 && selectedVisibleCount === rows.length;
-          selectAll.indeterminate = selectedVisibleCount > 0 && selectedVisibleCount < rows.length;
-        }
         if (!rows.length) {
           const row = document.createElement('tr');
           const cell = document.createElement('td');
-          cell.colSpan = 6;
+          cell.colSpan = 5;
           cell.className = 'empty-workorders';
           cell.textContent = 'Henüz gösterilecek stok kartı yok.';
           row.appendChild(cell);
           stockSummaryListBody.appendChild(row);
         } else rows.forEach((item) => {
           const row = document.createElement('tr');
-          const selectorCell = document.createElement('td');
-          selectorCell.className = 'stock-summary-select-cell';
-          const selector = document.createElement('input');
-          selector.type = 'checkbox';
-          selector.checked = stockSummarySelectedIds.has(item.selectionId);
-          selector.dataset.stockSummarySelect = item.selectionId;
-          selector.setAttribute('aria-label', `${item.name} ürününü seç`);
-          selectorCell.appendChild(selector);
-          row.appendChild(selectorCell);
           row.appendChild(stockImageCell(item.card));
           [item.source, item.group, item.name, item.quantity].forEach((value, index) => {
             const cell = document.createElement('td');
@@ -2863,7 +2839,7 @@
         const status = root.querySelector('#stock-summary-status');
         if (status) status.textContent = `${rows.length}${rows.length !== allRows.length ? ` / ${allRows.length}` : ''} stok kartı yalnızca güncel miktarıyla listeleniyor.`;
         const selectionStatus = root.querySelector('#stock-summary-selection-status');
-        if (selectionStatus) selectionStatus.textContent = stockSummarySelectedIds.size ? `${stockSummarySelectedIds.size} ürün seçildi. JPG raporu oluşturabilirsiniz.` : 'Raporlamak için ürün seçin.';
+        if (selectionStatus) selectionStatus.textContent = rows.length ? `${rows.length} listelenen ürün rapora dahil edilir.` : 'Raporlanacak ürün bulunamadı.';
         applyTableSearch('stock-summary-table');
       };
       const renderImportedStock = () => {
@@ -4383,7 +4359,7 @@
         downloadReportFile(new Blob([workbook], { type: 'application/vnd.ms-excel;charset=utf-8' }), `${fileName}.xls`);
         return 'xls';
       };
-      const selectedStockSummaryRows = () => stockSummaryAllRows.filter((item) => stockSummarySelectedIds.has(item.selectionId));
+      const visibleStockSummaryRows = () => [...stockSummaryFilteredRows];
       const drawStockSummaryJpgText = (context, text, x, y, maxWidth) => {
         const value = String(text || '—');
         if (context.measureText(value).width <= maxWidth) {
@@ -4430,7 +4406,7 @@
         context.font = '700 21px Arial, sans-serif';
         context.fillText('GENEL STOK ÖZETİ', 48, 88);
         context.font = '14px Arial, sans-serif';
-        context.fillText(`${items.length} seçili ürün · ${new Intl.DateTimeFormat('tr-TR', { dateStyle: 'long' }).format(new Date())}`, 48, 139);
+        context.fillText(`${items.length} listelenen ürün · ${new Intl.DateTimeFormat('tr-TR', { dateStyle: 'long' }).format(new Date())}`, 48, 139);
         context.fillStyle = '#eaf7fb';
         context.fillRect(0, 116, width, 50);
         context.fillStyle = '#0a5b7d';
@@ -4490,13 +4466,13 @@
       };
       const createStockSummaryJpgBlob = (canvas) => new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.94));
       const exportSelectedStockSummaryJpg = async (share = false) => {
-        const items = selectedStockSummaryRows();
+        const items = visibleStockSummaryRows();
         const status = root.querySelector('#stock-summary-selection-status');
         if (!items.length) {
-          if (status) status.textContent = 'Önce rapora eklenecek en az bir ürün seçin.';
+          if (status) status.textContent = 'Mevcut filtrelerde raporlanacak ürün bulunamadı.';
           return;
         }
-        if (status) status.textContent = 'Seçilen ürünlerin JPG raporu hazırlanıyor…';
+        if (status) status.textContent = 'Listelenen ürünlerin JPG raporu hazırlanıyor…';
         try {
           const blob = await createStockSummaryJpgBlob(await createStockSummaryJpg(items));
           if (!blob) throw new Error('JPG oluşturulamadı');
@@ -4506,7 +4482,7 @@
             const canShareFiles = typeof navigator.canShare !== 'function' || navigator.canShare({ files: [file] });
             if (canShareFiles) {
               try {
-                await navigator.share({ files: [file], title: 'CSP Genel stok özeti', text: `${items.length} seçili ürünün stok özeti` });
+                await navigator.share({ files: [file], title: 'CSP Genel stok özeti', text: `${items.length} listelenen ürünün stok özeti` });
                 if (status) status.textContent = 'JPG raporu paylaşım menüsüne gönderildi.';
                 return;
               } catch (error) {
@@ -4518,7 +4494,7 @@
             }
           }
           downloadReportFile(blob, fileName);
-          if (status) status.textContent = share ? 'Bu cihazda doğrudan paylaşım desteklenmedi. JPG indirildi; WhatsApp’tan dosya olarak ekleyebilirsiniz.' : 'Seçilen ürünlerin JPG raporu indirildi.';
+          if (status) status.textContent = share ? 'Bu cihazda doğrudan paylaşım desteklenmedi. JPG indirildi; WhatsApp’tan dosya olarak ekleyebilirsiniz.' : 'Listelenen ürünlerin JPG raporu indirildi.';
         } catch (error) {
           if (status) status.textContent = 'JPG raporu hazırlanamadı. Lütfen tekrar deneyin.';
         }
@@ -5843,23 +5819,6 @@
         }
       });
       root.addEventListener('change', (event) => {
-        const stockSummarySelector = event.target.closest('[data-stock-summary-select]');
-        if (stockSummarySelector) {
-          const selectionId = stockSummarySelector.dataset.stockSummarySelect;
-          if (stockSummarySelector.checked) stockSummarySelectedIds.add(selectionId);
-          else stockSummarySelectedIds.delete(selectionId);
-          renderStockSummary();
-          return;
-        }
-        const stockSummarySelectAll = event.target.closest('[data-stock-summary-select-all]');
-        if (stockSummarySelectAll) {
-          stockSummaryFilteredRows.forEach((item) => {
-            if (stockSummarySelectAll.checked) stockSummarySelectedIds.add(item.selectionId);
-            else stockSummarySelectedIds.delete(item.selectionId);
-          });
-          renderStockSummary();
-          return;
-        }
         const importedSalesPickerQuantity = event.target.closest('[data-imported-sales-picker-quantity]');
         if (importedSalesPickerQuantity) {
           const item = importedSalesPickerItems.find((entry) => Number(entry.cardId) === Number(importedSalesPickerQuantity.dataset.importedSalesPickerQuantity));
