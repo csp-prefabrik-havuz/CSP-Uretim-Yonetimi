@@ -822,6 +822,21 @@
         });
         filters.append(productSearch, categorySelect, sortSelect);
         stockSummaryStatus.after(filters);
+        const zeroStockButton = document.createElement('button');
+        zeroStockButton.type = 'button';
+        zeroStockButton.className = 'secondary-button is-active';
+        zeroStockButton.id = 'stock-summary-zero-toggle';
+        zeroStockButton.setAttribute('aria-pressed', 'true');
+        zeroStockButton.textContent = 'Sıfır stoklar gizli';
+        zeroStockButton.addEventListener('click', () => {
+          const currentlyHidden = zeroStockButton.getAttribute('aria-pressed') === 'true';
+          zeroStockButton.setAttribute('aria-pressed', currentlyHidden ? 'false' : 'true');
+          zeroStockButton.classList.toggle('is-active', !currentlyHidden);
+          zeroStockButton.textContent = currentlyHidden ? 'Sıfır stokları gösterme' : 'Sıfır stoklar gizli';
+          renderStockSummary();
+        });
+        const stockSummaryReportActions = root.querySelector('.stock-summary-report-actions');
+        if (stockSummaryReportActions) stockSummaryReportActions.prepend(zeroStockButton);
         productSearch.addEventListener('input', () => renderStockSummary());
         categorySelect.addEventListener('change', () => renderStockSummary());
         sortSelect.addEventListener('change', () => renderStockSummary());
@@ -2811,7 +2826,8 @@
         }
         const productTerm = normaliseSearchText(root.querySelector('#stock-summary-product-search')?.value.trim() || '');
         const sort = root.querySelector('#stock-summary-sort')?.value || 'name-asc';
-        const rows = allRows.filter((item) => (!productTerm || normaliseSearchText(`${item.name} ${item.source} ${item.group} ${item.category}`).includes(productTerm)) && (!categoryFilter?.value || item.category === categoryFilter.value));
+        const hideZeroStock = root.querySelector('#stock-summary-zero-toggle')?.getAttribute('aria-pressed') !== 'false';
+        const rows = allRows.filter((item) => (!hideZeroStock || item.amount !== 0) && (!productTerm || normaliseSearchText(`${item.name} ${item.source} ${item.group} ${item.category}`).includes(productTerm)) && (!categoryFilter?.value || item.category === categoryFilter.value));
         rows.sort((left, right) => {
           if (sort === 'name-desc') return right.name.localeCompare(left.name, 'tr');
           if (sort === 'quantity-asc') return left.amount - right.amount || left.name.localeCompare(right.name, 'tr');
@@ -4720,6 +4736,21 @@
           return null;
         }
       };
+      const githubStockImageSources = (card) => {
+        const code = String(card?.code || '').trim();
+        if (!code) return [];
+        const names = [...new Set([code, code.replaceAll('I', 'İ'), code.replaceAll('İ', 'I')])];
+        return names.map((name) => new URL(`gorseller/${encodeURIComponent(name)}.png`, document.baseURI).href);
+      };
+      const loadStockSummaryCardImage = async (card) => {
+        const directSource = String(card?.image || '').trim();
+        const sources = directSource ? [directSource] : githubStockImageSources(card);
+        for (const source of sources) {
+          const image = await loadStockSummaryJpgImage(source);
+          if (image) return image;
+        }
+        return null;
+      };
       const createStockSummaryJpg = async (items) => {
         const width = 1200;
         const rowHeight = 92;
@@ -4754,7 +4785,7 @@
         context.textAlign = 'right';
         context.fillText('MEVCUT MİKTAR', 1152, 147);
         context.textAlign = 'left';
-        const images = await Promise.all(items.map((item) => loadStockSummaryJpgImage(item.card?.image)));
+        const images = await Promise.all(items.map((item) => loadStockSummaryCardImage(item.card)));
         items.forEach((item, index) => {
           const y = headerHeight + (index * rowHeight);
           context.fillStyle = index % 2 ? '#f4fafc' : '#ffffff';
@@ -6854,7 +6885,9 @@
         const response = await cloud.from('public_stock_summary').select('*').order('stock_code');
         if (response.error) { notice.textContent = 'Stok özeti şu anda yüklenemedi.'; return; }
         body.replaceChildren();
-        (response.data || []).forEach((item) => {
+        const allPublicRows = response.data || [];
+        const publicRows = allPublicRows.filter((item) => Number(item.on_hand || 0) !== 0);
+        publicRows.forEach((item) => {
           const row = document.createElement('tr');
           const values = [
             '',
@@ -6881,7 +6914,7 @@
           });
           body.appendChild(row);
         });
-        notice.textContent = String((response.data || []).length) + ' ürün şifresiz görüntüleniyor. Yönetim için giriş yapın.';
+        notice.textContent = `${publicRows.length}${publicRows.length !== allPublicRows.length ? ` / ${allPublicRows.length}` : ''} ürün şifresiz görüntüleniyor; sıfır stoklar gizli. Yönetim için giriş yapın.`;
       };
       const isPanelAdmin = () => currentProfile?.role === 'admin';
       const canAccessPage = (page) => {
