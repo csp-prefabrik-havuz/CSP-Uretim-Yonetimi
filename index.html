@@ -4744,7 +4744,7 @@
       };
       const loadStockSummaryCardImage = async (card) => {
         const directSource = String(card?.image || '').trim();
-        const sources = directSource ? [directSource] : githubStockImageSources(card);
+        const sources = [...new Set([...githubStockImageSources(card), ...(directSource ? [directSource] : [])])];
         for (const source of sources) {
           const image = await loadStockSummaryJpgImage(source);
           if (image) return image;
