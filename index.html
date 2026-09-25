@@ -2845,7 +2845,7 @@
           stockSummaryListBody.appendChild(row);
         } else rows.forEach((item) => {
           const row = document.createElement('tr');
-          2855row.dataset.stockCode = item.card.code || '';
+          row.dataset.stockCode = item.card.code || '';
           row.dataset.stockImageTitle = item.name || item.card.code || 'Stok görseli';
           row.appendChild(stockImageCell(item.card));
           [item.source, item.group, item.name, item.quantity].forEach((value, index) => {
