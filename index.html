@@ -505,6 +505,7 @@
       <button class="nav-button" type="button" data-view="imported-stock-entry"><i data-lucide="package-plus" aria-hidden="true"></i> İthal ürün girişi</button>
       <button class="nav-button" type="button" data-view="imported-stock-exit"><i data-lucide="package-minus" aria-hidden="true"></i> İthal ürün çıkışı</button>
       <button class="nav-button" type="button" data-view="imported-sales"><i data-lucide="shopping-cart" aria-hidden="true"></i> İthal ürün satışları</button>
+      <button class="nav-button" type="button" data-view="imported-customers"><i data-lucide="contact-round" aria-hidden="true"></i> Cariler</button>
       <div class="nav-label">Depo</div>
       <button class="nav-button" type="button" data-view="warehouse-shipping"><i data-lucide="warehouse" aria-hidden="true"></i> Depo sevkiyat</button>
       <div class="nav-label" data-admin-only hidden>Yönetim</div>
@@ -640,8 +641,9 @@
         <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-exit-card">İthal ürün stok kartı</label><select id="imported-exit-card"></select></div><div class="field"><label for="imported-exit-date">Çıkış tarihi</label><input id="imported-exit-date" type="date" /></div><div class="field"><label for="imported-exit-quantity">Çıkış miktarı</label><input id="imported-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-exit-reference">İrsaliye / belge no</label><input id="imported-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-exit-partner">Çıkış yeri / teslim alan</label><input id="imported-exit-partner" placeholder="Bölüm, müşteri veya personel" /></div><div class="field span-two"><label for="imported-exit-note">Not</label><textarea id="imported-exit-note" placeholder="Çıkışla ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="exit">Çıkışı stoktan düş</button></div></section>
         <section class="section"><h2>Son ithal ürün çıkışları</h2><p class="table-hint">Çıkış miktarı mevcut stoktan fazla olamaz. Yanlış işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="imported-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Çıkış yeri / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-exit-movements-body"></tbody></table></div></section>
       </section>
+      <section class="view report-view" data-page="imported-customers"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Cariler</h1><p>İthal ürün satışlarında kullanılacak cari bilgilerini yönetin.</p></div></div></div><section class="section"><h2 id="imported-customer-form-title">Yeni cari</h2><input id="imported-customer-id" type="hidden" /><div class="form-grid"><div class="field"><label for="imported-customer-name">Cari adı</label><input id="imported-customer-name" placeholder="Firma veya kişi adı" /></div><div class="field"><label for="imported-customer-contact">Telefon / e-posta</label><input id="imported-customer-contact" placeholder="Telefon veya e-posta" /></div><div class="field span-two"><label for="imported-customer-address">Adres</label><textarea id="imported-customer-address" placeholder="Cari adresi"></textarea></div><div class="field span-two"><label for="imported-customer-note">Not</label><textarea id="imported-customer-note" placeholder="Cariyle ilgili not"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-customer-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-imported-customer>Temizle</button><button class="primary-button" type="button" data-save-imported-customer>Cariyi kaydet</button></div></section><section class="section"><h2>Kayıtlı cariler</h2><div class="table-wrap"><table id="imported-customers-table"><thead><tr><th>Cari</th><th>Telefon / e-posta</th><th>Adres</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-customers-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>Ürünler ithal stok kartlarından seçilir. Sipariş “Sevk edildi” olduğunda stok, ithal ürün çıkışına otomatik işlenir.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Seri no</th><th>Durum</th><th>Raporlar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
-      <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Sevk edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer">Müşteri</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Sevk edildi</option><option>İptal edildi</option></select></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
+      <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Sevk edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer-select">Kayıtlı cari</label><select id="imported-sales-customer-select"></select></div><div class="field"><label for="imported-sales-customer">Müşteri (manuel)</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Sevk edildi</option><option>İptal edildi</option></select></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
       <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Stok kayıtlarından bağımsız müşteri teslimatlarını depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürün</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi, serbest ürün bilgisi ve durum bilgilerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Sevkiyat tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-product">Ürün</label><input id="warehouse-shipping-product" placeholder="Ürünü veya sevkiyat içeriğini yazın" /></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section></section>
       <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
@@ -2115,6 +2117,9 @@
       let nextImportedStockMovementId = 1;
       const importedSalesOrders = [];
       let nextImportedSalesOrderId = 1;
+      const importedCustomers = [];
+      let nextImportedCustomerId = 1;
+      let editingImportedCustomerId = null;
       let editingImportedSalesOrderId = null;
       let importedSalesDraftItems = [];
       let importedSalesPickerItems = [];
@@ -3451,6 +3456,7 @@
         root.querySelector('#imported-sales-no').value = importedSalesOrderNumber();
         root.querySelector('#imported-sales-date').value = importedMovementDate();
         ['customer', 'contact', 'address', 'serial-no'].forEach((field) => { root.querySelector('#imported-sales-' + field).value = ''; });
+        renderImportedCustomerOptions();
         root.querySelector('#imported-sales-status-select').value = 'Taslak';
         root.querySelector('#imported-sales-form-status').textContent = '';
         renderImportedSalesDraft();
@@ -3528,6 +3534,127 @@
         if (status) status.textContent = importedSalesOrders.length ? String(importedSalesOrders.length) + ' ithal ürün satış siparişi listeleniyor.' : 'İthal ürün satış siparişleri burada listelenir.';
         applyTableSearch('imported-sales-table');
       };
+      const importedCustomerLabel = (customer) => [customer?.name || '', customer?.contact || ''].filter(Boolean).join(' · ');
+      const renderImportedCustomerOptions = (selectedId = '') => {
+        const select = root.querySelector('#imported-sales-customer-select');
+        if (!select) return;
+        const preferred = String(selectedId || select.value || '');
+        select.replaceChildren();
+        const prompt = document.createElement('option');
+        prompt.value = '';
+        prompt.textContent = importedCustomers.length ? 'Kayıtlı cari seçin (isteğe bağlı)' : 'Kayıtlı cari yok; müşteri bilgisini elle girin';
+        select.appendChild(prompt);
+        importedCustomers.slice().sort((left, right) => String(left.name || '').localeCompare(String(right.name || ''), 'tr')).forEach((customer) => {
+          const option = document.createElement('option');
+          option.value = String(customer.id);
+          option.textContent = importedCustomerLabel(customer) || 'İsimsiz cari';
+          select.appendChild(option);
+        });
+        select.disabled = !importedCustomers.length;
+        if (importedCustomers.some((customer) => String(customer.id) === preferred)) select.value = preferred;
+      };
+      const renderImportedCustomers = () => {
+        const body = root.querySelector('#imported-customers-list-body');
+        if (!body) return;
+        body.replaceChildren();
+        if (!importedCustomers.length) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 5;
+          cell.className = 'empty-workorders';
+          cell.textContent = 'Henüz cari kaydı yok.';
+          row.appendChild(cell);
+          body.appendChild(row);
+          return;
+        }
+        importedCustomers.slice().sort((left, right) => String(left.name || '').localeCompare(String(right.name || ''), 'tr')).forEach((customer) => {
+          const row = document.createElement('tr');
+          [customer.name || '—', customer.contact || '—', customer.address || '—', customer.note || '—'].forEach((value, index) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (index === 0) cell.classList.add('order');
+            row.appendChild(cell);
+          });
+          const actionCell = document.createElement('td');
+          const edit = document.createElement('button');
+          edit.type = 'button';
+          edit.className = 'row-action';
+          edit.dataset.editImportedCustomer = String(customer.id);
+          edit.textContent = 'Düzenle';
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'row-action is-cancel';
+          remove.dataset.deleteImportedCustomer = String(customer.id);
+          remove.textContent = 'Sil';
+          actionCell.append(edit, remove);
+          row.appendChild(actionCell);
+          body.appendChild(row);
+        });
+      };
+      const resetImportedCustomerForm = () => {
+        editingImportedCustomerId = null;
+        root.querySelector('#imported-customer-form-title').textContent = 'Yeni cari';
+        root.querySelector('#imported-customer-id').value = '';
+        ['name', 'contact', 'address', 'note'].forEach((field) => { root.querySelector('#imported-customer-' + field).value = ''; });
+        root.querySelector('#imported-customer-form-status').textContent = '';
+      };
+      const openImportedCustomerForEdit = (customer) => {
+        if (!customer) return;
+        editingImportedCustomerId = customer.id;
+        root.querySelector('#imported-customer-form-title').textContent = 'Cariyi düzenle';
+        root.querySelector('#imported-customer-id').value = String(customer.id);
+        root.querySelector('#imported-customer-name').value = customer.name || '';
+        root.querySelector('#imported-customer-contact').value = customer.contact || '';
+        root.querySelector('#imported-customer-address').value = customer.address || '';
+        root.querySelector('#imported-customer-note').value = customer.note || '';
+        root.querySelector('#imported-customer-form-status').textContent = '';
+      };
+      const saveImportedCustomer = () => {
+        const status = root.querySelector('#imported-customer-form-status');
+        const name = root.querySelector('#imported-customer-name').value.trim();
+        if (!name) { status.textContent = 'Cari adı girilmelidir.'; return; }
+        const existing = importedCustomers.find((customer) => Number(customer.id) === Number(editingImportedCustomerId));
+        const customer = {
+          id: existing?.id || nextImportedCustomerId++,
+          name,
+          contact: root.querySelector('#imported-customer-contact').value.trim(),
+          address: root.querySelector('#imported-customer-address').value.trim(),
+          note: root.querySelector('#imported-customer-note').value.trim()
+        };
+        if (existing) importedCustomers.splice(importedCustomers.indexOf(existing), 1, customer);
+        else importedCustomers.unshift(customer);
+        renderImportedCustomers();
+        renderImportedCustomerOptions(customer.id);
+        saveProductionState();
+        resetImportedCustomerForm();
+        status.textContent = existing ? 'Cari güncellendi.' : 'Cari kaydedildi.';
+      };
+      const applyImportedCustomerToSales = () => {
+        const selectedId = root.querySelector('#imported-sales-customer-select')?.value;
+        const customer = importedCustomers.find((item) => String(item.id) === String(selectedId));
+        if (!customer) return;
+        root.querySelector('#imported-sales-customer').value = customer.name || '';
+        root.querySelector('#imported-sales-contact').value = customer.contact || '';
+        root.querySelector('#imported-sales-address').value = customer.address || '';
+      };
+      root.addEventListener('change', (event) => {
+        if (event.target.matches('#imported-sales-customer-select')) applyImportedCustomerToSales();
+      });
+      root.addEventListener('click', (event) => {
+        if (event.target.closest('[data-save-imported-customer]')) { saveImportedCustomer(); return; }
+        if (event.target.closest('[data-reset-imported-customer]')) { resetImportedCustomerForm(); return; }
+        const edit = event.target.closest('[data-edit-imported-customer]');
+        if (edit) { openImportedCustomerForEdit(importedCustomers.find((customer) => Number(customer.id) === Number(edit.dataset.editImportedCustomer))); return; }
+        const remove = event.target.closest('[data-delete-imported-customer]');
+        if (remove) {
+          const customer = importedCustomers.find((item) => Number(item.id) === Number(remove.dataset.deleteImportedCustomer));
+          if (!customer || !window.confirm('“' + (customer.name || 'Bu cari') + '” kaydı silinsin mi?')) return;
+          importedCustomers.splice(importedCustomers.indexOf(customer), 1);
+          renderImportedCustomers();
+          renderImportedCustomerOptions();
+          saveProductionState();
+        }
+      });
       const openImportedSalesForEdit = (order) => {
         if (!order) return;
         editingImportedSalesOrderId = order.id;
@@ -3535,6 +3662,7 @@
         root.querySelector('#imported-sales-form-title').textContent = 'İthal ürün satış siparişini düzenle';
         root.querySelector('#imported-sales-no').value = order.orderNo;
         root.querySelector('#imported-sales-date').value = order.date || importedMovementDate();
+        renderImportedCustomerOptions(order.customerId || '');
         root.querySelector('#imported-sales-customer').value = order.customer || '';
         root.querySelector('#imported-sales-contact').value = order.contact || '';
         root.querySelector('#imported-sales-address').value = order.address || '';
@@ -3555,6 +3683,7 @@
           orderNo: root.querySelector('#imported-sales-no').value || importedSalesOrderNumber(),
           date: root.querySelector('#imported-sales-date').value || importedMovementDate(),
           customer,
+          customerId: Number(root.querySelector('#imported-sales-customer-select').value) || null,
           contact: root.querySelector('#imported-sales-contact').value.trim(),
           address: root.querySelector('#imported-sales-address').value.trim(),
           status: root.querySelector('#imported-sales-status-select').value,
@@ -3716,7 +3845,76 @@
           return canvas;
         });
       };
-      const importedSalesCargoLabelPdfCanvases = (order) => { const width = 800; const height = 600; const scale = 2; const canvas = document.createElement('canvas'); canvas.width = width * scale; canvas.height = height * scale; const context = canvas.getContext('2d'); context.scale(scale, scale); const items = (order?.items || []).map((item) => { const card = importedStockCards.find((entry) => String(entry.id) === String(item.cardId) || entry.code === item.cardCode) || {}; const quantity = Math.max(0, Number(item.quantity) || 0); const unitDesi = Number(card.desi) || importedStockDesi(card.packageWidth, card.packageLength, card.packageHeight); return { label: item.cardLabel || item.cardCode || card.name || 'Ürün', quantity, unit: item.unit || card.unit || 'adet', cartons: (Number(card.packageCount) || 0) * quantity, weight: (Number(card.packageWeight) || 0) * quantity, desi: unitDesi * quantity }; }); const totals = items.reduce((sum, item) => ({ cartons: sum.cartons + item.cartons, weight: sum.weight + item.weight, desi: sum.desi + item.desi }), { cartons: 0, weight: 0, desi: 0 }); const products = items.map((item) => item.label + ' · ' + numberFormat(item.quantity) + ' ' + item.unit).join(String.fromCharCode(10)) || 'Ürün bilgisi bulunmuyor.'; context.fillStyle = '#ffffff'; context.fillRect(0, 0, width, height); context.fillStyle = '#ef7b1a'; context.fillRect(0, 0, width, 12); context.fillStyle = '#0a93c6'; context.fillRect(0, 12, width, 84); context.fillStyle = '#ffffff'; context.font = '700 24px Arial, sans-serif'; context.fillText('CSP PREFABRİK HAVUZ', 34, 48); context.font = '13px Arial, sans-serif'; context.fillText('KARGO ETİKETİ · 100 × 75 mm · YATAY', 34, 73); context.fillStyle = '#eaf7fb'; context.fillRect(34, 122, 286, 82); context.fillStyle = '#527180'; context.font = '700 10px Arial, sans-serif'; context.fillText('SİPARİŞ NO', 50, 148); context.fillStyle = '#173f50'; context.font = '700 22px Arial, sans-serif'; drawImportedSalesReportText(context, order?.orderNo || '—', 50, 178, 250, 24, 2); context.fillStyle = '#eaf7fb'; context.fillRect(344, 122, 422, 82); context.fillStyle = '#527180'; context.font = '700 10px Arial, sans-serif'; context.fillText('SİPARİŞ TARİHİ', 360, 148); context.fillStyle = '#173f50'; context.font = '700 20px Arial, sans-serif'; context.fillText(formatImportedMovementDate(order?.date), 360, 178); context.fillStyle = '#527180'; context.font = '700 11px Arial, sans-serif'; context.fillText('ALICI', 34, 238); context.fillStyle = '#173f50'; context.font = '700 24px Arial, sans-serif'; drawImportedSalesReportText(context, order?.customer || '—', 34, 268, 468, 28, 2); context.font = '14px Arial, sans-serif'; drawImportedSalesReportText(context, order?.address || 'Teslimat adresi belirtilmedi.', 34, 332, 468, 19, 3); context.fillStyle = '#527180'; context.font = '12px Arial, sans-serif'; drawImportedSalesReportText(context, order?.contact || '', 34, 399, 468, 16, 2); context.fillStyle = '#f4fafc'; context.fillRect(34, 438, 468, 112); context.fillStyle = '#527180'; context.font = '700 10px Arial, sans-serif'; context.fillText('İÇERİK', 50, 462); context.fillStyle = '#173f50'; context.font = '13px Arial, sans-serif'; drawImportedSalesReportText(context, products, 50, 488, 430, 16, 3); context.fillStyle = '#173f50'; context.fillRect(532, 228, 234, 322); context.fillStyle = '#ffffff'; context.font = '700 12px Arial, sans-serif'; context.fillText('KARGO BİLGİLERİ', 550, 258); context.strokeStyle = '#75c9e6'; context.beginPath(); context.moveTo(550, 274); context.lineTo(748, 274); context.stroke(); context.font = '700 11px Arial, sans-serif'; context.fillStyle = '#b8e7f5'; context.fillText('KOLİ', 550, 312); context.fillText('AĞIRLIK', 550, 380); context.fillText('DESİ', 550, 448); context.fillStyle = '#ffffff'; context.font = '700 24px Arial, sans-serif'; context.fillText(totals.cartons ? numberFormat(totals.cartons) : '—', 550, 342); context.fillText(totals.weight ? `${numberFormat(totals.weight)} kg` : '—', 550, 410); context.fillText(totals.desi ? numberFormat(totals.desi) : '—', 550, 478); context.fillStyle = '#527180'; context.font = '9px Arial, sans-serif'; context.fillText('Ağırlık ve desi stok kartı bilgilerinden hesaplanır.', 34, 580); return [canvas]; };
+      const importedSalesCargoLabelPdfCanvases = (order) => {
+        const width = 800;
+        const height = 600;
+        const scale = 2;
+        const canvas = document.createElement('canvas');
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+        const context = canvas.getContext('2d');
+        context.scale(scale, scale);
+        const items = (order?.items || []).map((item) => {
+          const card = importedStockCards.find((entry) => String(entry.id) === String(item.cardId) || entry.code === item.cardCode) || {};
+          const quantity = Math.max(0, Number(item.quantity) || 0);
+          const unitDesi = Number(card.desi) || importedStockDesi(card.packageWidth, card.packageLength, card.packageHeight);
+          return { label: item.cardLabel || item.cardCode || card.name || 'Ürün', quantity, unit: item.unit || card.unit || 'adet', cartons: (Number(card.packageCount) || 0) * quantity, weight: (Number(card.packageWeight) || 0) * quantity, desi: unitDesi * quantity };
+        });
+        const totals = items.reduce((sum, item) => ({ cartons: sum.cartons + item.cartons, weight: sum.weight + item.weight, desi: sum.desi + item.desi }), { cartons: 0, weight: 0, desi: 0 });
+        const products = items.map((item) => item.label + ' · ' + numberFormat(item.quantity) + ' ' + item.unit).join(String.fromCharCode(10)) || 'Ürün bilgisi bulunmuyor.';
+        context.fillStyle = '#ffffff';
+        context.fillRect(0, 0, width, height);
+        context.fillStyle = '#ef7b1a';
+        context.fillRect(0, 0, width, 12);
+        context.fillStyle = '#0a93c6';
+        context.fillRect(0, 12, width, 84);
+        context.fillStyle = '#ffffff';
+        context.font = '700 25px Arial, sans-serif';
+        context.fillText('CSP PREFABRİK HAVUZ', 34, 49);
+        context.font = '700 20px Arial, sans-serif';
+        context.fillText('KARGO ETİKETİ', 34, 76);
+        const label = (text, x, y) => { context.fillStyle = '#527180'; context.font = '700 24px Arial, sans-serif'; context.fillText(text, x, y); };
+        context.fillStyle = '#f4fafc';
+        context.fillRect(34, 120, 470, 430);
+        label('ALICI', 56, 152);
+        context.fillStyle = '#173f50';
+        context.font = '700 24px Arial, sans-serif';
+        drawImportedSalesReportText(context, order?.customer || '—', 56, 186, 425, 29, 2);
+        label('ADRES', 56, 253);
+        context.fillStyle = '#173f50';
+        context.font = '26px Arial, sans-serif';
+        drawImportedSalesReportText(context, order?.address || 'Teslimat adresi belirtilmedi.', 56, 286, 425, 28, 3);
+        label('TELEFON / E-POSTA', 56, 385);
+        context.fillStyle = '#173f50';
+        context.font = '26px Arial, sans-serif';
+        drawImportedSalesReportText(context, order?.contact || '—', 56, 418, 425, 28, 2);
+        label('ÜRÜNLER', 56, 476);
+        context.fillStyle = '#173f50';
+        context.font = '26px Arial, sans-serif';
+        drawImportedSalesReportText(context, products, 56, 510, 425, 27, 2);
+        context.fillStyle = '#173f50';
+        context.fillRect(532, 120, 234, 430);
+        context.fillStyle = '#ffffff';
+        context.font = '700 24px Arial, sans-serif';
+        context.fillText('KARGO BİLGİLERİ', 550, 160);
+        context.strokeStyle = '#75c9e6';
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(550, 178);
+        context.lineTo(748, 178);
+        context.stroke();
+        context.fillStyle = '#b8e7f5';
+        context.font = '700 24px Arial, sans-serif';
+        context.fillText('KOLİ', 550, 228);
+        context.fillText('AĞIRLIK', 550, 344);
+        context.fillText('DESİ', 550, 460);
+        context.fillStyle = '#ffffff';
+        context.font = '700 28px Arial, sans-serif';
+        context.fillText(totals.cartons ? numberFormat(totals.cartons) : '—', 550, 268);
+        context.fillText(totals.weight ? numberFormat(totals.weight) + ' kg' : '—', 550, 384);
+        context.fillText(totals.desi ? numberFormat(totals.desi) : '—', 550, 500);
+        return [canvas];
+      };
       const importedSalesReportFileName = (order, suffix) => `${String(order?.orderNo || 'ithal-satis').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'ithal-satis'}-${suffix}.pdf`;
       const exportImportedSalesShippingPdf = (order) => {
         if (!order) return;
@@ -5255,7 +5453,7 @@
         list.innerHTML = templates.map((template) => `<button type="button" class="template-button" data-workorder-template="${template.id}"><strong>${template.label}</strong><span>${template.detail}</span></button>`).join('');
       };
       const persistentStateKey = 'csp-production-management-state-v2';
-      const deletionTrackedStateKeys = ['orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'warehouseShipments', 'workorderRecords'];
+      const deletionTrackedStateKeys = ['orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'workorderRecords'];
       let deletedRecords = {};
       let deletionBaseline = {};
       const copyStateValue = (value) => JSON.parse(JSON.stringify(value));
@@ -5494,6 +5692,7 @@
         importedStockCards: importedStockCards.map((card) => ({ ...card, image: card.imageKey ? '' : card.image })),
         importedStockMovements: importedStockMovements.map((movement) => ({ ...movement })),
         importedSalesOrders: importedSalesOrders.map((order) => ({ ...order, items: (order.items || []).map((item) => ({ ...item })) })),
+        importedCustomers: importedCustomers.map((customer) => ({ ...customer })),
         warehouseShipments: warehouseShipments.map((shipment) => ({ ...shipment, items: (shipment.items || []).map((item) => ({ ...item })) })),
         workorderRecords: workorderRecords.map((record) => {
           const { orderRow, ...savedRecord } = record;
@@ -5506,6 +5705,7 @@
         nextImportedStockCardId,
         nextImportedStockMovementId,
         nextImportedSalesOrderId,
+        nextImportedCustomerId,
         nextWarehouseShipmentId,
         linerStarterCardsImported,
         savedWorkorderId,
@@ -5592,6 +5792,8 @@
           nextImportedStockMovementId = Math.max(Number(saved.nextImportedStockMovementId) || 1, ...importedStockMovements.map((movement) => Number(movement.id) + 1 || 1));
           importedSalesOrders.splice(0, importedSalesOrders.length, ...(Array.isArray(saved.importedSalesOrders) ? saved.importedSalesOrders : []));
           nextImportedSalesOrderId = Math.max(Number(saved.nextImportedSalesOrderId) || 1, ...importedSalesOrders.map((order) => Number(order.id) + 1 || 1));
+          importedCustomers.splice(0, importedCustomers.length, ...(Array.isArray(saved.importedCustomers) ? saved.importedCustomers : []));
+          nextImportedCustomerId = Math.max(Number(saved.nextImportedCustomerId) || 1, ...importedCustomers.map((customer) => Number(customer.id) + 1 || 1));
           warehouseShipments.splice(0, warehouseShipments.length, ...(Array.isArray(saved.warehouseShipments) ? saved.warehouseShipments : []));
           nextWarehouseShipmentId = Math.max(Number(saved.nextWarehouseShipmentId) || 1, ...warehouseShipments.map((shipment) => Number(shipment.id) + 1 || 1));
           linerStarterCardsImported = Number(saved.linerStarterCardsImported) || 0;
@@ -5657,6 +5859,8 @@
       renderImportedMovementPage('entry');
       renderImportedMovementPage('exit');
       renderImportedSalesOrders();
+      renderImportedCustomers();
+      renderImportedCustomerOptions();
       void hydrateStockCardImages();
       void hydrateImportedStockCardImages();
       captureDeletionBaseline();
@@ -6511,11 +6715,11 @@
         ['dashboard', 'Ana panel'], ['orders', 'Siparişler'], ['workorders', 'İş emirleri'], ['planning', 'Üretim planı'],
         ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
         ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['settings', 'Ayarlar ve yedek'],
-        ['imported-stock', 'İthal ürün stokları'], ['imported-stock-entry', 'İthal ürün girişi'], ['imported-stock-exit', 'İthal ürün çıkışı'], ['imported-sales', 'İthal ürün satışları'],
+        ['imported-stock', 'İthal ürün stokları'], ['imported-stock-entry', 'İthal ürün girişi'], ['imported-stock-exit', 'İthal ürün çıkışı'], ['imported-sales', 'İthal ürün satışları'], ['imported-customers', 'Cariler'],
         ['warehouse-shipping', 'Depo sevkiyat']
       ];
       const pageAliases = { 'order-form': 'orders', 'workorder-select': 'workorders', 'workorder-form': 'workorders', 'imported-sales-form': 'imported-sales', 'warehouse-shipping-form': 'warehouse-shipping', 'user-management': 'user-management' };
-      const protectedFormPages = new Set(['order-form', 'workorder-select', 'workorder-form', 'stock-card-form', 'imported-stock-form', 'imported-sales-form', 'warehouse-shipping-form']);
+      const protectedFormPages = new Set(['order-form', 'workorder-select', 'workorder-form', 'stock-card-form', 'imported-stock-form', 'imported-sales-form', 'imported-customers', 'warehouse-shipping-form']);
       const activePanelPage = () => root.querySelector('[data-page].is-visible')?.dataset.page || '';
       const hasOpenForm = () => protectedFormPages.has(activePanelPage());
       const renderNotifications = () => {
@@ -6558,7 +6762,7 @@
       const setSessionLabel = (message) => { if (sessionLabel) sessionLabel.textContent = message; };
       const hasState = (value) => Boolean(value && Array.isArray(value.orders) && Array.isArray(value.stockCards));
       const hasMeaningfulRecords = (value) => Boolean(value && [
-        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'warehouseShipments', 'workorderRecords'
+        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'workorderRecords'
       ].some((key) => Array.isArray(value[key]) && value[key].length));
       const safeJson = (value) => {
         try { return JSON.parse(value || 'null'); } catch (error) { return null; }
