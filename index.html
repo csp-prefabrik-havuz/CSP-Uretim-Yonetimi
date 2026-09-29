@@ -643,10 +643,10 @@
         <section class="section"><h2>Son ithal ürün çıkışları</h2><p class="table-hint">Çıkış miktarı mevcut stoktan fazla olamaz. Yanlış işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="imported-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Çıkış yeri / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-exit-movements-body"></tbody></table></div></section>
       </section>
       <section class="view report-view" data-page="imported-customers"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Cariler</h1><p>İthal ürün satışlarında kullanılacak cari bilgilerini yönetin.</p></div></div></div><section class="section"><h2 id="imported-customer-form-title">Yeni cari</h2><input id="imported-customer-id" type="hidden" /><div class="form-grid"><div class="field"><label for="imported-customer-name">Cari adı</label><input id="imported-customer-name" placeholder="Firma veya kişi adı" /></div><div class="field"><label for="imported-customer-contact">Telefon / e-posta</label><input id="imported-customer-contact" placeholder="Telefon veya e-posta" /></div><div class="field span-two"><label for="imported-customer-address">Adres</label><textarea id="imported-customer-address" placeholder="Cari adresi"></textarea></div><div class="field span-two"><label for="imported-customer-note">Not</label><textarea id="imported-customer-note" placeholder="Cariyle ilgili not"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-customer-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-imported-customer>Temizle</button><button class="primary-button" type="button" data-save-imported-customer>Cariyi kaydet</button></div></section><section class="section"><h2>Kayıtlı cariler</h2><div class="table-wrap"><table id="imported-customers-table"><thead><tr><th>Cari</th><th>Telefon / e-posta</th><th>Adres</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-customers-list-body"></tbody></table></div></section></section>
-      <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>Ürünler ithal stok kartlarından seçilir. Sipariş “Sevk edildi” olduğunda stok, ithal ürün çıkışına otomatik işlenir.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Seri no</th><th>Durum</th><th>Raporlar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
-      <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Sevk edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer-select">Kayıtlı cari</label><select id="imported-sales-customer-select"></select></div><div class="field"><label for="imported-sales-customer">Müşteri (manuel)</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Sevk edildi</option><option>İptal edildi</option></select></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
-      <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Stok kayıtlarından bağımsız müşteri teslimatlarını depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürün</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
-      <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi, serbest ürün bilgisi ve durum bilgilerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Sevkiyat tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-product">Ürün</label><input id="warehouse-shipping-product" placeholder="Ürünü veya sevkiyat içeriğini yazın" /></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section></section>
+      <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>Ürünler ithal stok kartlarından seçilir. Sipariş “Sevk edildi” olduğunda stok, ithal ürün çıkışına otomatik işlenir.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Cari</th><th>Ürünler</th><th>Toplam</th><th>Seri no</th><th>Durum</th><th>Sevk tarihi</th><th>Raporlar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
+      <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Sevk edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer-select">Kayıtlı cari</label><select id="imported-sales-customer-select"></select></div><div class="field"><label for="imported-sales-customer">Müşteri (manuel)</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Sevk edildi</option><option>İptal edildi</option></select></div><div class="field" id="imported-sales-shipped-at-field" hidden><label for="imported-sales-shipped-at">Sevk tarihi</label><input id="imported-sales-shipped-at" type="date" /></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
+      <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Stok kayıtlarından bağımsız müşteri teslimatlarını depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürün</th><th>Durum</th><th>Sevk tarihi</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
+      <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi, serbest ürün bilgisi ve durum bilgilerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Kayıt tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Sevk edildi</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field" id="warehouse-shipping-shipped-at-field" hidden><label for="warehouse-shipping-shipped-at">Sevk tarihi</label><input id="warehouse-shipping-shipped-at" type="date" /></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-product">Ürün</label><input id="warehouse-shipping-product" placeholder="Ürünü veya sevkiyat içeriğini yazın" /></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section></section>
       <section class="view report-view" data-page="manual-cargo-label"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Manuel kargo etiketi</h1><p>Siparişe veya stok kartına bağlı olmadan etiket bilgisini tamamen elle girin.</p></div></div></div><section class="section"><p class="table-hint" id="manual-cargo-label-status" aria-live="polite">Etikette görünecek tüm bilgileri doldurun; kayıt oluşturulmaz.</p><div class="form-grid"><div class="field"><label for="manual-cargo-customer">Alıcı adı</label><input id="manual-cargo-customer" placeholder="Alıcı adı" /></div><div class="field"><label for="manual-cargo-contact">Telefon / e-posta</label><input id="manual-cargo-contact" placeholder="Telefon veya e-posta" /></div><div class="field span-two"><label for="manual-cargo-address">Adres</label><textarea id="manual-cargo-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="manual-cargo-products">Ürünler</label><textarea id="manual-cargo-products" placeholder="Ürün adı, adet ve istenen diğer bilgiler"></textarea></div><div class="field"><label for="manual-cargo-cartons">Koli adedi</label><input id="manual-cargo-cartons" type="number" min="0" step="1" placeholder="Örn. 2" /></div><div class="field"><label for="manual-cargo-weight">Toplam ağırlık (kg)</label><input id="manual-cargo-weight" type="number" min="0" step="0.01" placeholder="Örn. 18,5" /></div><div class="field"><label for="manual-cargo-desi">Toplam desi</label><input id="manual-cargo-desi" type="number" min="0" step="0.01" placeholder="Örn. 12" /></div></div><div class="form-actions"><span class="muted-note">Etiket yatay 100 × 75 mm PDF olarak hazırlanır.</span><button class="secondary-button" type="button" data-clear-manual-cargo-label>Temizle</button><button class="primary-button" type="button" data-export-manual-cargo-label>Kargo etiketini PDF al</button></div></section></section>
       <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
       <section class="view report-view" data-page="user-management">
@@ -3185,6 +3185,20 @@
         return 'ITH-SAT-' + year + '-' + String(number).padStart(4, '0');
       };
       const normaliseImportedSalesStatus = (status) => status === 'Teslim edildi' ? 'Sevk edildi' : (status || 'Taslak');
+      const updateImportedSalesShippedAtField = () => {
+        const field = root.querySelector('#imported-sales-shipped-at-field');
+        const input = root.querySelector('#imported-sales-shipped-at');
+        const isShipped = root.querySelector('#imported-sales-status-select')?.value === 'Sevk edildi';
+        if (field) field.hidden = !isShipped;
+        if (isShipped && input && !input.value) input.value = importedMovementDate();
+      };
+      const updateWarehouseShippingShippedAtField = () => {
+        const field = root.querySelector('#warehouse-shipping-shipped-at-field');
+        const input = root.querySelector('#warehouse-shipping-shipped-at');
+        const isShipped = root.querySelector('#warehouse-shipping-status-select')?.value === 'Sevk edildi';
+        if (field) field.hidden = !isShipped;
+        if (isShipped && input && !input.value) input.value = importedMovementDate();
+      };
       const importedSalesCurrency = (value) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(Number(value) || 0);
       const importedSalesPickerModal = () => root.querySelector('#imported-sales-picker-modal');
       const importedSalesPickerItem = (card) => ({ cardId: card.id, cardCode: card.code, cardLabel: importedCardLabel(card), unit: card.unit, quantity: 1, unitPrice: 0 });
@@ -3460,6 +3474,8 @@
         ['customer', 'contact', 'address', 'serial-no'].forEach((field) => { root.querySelector('#imported-sales-' + field).value = ''; });
         renderImportedCustomerOptions();
         root.querySelector('#imported-sales-status-select').value = 'Taslak';
+        root.querySelector('#imported-sales-shipped-at').value = '';
+        updateImportedSalesShippedAtField();
         root.querySelector('#imported-sales-form-status').textContent = '';
         renderImportedSalesDraft();
       };
@@ -3469,7 +3485,7 @@
         if (!importedSalesOrders.length) {
           const row = document.createElement('tr');
           const cell = document.createElement('td');
-          cell.colSpan = 9;
+          cell.colSpan = 11;
           cell.className = 'empty-workorders';
           cell.textContent = 'Henüz ithal ürün satış siparişi kaydedilmedi.';
           row.appendChild(cell);
@@ -3477,11 +3493,13 @@
         } else importedSalesOrders.slice().sort((left, right) => Number(right.id) - Number(left.id)).forEach((order) => {
           const row = document.createElement('tr');
           const products = (order.items || []).map((item) => item.cardLabel).join(' · ') || '—';
-          [order.orderNo, formatImportedMovementDate(order.date), order.customer || '—', products, importedSalesCurrency(order.total), order.serialNo || '—'].forEach((value, index) => {
+          const registeredCustomer = importedCustomers.find((customer) => Number(customer.id) === Number(order.customerId));
+          const account = registeredCustomer ? importedCustomerLabel(registeredCustomer) : '—';
+          [order.orderNo, formatImportedMovementDate(order.date), order.customer || '—', account, products, importedSalesCurrency(order.total), order.serialNo || '—'].forEach((value, index) => {
             const cell = document.createElement('td');
             cell.textContent = value;
             if (index === 0) cell.className = 'code';
-            if (index === 2 || index === 3) cell.classList.add('order');
+            if (index === 2 || index === 3 || index === 4) cell.classList.add('order');
             row.appendChild(cell);
           });
           const statusCell = document.createElement('td');
@@ -3501,6 +3519,9 @@
           });
           statusCell.appendChild(statusSelect);
           row.appendChild(statusCell);
+          const shippedAtCell = document.createElement('td');
+          shippedAtCell.textContent = order.shippedAt ? formatImportedMovementDate(order.shippedAt) : '—';
+          row.appendChild(shippedAtCell);
           const reportCell = document.createElement('td');
           const reports = document.createElement('div');
           reports.className = 'row-actions';
@@ -3669,6 +3690,8 @@
         root.querySelector('#imported-sales-contact').value = order.contact || '';
         root.querySelector('#imported-sales-address').value = order.address || '';
         root.querySelector('#imported-sales-status-select').value = normaliseImportedSalesStatus(order.status);
+        root.querySelector('#imported-sales-shipped-at').value = order.shippedAt || '';
+        updateImportedSalesShippedAtField();
         root.querySelector('#imported-sales-serial-no').value = order.serialNo || '';
         root.querySelector('#imported-sales-form-status').textContent = '';
         renderImportedSalesDraft();
@@ -3689,6 +3712,7 @@
           contact: root.querySelector('#imported-sales-contact').value.trim(),
           address: root.querySelector('#imported-sales-address').value.trim(),
           status: root.querySelector('#imported-sales-status-select').value,
+          shippedAt: root.querySelector('#imported-sales-status-select').value === 'Sevk edildi' ? (root.querySelector('#imported-sales-shipped-at').value || importedMovementDate()) : '',
           serialNo: root.querySelector('#imported-sales-serial-no').value.trim(),
           items: importedSalesDraftItems.map((item) => ({ ...item })),
           total: importedSalesDraftTotal(),
@@ -4016,6 +4040,8 @@
         root.querySelector('#warehouse-shipping-date').value = importedMovementDate();
         ['customer', 'address', 'product', 'note'].forEach((field) => { root.querySelector('#warehouse-shipping-' + field).value = ''; });
         root.querySelector('#warehouse-shipping-status-select').value = 'Hazırlanıyor';
+        root.querySelector('#warehouse-shipping-shipped-at').value = '';
+        updateWarehouseShippingShippedAtField();
         root.querySelector('#warehouse-shipping-form-status').textContent = '';
         renderWarehouseShippingProductOptions();
       };
@@ -4025,7 +4051,7 @@
         if (!warehouseShipments.length) {
           const row = document.createElement('tr');
           const cell = document.createElement('td');
-          cell.colSpan = 8;
+          cell.colSpan = 9;
           cell.className = 'empty-workorders';
           cell.textContent = 'Henüz depo sevkiyatı kaydedilmedi.';
           row.appendChild(cell);
@@ -4045,7 +4071,7 @@
           statusSelect.className = 'warehouse-shipping-status-select';
           statusSelect.dataset.warehouseShippingStatus = shipment.id;
           statusSelect.setAttribute('aria-label', `${shipment.shippingNo} sevkiyat durumu`);
-          const statuses = ['Hazırlanıyor', 'Sevke hazır', 'Yolda', 'Teslim edildi', 'İptal edildi'];
+          const statuses = ['Hazırlanıyor', 'Sevke hazır', 'Yolda', 'Sevk edildi', 'Teslim edildi', 'İptal edildi'];
           const selectedStatus = shipment.status || 'Hazırlanıyor';
           if (!statuses.includes(selectedStatus)) statuses.push(selectedStatus);
           statuses.forEach((statusValue) => {
@@ -4057,6 +4083,9 @@
           });
           statusCell.appendChild(statusSelect);
           row.appendChild(statusCell);
+          const shippedAtCell = document.createElement('td');
+          shippedAtCell.textContent = shipment.shippedAt ? formatImportedMovementDate(shipment.shippedAt) : '—';
+          row.appendChild(shippedAtCell);
           const noteCell = document.createElement('td');
           noteCell.textContent = shipment.note || '—';
           row.appendChild(noteCell);
@@ -4088,6 +4117,8 @@
         root.querySelector('#warehouse-shipping-customer').value = shipment.customer || '';
         root.querySelector('#warehouse-shipping-address').value = shipment.address || '';
         root.querySelector('#warehouse-shipping-status-select').value = shipment.status || 'Hazırlanıyor';
+        root.querySelector('#warehouse-shipping-shipped-at').value = shipment.shippedAt || '';
+        updateWarehouseShippingShippedAtField();
         root.querySelector('#warehouse-shipping-note').value = shipment.note || ''; root.querySelector('#warehouse-shipping-product').value = shipment.product || '';
         root.querySelector('#warehouse-shipping-form-status').textContent = '';
         renderWarehouseShippingProductOptions(shipment.productId || shipment.items?.[0]?.cardId || '');
@@ -4109,6 +4140,7 @@
           customer,
           address,
           status: root.querySelector('#warehouse-shipping-status-select').value,
+          shippedAt: root.querySelector('#warehouse-shipping-status-select').value === 'Sevk edildi' ? (root.querySelector('#warehouse-shipping-shipped-at').value || importedMovementDate()) : '',
           note: root.querySelector('#warehouse-shipping-note').value.trim(),
           productId: null,
           productCode: '',
@@ -6405,6 +6437,8 @@
           if (item) item.unitPrice = importedSalesPickerPrice.value;
           return;
         }
+        if (event.target.matches('#imported-sales-status-select')) { updateImportedSalesShippedAtField(); return; }
+        if (event.target.matches('#warehouse-shipping-status-select')) { updateWarehouseShippingShippedAtField(); return; }
         const importedSalesStatusSelect = event.target.closest('[data-imported-sales-status]');
         if (importedSalesStatusSelect) {
           const order = importedSalesOrders.find((item) => item.id === Number(importedSalesStatusSelect.dataset.importedSalesStatus));
@@ -6429,6 +6463,7 @@
             }
           }
           order.status = nextStatus;
+          order.shippedAt = nextStatus === 'Sevk edildi' ? (order.shippedAt || importedMovementDate()) : '';
           refreshImportedSalesStockViews();
           saveProductionState();
           const status = root.querySelector('#imported-sales-status');
@@ -6440,6 +6475,8 @@
           const shipment = warehouseShipments.find((item) => item.id === Number(warehouseShippingStatusSelect.dataset.warehouseShippingStatus));
           if (!shipment) return;
           shipment.status = warehouseShippingStatusSelect.value;
+          shipment.shippedAt = shipment.status === 'Sevk edildi' ? (shipment.shippedAt || importedMovementDate()) : '';
+          renderWarehouseShipments();
           saveProductionState();
           const status = root.querySelector('#warehouse-shipping-status');
           if (status) status.textContent = `${shipment.shippingNo} sevkiyatının durumu “${shipment.status}” olarak güncellendi.`;
@@ -6753,9 +6790,13 @@
         ['warehouse-shipping', 'Depo sevkiyat'], ['manual-cargo-label', 'Manuel kargo etiketi']
       ];
       const pageAliases = { 'order-form': 'orders', 'workorder-select': 'workorders', 'workorder-form': 'workorders', 'imported-sales-form': 'imported-sales', 'warehouse-shipping-form': 'warehouse-shipping', 'user-management': 'user-management' };
-      const protectedFormPages = new Set(['order-form', 'workorder-select', 'workorder-form', 'stock-card-form', 'imported-stock-form', 'imported-sales-form', 'imported-customers', 'warehouse-shipping-form', 'manual-cargo-label']);
+      const protectedFormPages = new Set(['order-form', 'workorder-select', 'workorder-form', 'stock-card-form', 'imported-stock-form', 'imported-sales-form', 'warehouse-shipping-form', 'manual-cargo-label']);
       const activePanelPage = () => root.querySelector('[data-page].is-visible')?.dataset.page || '';
-      const hasOpenForm = () => protectedFormPages.has(activePanelPage());
+      const hasImportedCustomerDraft = () => {
+        if (activePanelPage() !== 'imported-customers') return false;
+        return ['name', 'contact', 'address', 'note'].some((field) => String(root.querySelector('#imported-customer-' + field)?.value || '').trim());
+      };
+      const hasOpenForm = () => protectedFormPages.has(activePanelPage()) || hasImportedCustomerDraft();
       const renderNotifications = () => {
         if (!notificationsList || !notificationBadge || !notificationsButton || !applyPendingChangesButton) return;
         notificationsList.replaceChildren();
