@@ -508,6 +508,7 @@
       <button class="nav-button" type="button" data-view="imported-customers"><i data-lucide="contact-round" aria-hidden="true"></i> Cariler</button>
       <div class="nav-label">Depo</div>
       <button class="nav-button" type="button" data-view="warehouse-shipping"><i data-lucide="warehouse" aria-hidden="true"></i> Depo sevkiyat</button>
+      <button class="nav-button" type="button" data-view="manual-cargo-label"><i data-lucide="printer" aria-hidden="true"></i> Manuel kargo etiketi</button>
       <div class="nav-label" data-admin-only hidden>Yönetim</div>
       <button class="nav-button" type="button" data-view="user-management" data-admin-only hidden><i data-lucide="users-round" aria-hidden="true"></i> Kullanıcı ve erişim</button>
     </nav>
@@ -646,6 +647,7 @@
       <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Sevk edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer-select">Kayıtlı cari</label><select id="imported-sales-customer-select"></select></div><div class="field"><label for="imported-sales-customer">Müşteri (manuel)</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Sevk edildi</option><option>İptal edildi</option></select></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
       <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Stok kayıtlarından bağımsız müşteri teslimatlarını depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürün</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi, serbest ürün bilgisi ve durum bilgilerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Sevkiyat tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-product">Ürün</label><input id="warehouse-shipping-product" placeholder="Ürünü veya sevkiyat içeriğini yazın" /></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section></section>
+      <section class="view report-view" data-page="manual-cargo-label"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Manuel kargo etiketi</h1><p>Siparişe veya stok kartına bağlı olmadan etiket bilgisini tamamen elle girin.</p></div></div></div><section class="section"><p class="table-hint" id="manual-cargo-label-status" aria-live="polite">Etikette görünecek tüm bilgileri doldurun; kayıt oluşturulmaz.</p><div class="form-grid"><div class="field"><label for="manual-cargo-customer">Alıcı adı</label><input id="manual-cargo-customer" placeholder="Alıcı adı" /></div><div class="field"><label for="manual-cargo-contact">Telefon / e-posta</label><input id="manual-cargo-contact" placeholder="Telefon veya e-posta" /></div><div class="field span-two"><label for="manual-cargo-address">Adres</label><textarea id="manual-cargo-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="manual-cargo-products">Ürünler</label><textarea id="manual-cargo-products" placeholder="Ürün adı, adet ve istenen diğer bilgiler"></textarea></div><div class="field"><label for="manual-cargo-cartons">Koli adedi</label><input id="manual-cargo-cartons" type="number" min="0" step="1" placeholder="Örn. 2" /></div><div class="field"><label for="manual-cargo-weight">Toplam ağırlık (kg)</label><input id="manual-cargo-weight" type="number" min="0" step="0.01" placeholder="Örn. 18,5" /></div><div class="field"><label for="manual-cargo-desi">Toplam desi</label><input id="manual-cargo-desi" type="number" min="0" step="0.01" placeholder="Örn. 12" /></div></div><div class="form-actions"><span class="muted-note">Etiket yatay 100 × 75 mm PDF olarak hazırlanır.</span><button class="secondary-button" type="button" data-clear-manual-cargo-label>Temizle</button><button class="primary-button" type="button" data-export-manual-cargo-label>Kargo etiketini PDF al</button></div></section></section>
       <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
       <section class="view report-view" data-page="user-management">
         <section class="section public-access-section">
@@ -3860,8 +3862,9 @@
           const unitDesi = Number(card.desi) || importedStockDesi(card.packageWidth, card.packageLength, card.packageHeight);
           return { label: item.cardLabel || item.cardCode || card.name || 'Ürün', quantity, unit: item.unit || card.unit || 'adet', cartons: (Number(card.packageCount) || 0) * quantity, weight: (Number(card.packageWeight) || 0) * quantity, desi: unitDesi * quantity };
         });
-        const totals = items.reduce((sum, item) => ({ cartons: sum.cartons + item.cartons, weight: sum.weight + item.weight, desi: sum.desi + item.desi }), { cartons: 0, weight: 0, desi: 0 });
-        const products = items.map((item) => item.label + ' · ' + numberFormat(item.quantity) + ' ' + item.unit).join(String.fromCharCode(10)) || 'Ürün bilgisi bulunmuyor.';
+        const manualCargo = order?.manualCargo || null;
+        const totals = manualCargo ? { cartons: Math.max(0, Number(manualCargo.cartons) || 0), weight: Math.max(0, Number(manualCargo.weight) || 0), desi: Math.max(0, Number(manualCargo.desi) || 0) } : items.reduce((sum, item) => ({ cartons: sum.cartons + item.cartons, weight: sum.weight + item.weight, desi: sum.desi + item.desi }), { cartons: 0, weight: 0, desi: 0 });
+        const products = manualCargo ? (manualCargo.products || 'Ürün bilgisi bulunmuyor.') : (items.map((item) => item.label + ' · ' + numberFormat(item.quantity) + ' ' + item.unit).join(String.fromCharCode(10)) || 'Ürün bilgisi bulunmuyor.');
         context.fillStyle = '#ffffff';
         context.fillRect(0, 0, width, height);
         context.fillStyle = '#ef7b1a';
@@ -3935,6 +3938,33 @@
           if (status) status.textContent = `${order.orderNo} için kargo etiketi indirildi.`;
         } catch (error) {
           const status = root.querySelector('#imported-sales-status');
+          if (status) status.textContent = 'Kargo etiketi hazırlanamadı. Lütfen tekrar deneyin.';
+        }
+      };
+      const manualCargoLabelValue = (id) => root.querySelector(id)?.value.trim() || '';
+      const clearManualCargoLabel = () => {
+        ['#manual-cargo-customer', '#manual-cargo-contact', '#manual-cargo-address', '#manual-cargo-products', '#manual-cargo-cartons', '#manual-cargo-weight', '#manual-cargo-desi'].forEach((id) => { const field = root.querySelector(id); if (field) field.value = ''; });
+        const status = root.querySelector('#manual-cargo-label-status');
+        if (status) status.textContent = 'Form temizlendi.';
+      };
+      const exportManualCargoLabelPdf = () => {
+        const status = root.querySelector('#manual-cargo-label-status');
+        try {
+          const labelOrder = {
+            customer: manualCargoLabelValue('#manual-cargo-customer') || '—',
+            contact: manualCargoLabelValue('#manual-cargo-contact') || '—',
+            address: manualCargoLabelValue('#manual-cargo-address') || 'Teslimat adresi belirtilmedi.',
+            manualCargo: {
+              products: manualCargoLabelValue('#manual-cargo-products'),
+              cartons: manualCargoLabelValue('#manual-cargo-cartons'),
+              weight: manualCargoLabelValue('#manual-cargo-weight'),
+              desi: manualCargoLabelValue('#manual-cargo-desi')
+            }
+          };
+          const date = new Date().toISOString().slice(0, 10);
+          downloadReportFile(makeCanvasPdf(importedSalesCargoLabelPdfCanvases(labelOrder), 283.46, 212.6), 'manuel-kargo-etiketi-' + date + '.pdf');
+          if (status) status.textContent = 'Kargo etiketi indirildi.';
+        } catch (error) {
           if (status) status.textContent = 'Kargo etiketi hazırlanamadı. Lütfen tekrar deneyin.';
         }
       };
@@ -5934,6 +5964,8 @@
         const deleteImportedSalesButton = event.target.closest('[data-delete-imported-sales]');
         const exportImportedSalesShippingButton = event.target.closest('[data-export-imported-sales-shipping]');
         const exportImportedSalesCargoButton = event.target.closest('[data-export-imported-sales-cargo]');
+        const exportManualCargoLabelButton = event.target.closest('[data-export-manual-cargo-label]');
+        const clearManualCargoLabelButton = event.target.closest('[data-clear-manual-cargo-label]');
         const openWarehouseShippingButton = event.target.closest('[data-open-warehouse-shipping]');
         const saveWarehouseShippingButton = event.target.closest('[data-save-warehouse-shipping]');
         const editWarehouseShippingButton = event.target.closest('[data-edit-warehouse-shipping]');
@@ -5970,6 +6002,8 @@
         if (deleteImportedSalesButton) { deleteImportedSalesOrder(deleteImportedSalesButton.dataset.deleteImportedSales); return; }
         if (exportImportedSalesShippingButton) { exportImportedSalesShippingPdf(importedSalesOrders.find((order) => order.id === Number(exportImportedSalesShippingButton.dataset.exportImportedSalesShipping))); return; }
         if (exportImportedSalesCargoButton) { exportImportedSalesCargoLabelPdf(importedSalesOrders.find((order) => order.id === Number(exportImportedSalesCargoButton.dataset.exportImportedSalesCargo))); return; }
+        if (exportManualCargoLabelButton) { exportManualCargoLabelPdf(); return; }
+        if (clearManualCargoLabelButton) { clearManualCargoLabel(); return; }
         if (openWarehouseShippingButton) { resetWarehouseShippingForm(); show('warehouse-shipping-form'); return; }
         if (saveWarehouseShippingButton) { saveWarehouseShipping(); return; }
         if (editWarehouseShippingButton) { openWarehouseShippingForEdit(warehouseShipments.find((shipment) => shipment.id === Number(editWarehouseShippingButton.dataset.editWarehouseShipping))); return; }
@@ -6716,10 +6750,10 @@
         ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
         ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['settings', 'Ayarlar ve yedek'],
         ['imported-stock', 'İthal ürün stokları'], ['imported-stock-entry', 'İthal ürün girişi'], ['imported-stock-exit', 'İthal ürün çıkışı'], ['imported-sales', 'İthal ürün satışları'], ['imported-customers', 'Cariler'],
-        ['warehouse-shipping', 'Depo sevkiyat']
+        ['warehouse-shipping', 'Depo sevkiyat'], ['manual-cargo-label', 'Manuel kargo etiketi']
       ];
       const pageAliases = { 'order-form': 'orders', 'workorder-select': 'workorders', 'workorder-form': 'workorders', 'imported-sales-form': 'imported-sales', 'warehouse-shipping-form': 'warehouse-shipping', 'user-management': 'user-management' };
-      const protectedFormPages = new Set(['order-form', 'workorder-select', 'workorder-form', 'stock-card-form', 'imported-stock-form', 'imported-sales-form', 'imported-customers', 'warehouse-shipping-form']);
+      const protectedFormPages = new Set(['order-form', 'workorder-select', 'workorder-form', 'stock-card-form', 'imported-stock-form', 'imported-sales-form', 'imported-customers', 'warehouse-shipping-form', 'manual-cargo-label']);
       const activePanelPage = () => root.querySelector('[data-page].is-visible')?.dataset.page || '';
       const hasOpenForm = () => protectedFormPages.has(activePanelPage());
       const renderNotifications = () => {
@@ -6773,6 +6807,42 @@
           return '{' + Object.keys(value).sort().map((key) => JSON.stringify(key) + ':' + stableStateJson(value[key])).join(',') + '}';
         }
         return JSON.stringify(value);
+      };
+      const mergeRemoteCustomers = (remoteState, localState) => {
+        if (!remoteState || typeof remoteState !== 'object' || Array.isArray(remoteState)) return { state: remoteState, changed: false };
+        const state = JSON.parse(JSON.stringify(remoteState));
+        const remoteDeleted = normaliseDeletedRecords(state.deletedRecords);
+        const localDeleted = normaliseDeletedRecords(localState?.deletedRecords);
+        const deletedCustomerIds = new Set([...(remoteDeleted.importedCustomers || []), ...(localDeleted.importedCustomers || [])]);
+        const remoteCustomers = Array.isArray(state.importedCustomers) ? state.importedCustomers : [];
+        const localCustomers = Array.isArray(localState?.importedCustomers) ? localState.importedCustomers : [];
+        const seen = new Set();
+        const customers = [];
+        let changed = false;
+        remoteCustomers.forEach((customer, index) => {
+          const identity = deletionIdentity('importedCustomers', customer, index);
+          if (deletedCustomerIds.has(identity) || seen.has(identity)) { changed = true; return; }
+          seen.add(identity);
+          customers.push(customer);
+        });
+        localCustomers.forEach((customer, index) => {
+          const identity = deletionIdentity('importedCustomers', customer, index);
+          if (deletedCustomerIds.has(identity) || seen.has(identity)) return;
+          seen.add(identity);
+          customers.push(JSON.parse(JSON.stringify(customer)));
+          changed = true;
+        });
+        state.importedCustomers = customers;
+        const combinedDeleted = { ...remoteDeleted };
+        if (deletedCustomerIds.size) combinedDeleted.importedCustomers = [...deletedCustomerIds];
+        else delete combinedDeleted.importedCustomers;
+        if (stableStateJson(combinedDeleted) !== stableStateJson(remoteDeleted)) changed = true;
+        state.deletedRecords = combinedDeleted;
+        const inferredNextId = customers.reduce((highest, customer) => Math.max(highest, (Number(customer?.id) || 0) + 1), 1);
+        const nextCustomerId = Math.max(Number(state.nextImportedCustomerId) || 1, Number(localState?.nextImportedCustomerId) || 1, inferredNextId);
+        if ((Number(state.nextImportedCustomerId) || 1) !== nextCustomerId) changed = true;
+        state.nextImportedCustomerId = nextCustomerId;
+        return { state, changed };
       };
       const userTitle = () => currentProfile?.display_name || currentProfile?.username || 'Kullanıcı';
       const showGate = (mode) => {
@@ -6888,11 +6958,12 @@
         nativeStorageSet.call(this, key, value);
         if (this === window.localStorage && key === cloudConfig.stateKey) queueCloudSync(safeJson(value));
       };
-      const pullState = async () => {
+      const pullState = async (applyNow = false) => {
         const response = await cloud.functions.invoke('panel-state', { body: { action: 'pull' } });
         if (response.error || response.data?.error) throw (response.error || new Error(response.data.error));
-        const remoteState = response.data?.state;
         const localState = safeJson(window.localStorage.getItem(cloudConfig.stateKey));
+        const mergedRemote = mergeRemoteCustomers(response.data?.state, localState);
+        const remoteState = mergedRemote.state;
         if (!response.data?.has_state) {
           // İlk çevrimiçi geçişte yönetici bilgisayarındaki mevcut kayıtları buluta taşır.
           // Böylece boş bulut verisi, bilgisayardaki stok kartlarını silmez.
@@ -6903,9 +6974,9 @@
           const remoteFingerprint = stableStateJson(remoteState);
           const reloadKey = cloudConfig.stateKey + '-last-pull';
           if (remoteFingerprint !== stableStateJson(localState)) {
-            // Sipariş veya kart formu açıkken yenileme yapılmaz. Böylece
-            // henüz kaydedilmemiş kullanıcı girdileri korunur.
-            if (hasOpenForm()) {
+            // Düzenli arka plan kontrolü yalnızca bildirim üretir. Yerel kayıtların
+            // üzerine yazmaz ve kullanıcı çalışırken sayfayı kendiliğinden yenilemez.
+            if (!applyNow || hasOpenForm()) {
               setPendingRemoteUpdate(true);
               return false;
             }
@@ -6913,7 +6984,10 @@
             suppressCloudSync = true;
             nativeStorageSet.call(window.localStorage, cloudConfig.stateKey, JSON.stringify(remoteState));
             suppressCloudSync = false;
-            // Aynı bulut verisi ikinci kez gelirse yeniden yükleme döngüsüne girme.
+            // Yerelde olup uzakta henüz görünmeyen cari ve silme kayıtları korunur.
+            if (mergedRemote.changed) await pushState(remoteState);
+            // Açılışta veya kullanıcının açıkça istediği güncellemede yeni ortak
+            // durum bir kez yüklenir; düzenli denetim bu yolu çağırmaz.
             if (window.sessionStorage.getItem(reloadKey) !== remoteFingerprint) {
               window.sessionStorage.setItem(reloadKey, remoteFingerprint);
               window.location.reload();
@@ -6928,12 +7002,12 @@
         if (hasState(localState)) await pushState(localState);
         return false;
       };
-      function applyPendingRemoteUpdateIfSafe() {
-        if (!pendingRemoteUpdate || hasOpenForm() || syncInProgress || localSyncQueued) {
+      function applyPendingRemoteUpdateIfSafe(applyNow = false) {
+        if (!pendingRemoteUpdate || hasOpenForm() || syncInProgress || localSyncQueued || !applyNow) {
           renderNotifications();
           return;
         }
-        void pullState().catch(() => { renderNotifications(); });
+        void pullState(true).catch(() => { renderNotifications(); });
       }
       const startCloudRefresh = () => {
         window.clearInterval(cloudRefreshTimer);
@@ -6962,7 +7036,7 @@
             renderNotifications();
             return;
           }
-          applyPendingRemoteUpdateIfSafe();
+          applyPendingRemoteUpdateIfSafe(true);
         }
       });
       // Form sayfasından çıkıldığında bekleyen değişiklikler, kullanıcının
@@ -7265,7 +7339,7 @@
           void loadPublicPageSettings().catch(() => publicAccessStatus('Şifresiz erişim ayarları şu anda yüklenemedi.'));
         }
         closeGate();
-        await pullState();
+        await pullState(true);
         startCloudRefresh();
       };
       loginForm.addEventListener('submit', async (event) => {
