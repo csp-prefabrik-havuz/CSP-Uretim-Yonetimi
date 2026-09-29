@@ -628,7 +628,7 @@
       </section>
       <section class="view" data-page="imported-stock-form">
         <div class="page-head"><div><h1 id="imported-stock-form-title">Yeni ithal ürün</h1><p>İthal ürüne ait stok kartını kaydedin.</p></div><button class="secondary-button" type="button" data-view-button="imported-stock">İthal ürün stoklarına dön</button></div>
-        <section class="section"><div class="form-grid"><div class="field"><label for="imported-stock-code">Stok kodu</label><input id="imported-stock-code" placeholder="Otomatik oluşturulur" /></div><div class="field"><label for="imported-stock-category">Kategori</label><input id="imported-stock-category" placeholder="Örn. Pompa, filtre veya aksesuar" /></div><div class="field span-two"><label for="imported-stock-name">Ürün adı</label><input id="imported-stock-name" placeholder="Ürün adı" /></div><div class="field span-two"><label for="imported-stock-variant">Varyant / özellik</label><input id="imported-stock-variant" placeholder="Model, renk, ölçü veya açıklama" /></div><div class="field span-two"><label for="imported-stock-image">Ürün görseli</label><input id="imported-stock-image" type="file" accept="image/*" data-imported-stock-card-image /><div class="stock-card-image-preview" id="imported-stock-image-preview" hidden><img id="imported-stock-image-preview-image" alt="İthal ürün stok görseli" /><button class="secondary-button" type="button" data-clear-imported-stock-card-image>Görseli kaldır</button></div></div><div class="field"><label for="imported-stock-unit">Birim</label><select id="imported-stock-unit"><option value="adet">adet</option><option value="m">m</option><option value="m²">m²</option><option value="kg">kg</option><option value="lt">lt</option><option value="takım">takım</option></select></div><div class="field"><label for="imported-stock-initial">İlk stok miktarı</label><input id="imported-stock-initial" type="number" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-stock-onhand">Mevcut miktar</label><input id="imported-stock-onhand" type="number" step="0.01" placeholder="İlk stokla aynı" /></div><div class="field"><label for="imported-stock-minimum">Minimum seviye</label><input id="imported-stock-minimum" type="number" min="0" step="0.01" placeholder="0" /></div><div class="field span-two"><label for="imported-stock-note">Not</label><textarea id="imported-stock-note" placeholder="Tedarikçi, raf yeri veya açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-stock-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-stock">Vazgeç</button><button class="primary-button" type="button" data-save-import-stock-card>İthal ürün stok kartını kaydet</button></div></section>
+        <section class="section"><div class="form-grid"><div class="field"><label for="imported-stock-code">Stok kodu</label><input id="imported-stock-code" placeholder="Otomatik oluşturulur" /></div><div class="field"><label for="imported-stock-category">Kategori</label><input id="imported-stock-category" placeholder="Örn. Pompa, filtre veya aksesuar" /></div><div class="field span-two"><label for="imported-stock-name">Ürün adı</label><input id="imported-stock-name" placeholder="Ürün adı" /></div><div class="field span-two"><label for="imported-stock-variant">Varyant / özellik</label><input id="imported-stock-variant" placeholder="Model, renk, ölçü veya açıklama" /></div><div class="field span-two"><label for="imported-stock-image">Ürün görseli</label><input id="imported-stock-image" type="file" accept="image/*" data-imported-stock-card-image /><div class="stock-card-image-preview" id="imported-stock-image-preview" hidden><img id="imported-stock-image-preview-image" alt="İthal ürün stok görseli" /><button class="secondary-button" type="button" data-clear-imported-stock-card-image>Görseli kaldır</button></div></div><div class="field"><label for="imported-stock-unit">Birim</label><select id="imported-stock-unit"><option value="adet">adet</option><option value="m">m</option><option value="m²">m²</option><option value="kg">kg</option><option value="lt">lt</option><option value="takım">takım</option></select></div><div class="field"><label for="imported-stock-initial">İlk stok miktarı</label><input id="imported-stock-initial" type="number" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-stock-onhand">Mevcut miktar</label><input id="imported-stock-onhand" type="number" step="0.01" placeholder="İlk stokla aynı" /></div><div class="field"><label for="imported-stock-minimum">Minimum seviye</label><input id="imported-stock-minimum" type="number" min="0" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-stock-package-count">Koli adedi</label><input id="imported-stock-package-count" type="number" min="0" step="1" placeholder="0" /></div><div class="field"><label for="imported-stock-package-weight">Ağırlık (kg)</label><input id="imported-stock-package-weight" type="number" min="0" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-stock-package-width">En (cm)</label><input id="imported-stock-package-width" type="number" min="0" step="0.01" placeholder="0" data-imported-stock-desi-input /></div><div class="field"><label for="imported-stock-package-length">Boy (cm)</label><input id="imported-stock-package-length" type="number" min="0" step="0.01" placeholder="0" data-imported-stock-desi-input /></div><div class="field"><label for="imported-stock-package-height">Yükseklik (cm)</label><input id="imported-stock-package-height" type="number" min="0" step="0.01" placeholder="0" data-imported-stock-desi-input /></div><div class="field"><label for="imported-stock-desi">Desi</label><input id="imported-stock-desi" readonly value="0,00" aria-label="Desi: en çarpı boy çarpı yükseklik bölü 3000" /></div><div class="field span-two"><label for="imported-stock-note">Not</label><textarea id="imported-stock-note" placeholder="Tedarikçi, raf yeri veya açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-stock-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-stock">Vazgeç</button><button class="primary-button" type="button" data-save-import-stock-card>İthal ürün stok kartını kaydet</button></div></section>
       </section>
       <section class="view report-view" data-page="imported-stock-entry">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün girişi</h1><p>Gelen ithal ürünleri stok kartına işleyin; miktar mevcut stoğa eklenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-stock">İthal ürün stoklarına dön</button></div>
@@ -642,8 +642,8 @@
       </section>
       <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>İthal ürün satış siparişleri</h1><p>Ürünler ithal stok kartlarından seçilir. Sipariş “Sevk edildi” olduğunda stok, ithal ürün çıkışına otomatik işlenir.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">İthal ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Seri no</th><th>Durum</th><th>Raporlar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="imported-sales-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="imported-sales-form-title">Yeni ithal ürün satış siparişi</h1><p>Müşteri ve ürün bilgilerini girin. Sevk edilen siparişin stok çıkışı otomatik işlenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-sales">Satış siparişlerine dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="imported-sales-no">Sipariş no</label><input id="imported-sales-no" readonly /></div><div class="field"><label for="imported-sales-date">Sipariş tarihi</label><input id="imported-sales-date" type="date" /></div><div class="field"><label for="imported-sales-customer">Müşteri</label><input id="imported-sales-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="imported-sales-contact">Telefon / e-posta</label><input id="imported-sales-contact" placeholder="İsteğe bağlı" /></div><div class="field span-two"><label for="imported-sales-address">Teslimat adresi</label><textarea id="imported-sales-address" placeholder="Teslimat adresi"></textarea></div><div class="field"><label for="imported-sales-status-select">Sipariş durumu</label><select id="imported-sales-status-select"><option>Taslak</option><option>Onaylandı</option><option>Sevke hazır</option><option>Sevk edildi</option><option>İptal edildi</option></select></div><div class="field"><label for="imported-sales-serial-no">Seri no</label><input id="imported-sales-serial-no" placeholder="Ürün seri numarası" /></div></div></section><section class="section"><div class="section-head"><div><h2>Satış kalemleri</h2><p class="table-hint">İthal ürün stoklarından ürün seçin; miktar ve birim fiyatı seçim penceresinde belirleyin.</p></div><button class="secondary-button" type="button" data-open-imported-sales-picker>Ürün seç</button></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Birim fiyat</th><th>Tutar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-draft-body"></tbody><tfoot><tr><th colspan="4">Genel toplam</th><th id="imported-sales-total">0,00 TL</th><th></th></tr></tfoot></table></div></section><div class="form-actions"><span class="muted-note" id="imported-sales-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-sales">Vazgeç</button><button class="primary-button" type="button" data-save-imported-sales>Satış siparişini kaydet</button></div></section>
-      <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Müşteri teslimatlarını ve ithal ürün sevkiyat kayıtlarını depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürün</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
-      <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi, ürün ve durum bilgilerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Sevkiyat tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-product">Ürün</label><select id="warehouse-shipping-product"></select></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section></section>
+      <section class="view report-view" data-page="warehouse-shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Depo sevkiyat</h1><p>Stok kayıtlarından bağımsız müşteri teslimatlarını depodan takip edin.</p></div></div><button class="primary-button" type="button" data-open-warehouse-shipping>+ Yeni sevkiyat</button></div><section class="section"><p class="table-hint" id="warehouse-shipping-status" aria-live="polite">Depo sevkiyat kayıtları burada listelenir. Kayıt, stoktan otomatik düşüm yapmaz.</p><div class="table-search"><input type="search" placeholder="Depo sevkiyatlarında ara" data-table-search-input="warehouse-shipping-table" aria-label="Depo sevkiyatlarında ara" /><button class="secondary-button" type="button" data-table-search-button="warehouse-shipping-table">Ara</button></div><div class="table-wrap"><table id="warehouse-shipping-table"><thead><tr><th>Sevkiyat no</th><th>Tarih</th><th>Müşteri</th><th>Adres</th><th>Ürün</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="warehouse-shipping-list-body"></tbody></table></div></section></section>
+      <section class="view report-view" data-page="warehouse-shipping-form"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1 id="warehouse-shipping-form-title">Yeni depo sevkiyatı</h1><p>Müşteri, teslimat adresi, serbest ürün bilgisi ve durum bilgilerini kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Depo sevkiyatına dön</button></div><section class="section"><div class="form-grid"><div class="field"><label for="warehouse-shipping-no">Sevkiyat no</label><input id="warehouse-shipping-no" readonly /></div><div class="field"><label for="warehouse-shipping-date">Sevkiyat tarihi</label><input id="warehouse-shipping-date" type="date" /></div><div class="field"><label for="warehouse-shipping-customer">Müşteri</label><input id="warehouse-shipping-customer" placeholder="Müşteri adı" /></div><div class="field"><label for="warehouse-shipping-status-select">Durum</label><select id="warehouse-shipping-status-select"><option>Hazırlanıyor</option><option>Sevke hazır</option><option>Yolda</option><option>Teslim edildi</option><option>İptal edildi</option></select></div><div class="field span-two"><label for="warehouse-shipping-address">Teslimat adresi</label><textarea id="warehouse-shipping-address" placeholder="Teslimat adresi"></textarea></div><div class="field span-two"><label for="warehouse-shipping-product">Ürün</label><input id="warehouse-shipping-product" placeholder="Ürünü veya sevkiyat içeriğini yazın" /></div><div class="field span-two"><label for="warehouse-shipping-note">Not</label><textarea id="warehouse-shipping-note" placeholder="Teslimat veya depo notu"></textarea></div></div><div class="form-actions"><span class="muted-note" id="warehouse-shipping-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="warehouse-shipping">Vazgeç</button><button class="primary-button" type="button" data-save-warehouse-shipping>Sevkiyatı kaydet</button></div></section></section>
       <section class="view report-view" data-page="user-management"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Kullanıcı ve erişim yönetimi</h1><p>Kullanıcı hesabı oluşturun; sayfa erişimlerini belirleyin ve gerektiğinde şifreyi yenileyin.</p></div></div></div><section class="section"><h2 id="user-management-form-title">Yeni kullanıcı</h2><p class="table-hint">Güvenlik nedeniyle mevcut şifreler görüntülenmez. Yönetici yalnızca yeni şifre atayabilir.</p><input id="user-management-id" type="hidden" /><div class="form-grid"><div class="field"><label for="user-management-username">Kullanıcı adı</label><input id="user-management-username" autocomplete="off" placeholder="Örn. depo" /></div><div class="field"><label for="user-management-display-name">Ad soyad / görünür ad</label><input id="user-management-display-name" placeholder="Örn. Depo sorumlusu" /></div><div class="field"><label for="user-management-department">Birim</label><input id="user-management-department" placeholder="Örn. Depo" /></div><div class="field"><label for="user-management-role">Rol</label><select id="user-management-role"><option value="user">Kullanıcı</option><option value="admin">Yönetici</option></select></div><div class="field"><label for="user-management-password">Şifre</label><input id="user-management-password" type="password" autocomplete="new-password" placeholder="En az 8 karakter" /></div><div class="field"><label for="user-management-active">Hesap durumu</label><select id="user-management-active"><option value="true">Aktif</option><option value="false">Pasif</option></select></div></div><h2>Görebileceği sayfalar</h2><div class="user-access-grid" id="user-management-pages"></div><div class="form-actions"><span class="muted-note" id="user-management-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-managed-user>Temizle</button><button class="primary-button" type="button" data-save-managed-user>Kullanıcıyı kaydet</button></div></section><section class="section"><h2>Tanımlı kullanıcılar</h2><div class="table-wrap"><table id="user-management-table"><thead><tr><th>Kullanıcı adı</th><th>Görünür ad</th><th>Birim</th><th>Rol</th><th>Sayfa erişimleri</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="user-management-list"></tbody></table></div></section></section>
       <section class="view report-view" data-page="user-management">
         <section class="section public-access-section">
@@ -2925,12 +2925,12 @@
         applyTableSearch('imported-stock-table');
         renderStockSummary();
       };
-      const resetImportedStockForm = () => {
+      const importedStockDesi = (width, length, height) => { const values = [width, length, height].map((value) => Number(value) || 0); return values.every((value) => value > 0) ? Number(((values[0] * values[1] * values[2]) / 3000).toFixed(2)) : 0; }; const formatImportedDesi = (value) => Number(value || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); const updateImportedStockDesi = () => { const input = root.querySelector('#imported-stock-desi'); if (!input) return; input.value = formatImportedDesi(importedStockDesi(root.querySelector('#imported-stock-package-width')?.value, root.querySelector('#imported-stock-package-length')?.value, root.querySelector('#imported-stock-package-height')?.value)); }; const resetImportedStockForm = () => {
         editingImportedStockCardId = null;
         pendingImportedStockCardImage = '';
         root.querySelector('#imported-stock-form-title').textContent = 'Yeni ithal ürün';
-        ['code', 'group', 'category', 'name', 'variant', 'initial', 'onhand', 'minimum', 'note'].forEach((field) => { root.querySelector(`#imported-stock-${field}`).value = ''; });
-        root.querySelector('#imported-stock-unit').value = 'adet';
+        ['code', 'group', 'category', 'name', 'variant', 'initial', 'onhand', 'minimum', 'package-count', 'package-weight', 'package-width', 'package-length', 'package-height', 'note'].forEach((field) => { root.querySelector(`#imported-stock-${field}`).value = ''; });
+        root.querySelector('#imported-stock-unit').value = 'adet'; root.querySelector('#imported-stock-desi').value = '0,00';
         root.querySelector('#imported-stock-image').value = '';
         root.querySelector('#imported-stock-image-url').value = '';
         updateImportedStockCardImagePreview();
@@ -2948,7 +2948,7 @@
         root.querySelector('#imported-stock-unit').value = card.unit || 'adet';
         root.querySelector('#imported-stock-initial').value = card.initialQuantity;
         root.querySelector('#imported-stock-onhand').value = card.onHand;
-        root.querySelector('#imported-stock-minimum').value = card.minimum;
+        root.querySelector('#imported-stock-minimum').value = card.minimum; root.querySelector('#imported-stock-package-count').value = card.packageCount ?? ''; root.querySelector('#imported-stock-package-weight').value = card.packageWeight ?? ''; root.querySelector('#imported-stock-package-width').value = card.packageWidth ?? ''; root.querySelector('#imported-stock-package-length').value = card.packageLength ?? ''; root.querySelector('#imported-stock-package-height').value = card.packageHeight ?? ''; updateImportedStockDesi();
         root.querySelector('#imported-stock-note').value = card.note || '';
         root.querySelector('#imported-stock-image').value = '';
         root.querySelector('#imported-stock-image-url').value = isExternalImageUrl(card.image) ? card.image : '';
@@ -2972,7 +2972,7 @@
           status.textContent = 'Dış görsel bağlantısı geçerli bir http:// veya https:// adresi olmalıdır.';
           return false;
         }
-        const initialQuantity = initialInput === '' ? 0 : Number(initialInput) || 0;
+        const initialQuantity = initialInput === '' ? 0 : Number(initialInput) || 0; const packageCount = Math.max(0, Number(root.querySelector('#imported-stock-package-count').value) || 0); const packageWeight = Math.max(0, Number(root.querySelector('#imported-stock-package-weight').value) || 0); const packageWidth = Math.max(0, Number(root.querySelector('#imported-stock-package-width').value) || 0); const packageLength = Math.max(0, Number(root.querySelector('#imported-stock-package-length').value) || 0); const packageHeight = Math.max(0, Number(root.querySelector('#imported-stock-package-height').value) || 0); const desi = importedStockDesi(packageWidth, packageLength, packageHeight);
         const card = {
           id: editingImportedStockCardId || nextImportedStockCardId++,
           code,
@@ -2983,7 +2983,7 @@
           unit: root.querySelector('#imported-stock-unit').value,
           initialQuantity,
           onHand: onHandInput === '' ? initialQuantity : Number(onHandInput) || 0,
-          minimum: root.querySelector('#imported-stock-minimum').value === '' ? '' : Math.max(0, Number(root.querySelector('#imported-stock-minimum').value) || 0),
+          minimum: root.querySelector('#imported-stock-minimum').value === '' ? '' : Math.max(0, Number(root.querySelector('#imported-stock-minimum').value) || 0), packageCount, packageWeight, packageWidth, packageLength, packageHeight, desi,
           note: root.querySelector('#imported-stock-note').value.trim(),
           image: externalImage || pendingImportedStockCardImage,
           imageKey: ''
@@ -3716,60 +3716,7 @@
           return canvas;
         });
       };
-      const importedSalesCargoLabelPdfCanvases = (order) => {
-        const width = 420;
-        const height = 595;
-        const scale = 2;
-        const canvas = document.createElement('canvas');
-        canvas.width = width * scale;
-        canvas.height = height * scale;
-        const context = canvas.getContext('2d');
-        context.scale(scale, scale);
-        context.fillStyle = '#ffffff';
-        context.fillRect(0, 0, width, height);
-        context.fillStyle = '#ef7b1a';
-        context.fillRect(0, 0, width, 10);
-        context.fillStyle = '#0a93c6';
-        context.fillRect(0, 10, width, 72);
-        context.fillStyle = '#ffffff';
-        context.font = '700 18px Arial, sans-serif';
-        context.fillText('CSP PREFABRİK HAVUZ', 26, 40);
-        context.font = '12px Arial, sans-serif';
-        context.fillText('KARGO ETİKETİ', 26, 61);
-        context.fillStyle = '#eaf7fb';
-        context.fillRect(24, 106, width - 48, 58);
-        context.fillStyle = '#527180';
-        context.font = '700 9px Arial, sans-serif';
-        context.fillText('SİPARİŞ NO', 38, 127);
-        context.fillStyle = '#173f50';
-        context.font = '700 18px Arial, sans-serif';
-        drawImportedSalesReportText(context, order?.orderNo || '—', 38, 150, width - 76, 19, 2);
-        context.fillStyle = '#527180';
-        context.font = '700 10px Arial, sans-serif';
-        context.fillText('ALICI', 26, 198);
-        context.fillStyle = '#173f50';
-        context.font = '700 20px Arial, sans-serif';
-        drawImportedSalesReportText(context, order?.customer || '—', 26, 224, width - 52, 22, 2);
-        context.fillStyle = '#173f50';
-        context.font = '13px Arial, sans-serif';
-        drawImportedSalesReportText(context, order?.address || 'Teslimat adresi belirtilmedi.', 26, 282, width - 52, 17, 5);
-        context.fillStyle = '#527180';
-        context.font = '11px Arial, sans-serif';
-        drawImportedSalesReportText(context, order?.contact || 'İletişim bilgisi belirtilmedi.', 26, 380, width - 52, 15, 2);
-        const products = (order?.items || []).map((item) => `${item.cardLabel || item.cardCode || 'Ürün'} · ${numberFormat(Number(item.quantity) || 0)} ${item.unit || 'adet'}`).join('\n') || 'Ürün bilgisi bulunmuyor.';
-        context.fillStyle = '#f4fafc';
-        context.fillRect(24, 422, width - 48, 105);
-        context.fillStyle = '#527180';
-        context.font = '700 9px Arial, sans-serif';
-        context.fillText('İÇERİK', 38, 444);
-        context.fillStyle = '#173f50';
-        context.font = '11px Arial, sans-serif';
-        drawImportedSalesReportText(context, products, 38, 465, width - 76, 14, 4);
-        context.fillStyle = '#527180';
-        context.font = '9px Arial, sans-serif';
-        context.fillText(`Sipariş tarihi: ${formatImportedMovementDate(order?.date)}`, 26, height - 30);
-        return [canvas];
-      };
+      const importedSalesCargoLabelPdfCanvases = (order) => { const width = 800; const height = 600; const scale = 2; const canvas = document.createElement('canvas'); canvas.width = width * scale; canvas.height = height * scale; const context = canvas.getContext('2d'); context.scale(scale, scale); const items = (order?.items || []).map((item) => { const card = importedStockCards.find((entry) => String(entry.id) === String(item.cardId) || entry.code === item.cardCode) || {}; const quantity = Math.max(0, Number(item.quantity) || 0); const unitDesi = Number(card.desi) || importedStockDesi(card.packageWidth, card.packageLength, card.packageHeight); return { label: item.cardLabel || item.cardCode || card.name || 'Ürün', quantity, unit: item.unit || card.unit || 'adet', cartons: (Number(card.packageCount) || 0) * quantity, weight: (Number(card.packageWeight) || 0) * quantity, desi: unitDesi * quantity }; }); const totals = items.reduce((sum, item) => ({ cartons: sum.cartons + item.cartons, weight: sum.weight + item.weight, desi: sum.desi + item.desi }), { cartons: 0, weight: 0, desi: 0 }); const products = items.map((item) => item.label + ' · ' + numberFormat(item.quantity) + ' ' + item.unit).join(String.fromCharCode(10)) || 'Ürün bilgisi bulunmuyor.'; context.fillStyle = '#ffffff'; context.fillRect(0, 0, width, height); context.fillStyle = '#ef7b1a'; context.fillRect(0, 0, width, 12); context.fillStyle = '#0a93c6'; context.fillRect(0, 12, width, 84); context.fillStyle = '#ffffff'; context.font = '700 24px Arial, sans-serif'; context.fillText('CSP PREFABRİK HAVUZ', 34, 48); context.font = '13px Arial, sans-serif'; context.fillText('KARGO ETİKETİ · 100 × 75 mm · YATAY', 34, 73); context.fillStyle = '#eaf7fb'; context.fillRect(34, 122, 286, 82); context.fillStyle = '#527180'; context.font = '700 10px Arial, sans-serif'; context.fillText('SİPARİŞ NO', 50, 148); context.fillStyle = '#173f50'; context.font = '700 22px Arial, sans-serif'; drawImportedSalesReportText(context, order?.orderNo || '—', 50, 178, 250, 24, 2); context.fillStyle = '#eaf7fb'; context.fillRect(344, 122, 422, 82); context.fillStyle = '#527180'; context.font = '700 10px Arial, sans-serif'; context.fillText('SİPARİŞ TARİHİ', 360, 148); context.fillStyle = '#173f50'; context.font = '700 20px Arial, sans-serif'; context.fillText(formatImportedMovementDate(order?.date), 360, 178); context.fillStyle = '#527180'; context.font = '700 11px Arial, sans-serif'; context.fillText('ALICI', 34, 238); context.fillStyle = '#173f50'; context.font = '700 24px Arial, sans-serif'; drawImportedSalesReportText(context, order?.customer || '—', 34, 268, 468, 28, 2); context.font = '14px Arial, sans-serif'; drawImportedSalesReportText(context, order?.address || 'Teslimat adresi belirtilmedi.', 34, 332, 468, 19, 3); context.fillStyle = '#527180'; context.font = '12px Arial, sans-serif'; drawImportedSalesReportText(context, order?.contact || '', 34, 399, 468, 16, 2); context.fillStyle = '#f4fafc'; context.fillRect(34, 438, 468, 112); context.fillStyle = '#527180'; context.font = '700 10px Arial, sans-serif'; context.fillText('İÇERİK', 50, 462); context.fillStyle = '#173f50'; context.font = '13px Arial, sans-serif'; drawImportedSalesReportText(context, products, 50, 488, 430, 16, 3); context.fillStyle = '#173f50'; context.fillRect(532, 228, 234, 322); context.fillStyle = '#ffffff'; context.font = '700 12px Arial, sans-serif'; context.fillText('KARGO BİLGİLERİ', 550, 258); context.strokeStyle = '#75c9e6'; context.beginPath(); context.moveTo(550, 274); context.lineTo(748, 274); context.stroke(); context.font = '700 11px Arial, sans-serif'; context.fillStyle = '#b8e7f5'; context.fillText('KOLİ', 550, 312); context.fillText('AĞIRLIK', 550, 380); context.fillText('DESİ', 550, 448); context.fillStyle = '#ffffff'; context.font = '700 24px Arial, sans-serif'; context.fillText(totals.cartons ? numberFormat(totals.cartons) : '—', 550, 342); context.fillText(totals.weight ? `${numberFormat(totals.weight)} kg` : '—', 550, 410); context.fillText(totals.desi ? numberFormat(totals.desi) : '—', 550, 478); context.fillStyle = '#527180'; context.font = '9px Arial, sans-serif'; context.fillText('Ağırlık ve desi stok kartı bilgilerinden hesaplanır.', 34, 580); return [canvas]; };
       const importedSalesReportFileName = (order, suffix) => `${String(order?.orderNo || 'ithal-satis').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'ithal-satis'}-${suffix}.pdf`;
       const exportImportedSalesShippingPdf = (order) => {
         if (!order) return;
@@ -3785,7 +3732,7 @@
       const exportImportedSalesCargoLabelPdf = (order) => {
         if (!order) return;
         try {
-          downloadReportFile(makeCanvasPdf(importedSalesCargoLabelPdfCanvases(order), 420, 595), importedSalesReportFileName(order, 'kargo-etiketi'));
+          downloadReportFile(makeCanvasPdf(importedSalesCargoLabelPdfCanvases(order), 283.46, 212.6), importedSalesReportFileName(order, 'kargo-etiketi'));
           const status = root.querySelector('#imported-sales-status');
           if (status) status.textContent = `${order.orderNo} için kargo etiketi indirildi.`;
         } catch (error) {
@@ -3816,7 +3763,7 @@
         const number = Number(id) || nextWarehouseShipmentId;
         return 'DEP-SEVK-' + year + '-' + String(number).padStart(4, '0');
       };
-      const renderWarehouseShippingProductOptions = (selectedId = '') => {
+      const renderWarehouseShippingProductOptions = (selectedId = '') => { return;
         const select = root.querySelector('#warehouse-shipping-product');
         if (!select) return;
         const previous = String(selectedId || select.value || '');
@@ -3839,7 +3786,7 @@
         root.querySelector('#warehouse-shipping-form-title').textContent = 'Yeni depo sevkiyatı';
         root.querySelector('#warehouse-shipping-no').value = warehouseShippingNumber();
         root.querySelector('#warehouse-shipping-date').value = importedMovementDate();
-        ['customer', 'address', 'note'].forEach((field) => { root.querySelector('#warehouse-shipping-' + field).value = ''; });
+        ['customer', 'address', 'product', 'note'].forEach((field) => { root.querySelector('#warehouse-shipping-' + field).value = ''; });
         root.querySelector('#warehouse-shipping-status-select').value = 'Hazırlanıyor';
         root.querySelector('#warehouse-shipping-form-status').textContent = '';
         renderWarehouseShippingProductOptions();
@@ -3913,7 +3860,7 @@
         root.querySelector('#warehouse-shipping-customer').value = shipment.customer || '';
         root.querySelector('#warehouse-shipping-address').value = shipment.address || '';
         root.querySelector('#warehouse-shipping-status-select').value = shipment.status || 'Hazırlanıyor';
-        root.querySelector('#warehouse-shipping-note').value = shipment.note || '';
+        root.querySelector('#warehouse-shipping-note').value = shipment.note || ''; root.querySelector('#warehouse-shipping-product').value = shipment.product || '';
         root.querySelector('#warehouse-shipping-form-status').textContent = '';
         renderWarehouseShippingProductOptions(shipment.productId || shipment.items?.[0]?.cardId || '');
         show('warehouse-shipping-form');
@@ -3922,10 +3869,10 @@
         const status = root.querySelector('#warehouse-shipping-form-status');
         const customer = root.querySelector('#warehouse-shipping-customer').value.trim();
         const address = root.querySelector('#warehouse-shipping-address').value.trim();
-        const selectedCard = importedStockCards.find((item) => item.id === Number(root.querySelector('#warehouse-shipping-product').value));
+        const product = root.querySelector('#warehouse-shipping-product').value.trim();
         if (!customer) { status.textContent = 'Müşteri adı girilmelidir.'; return; }
         if (!address) { status.textContent = 'Teslimat adresi girilmelidir.'; return; }
-        if (!selectedCard) { status.textContent = 'Sevk edilecek ürün seçilmelidir.'; return; }
+        if (!product) { status.textContent = 'Sevk edilecek ürün girilmelidir.'; return; }
         const existing = warehouseShipments.find((shipment) => shipment.id === editingWarehouseShipmentId);
         const shipment = {
           id: editingWarehouseShipmentId || nextWarehouseShipmentId++,
@@ -3935,9 +3882,9 @@
           address,
           status: root.querySelector('#warehouse-shipping-status-select').value,
           note: root.querySelector('#warehouse-shipping-note').value.trim(),
-          productId: selectedCard.id,
-          productCode: selectedCard.code,
-          product: importedCardLabel(selectedCard),
+          productId: null,
+          productCode: '',
+          product,
           items: [],
         };
         if (existing) warehouseShipments.splice(warehouseShipments.indexOf(existing), 1, shipment);
@@ -6401,7 +6348,7 @@
         row.classList.toggle('is-selected', selector.checked);
         updateSelectedOrder();
       });
-      root.addEventListener('input', (event) => {
+      root.addEventListener('input', (event) => { if (event.target.matches('[data-imported-stock-desi-input]')) { updateImportedStockDesi(); return; }
         if (event.target.matches('#imported-sales-picker-search')) {
           renderImportedSalesPicker();
           return;
