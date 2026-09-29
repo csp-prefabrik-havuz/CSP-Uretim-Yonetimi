@@ -1,0 +1,16 @@
+{
+  "name": "CSP Üretim Yönetimi",
+  "short_name": "CSP Üretim",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#123b52",
+  "icons": [
+    {
+      "src": "csp-logo.png",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
