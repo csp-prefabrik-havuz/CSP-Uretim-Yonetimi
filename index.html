@@ -6811,32 +6811,38 @@
       const mergeRemoteCustomers = (remoteState, localState) => {
         if (!remoteState || typeof remoteState !== 'object' || Array.isArray(remoteState)) return { state: remoteState, changed: false };
         const state = JSON.parse(JSON.stringify(remoteState));
-        const remoteDeleted = normaliseDeletedRecords(state.deletedRecords);
-        const localDeleted = normaliseDeletedRecords(localState?.deletedRecords);
-        const deletedCustomerIds = new Set([...(remoteDeleted.importedCustomers || []), ...(localDeleted.importedCustomers || [])]);
+        const remoteDeletedRecords = state.deletedRecords && typeof state.deletedRecords === 'object' && !Array.isArray(state.deletedRecords) ? state.deletedRecords : {};
+        const localDeletedRecords = localState?.deletedRecords && typeof localState.deletedRecords === 'object' && !Array.isArray(localState.deletedRecords) ? localState.deletedRecords : {};
+        const remoteDeleted = Array.isArray(remoteDeletedRecords.importedCustomers) ? remoteDeletedRecords.importedCustomers : [];
+        const localDeleted = Array.isArray(localDeletedRecords.importedCustomers) ? localDeletedRecords.importedCustomers : [];
+        const deletedCustomerIds = new Set([...remoteDeleted, ...localDeleted].map((identity) => String(identity || '').trim()).filter(Boolean));
+        const customerIdentity = (customer, index) => {
+          const id = String(customer?.id ?? customer?.customerId ?? '').trim();
+          return id ? 'importedCustomers:id:' + id : 'importedCustomers:row:' + index;
+        };
         const remoteCustomers = Array.isArray(state.importedCustomers) ? state.importedCustomers : [];
         const localCustomers = Array.isArray(localState?.importedCustomers) ? localState.importedCustomers : [];
         const seen = new Set();
         const customers = [];
         let changed = false;
         remoteCustomers.forEach((customer, index) => {
-          const identity = deletionIdentity('importedCustomers', customer, index);
+          const identity = customerIdentity(customer, index);
           if (deletedCustomerIds.has(identity) || seen.has(identity)) { changed = true; return; }
           seen.add(identity);
           customers.push(customer);
         });
         localCustomers.forEach((customer, index) => {
-          const identity = deletionIdentity('importedCustomers', customer, index);
+          const identity = customerIdentity(customer, index);
           if (deletedCustomerIds.has(identity) || seen.has(identity)) return;
           seen.add(identity);
           customers.push(JSON.parse(JSON.stringify(customer)));
           changed = true;
         });
         state.importedCustomers = customers;
-        const combinedDeleted = { ...remoteDeleted };
+        const combinedDeleted = { ...remoteDeletedRecords };
         if (deletedCustomerIds.size) combinedDeleted.importedCustomers = [...deletedCustomerIds];
         else delete combinedDeleted.importedCustomers;
-        if (stableStateJson(combinedDeleted) !== stableStateJson(remoteDeleted)) changed = true;
+        if (stableStateJson(combinedDeleted) !== stableStateJson(remoteDeletedRecords)) changed = true;
         state.deletedRecords = combinedDeleted;
         const inferredNextId = customers.reduce((highest, customer) => Math.max(highest, (Number(customer?.id) || 0) + 1), 1);
         const nextCustomerId = Math.max(Number(state.nextImportedCustomerId) || 1, Number(localState?.nextImportedCustomerId) || 1, inferredNextId);
@@ -6974,9 +6980,9 @@
           const remoteFingerprint = stableStateJson(remoteState);
           const reloadKey = cloudConfig.stateKey + '-last-pull';
           if (remoteFingerprint !== stableStateJson(localState)) {
-            // Düzenli arka plan kontrolü yalnızca bildirim üretir. Yerel kayıtların
-            // üzerine yazmaz ve kullanıcı çalışırken sayfayı kendiliğinden yenilemez.
-            if (!applyNow || hasOpenForm()) {
+            // Eşitleme otomatik çalışır; yalnızca açık işlem/form ekranında
+            // yerel kaydı değiştirmez ve sayfayı yenilemez.
+            if (hasOpenForm()) {
               setPendingRemoteUpdate(true);
               return false;
             }
@@ -6986,8 +6992,7 @@
             suppressCloudSync = false;
             // Yerelde olup uzakta henüz görünmeyen cari ve silme kayıtları korunur.
             if (mergedRemote.changed) await pushState(remoteState);
-            // Açılışta veya kullanıcının açıkça istediği güncellemede yeni ortak
-            // durum bir kez yüklenir; düzenli denetim bu yolu çağırmaz.
+            // İşlem ekranı açık değilse ortak durum otomatik uygulanır.
             if (window.sessionStorage.getItem(reloadKey) !== remoteFingerprint) {
               window.sessionStorage.setItem(reloadKey, remoteFingerprint);
               window.location.reload();
@@ -7002,8 +7007,8 @@
         if (hasState(localState)) await pushState(localState);
         return false;
       };
-      function applyPendingRemoteUpdateIfSafe(applyNow = false) {
-        if (!pendingRemoteUpdate || hasOpenForm() || syncInProgress || localSyncQueued || !applyNow) {
+      function applyPendingRemoteUpdateIfSafe() {
+        if (!pendingRemoteUpdate || hasOpenForm() || syncInProgress || localSyncQueued) {
           renderNotifications();
           return;
         }
@@ -7036,7 +7041,7 @@
             renderNotifications();
             return;
           }
-          applyPendingRemoteUpdateIfSafe(true);
+          applyPendingRemoteUpdateIfSafe();
         }
       });
       // Form sayfasından çıkıldığında bekleyen değişiklikler, kullanıcının
