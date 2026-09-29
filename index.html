@@ -3542,7 +3542,7 @@
         select.replaceChildren();
         const prompt = document.createElement('option');
         prompt.value = '';
-        prompt.textContent = importedCustomers.length ? 'Kayıtlı cari seçin (isteğe bağlı)' : 'Kayıtlı cari yok; müşteri bilgisini elle girin';
+        prompt.textContent = importedCustomers.length ? 'Kayıtlı cari seçin (isteğe bağlı)' : 'Kayıtlı cari yok; Cariler sayfasından ekleyin veya müşteri bilgisini elle girin';
         select.appendChild(prompt);
         importedCustomers.slice().sort((left, right) => String(left.name || '').localeCompare(String(right.name || ''), 'tr')).forEach((customer) => {
           const option = document.createElement('option');
@@ -3550,7 +3550,7 @@
           option.textContent = importedCustomerLabel(customer) || 'İsimsiz cari';
           select.appendChild(option);
         });
-        select.disabled = !importedCustomers.length;
+        select.disabled = false;
         if (importedCustomers.some((customer) => String(customer.id) === preferred)) select.value = preferred;
       };
       const renderImportedCustomers = () => {
