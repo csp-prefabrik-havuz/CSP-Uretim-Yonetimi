@@ -4,6 +4,8 @@ const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
   './csp-logo.png',
+  './icon-192.png',
+  './icon-512.png',
   './github-image-autolink.js'
 ];
 
