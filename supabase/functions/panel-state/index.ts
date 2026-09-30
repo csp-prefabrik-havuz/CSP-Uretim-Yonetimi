@@ -63,6 +63,11 @@ const stateAreas = [
     write: ['manual-cargo-label'],
   },
   {
+    keys: ['serviceHistoryRecords'],
+    read: ['service-history-search'],
+    write: ['service-history-search'],
+  },
+  {
     keys: ['series', 'releasedCodes'],
     read: ['series', 'orders', 'workorders'],
     write: ['series', 'orders', 'workorders'],
@@ -77,6 +82,7 @@ const defaults: JsonRecord = {
   importedSalesOrders: [],
   warehouseShipments: [],
   manualDocuments: [],
+  serviceHistoryRecords: [],
   nextManualDocumentId: 1,
   workorderRecords: [],
   series: {},
@@ -107,7 +113,7 @@ const keysFor = (pages: Set<string>, mode: 'read' | 'write') => {
 
 const collectionKeys = new Set([
   'orders', 'stockCards', 'importedStockCards', 'importedStockMovements',
-  'importedSalesOrders', 'warehouseShipments', 'manualDocuments', 'workorderRecords',
+  'importedSalesOrders', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords',
 ])
 
 const deletedRecordsFor = (value: unknown, allowedKeys: Set<string>) => {

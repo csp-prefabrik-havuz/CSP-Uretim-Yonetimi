@@ -513,6 +513,7 @@
       <button class="nav-button" type="button" data-view="liner-widths"><i data-lucide="ruler" aria-hidden="true"></i> Liner genişlikleri</button>
       <button class="nav-button" type="button" data-view="shipping"><i data-lucide="truck" aria-hidden="true"></i> Sevkiyat</button>
       <button class="nav-button" type="button" data-view="series"><i data-lucide="hash" aria-hidden="true"></i> Seri numaraları</button>
+      <button class="nav-button" type="button" data-view="service-history-search"><i data-lucide="search" aria-hidden="true"></i> Servis geçmiş arama</button>
       <button class="nav-button" type="button" data-view="settings"><i data-lucide="settings" aria-hidden="true"></i> Ayarlar ve yedek</button>
       <div class="nav-label">Hazır ürünler</div>
       <button class="nav-button" type="button" data-view="imported-stock"><i data-lucide="package-open" aria-hidden="true"></i> Hazır ürün stokları</button>
@@ -613,6 +614,10 @@
       </section>
       <section class="view report-view" data-page="liner-widths"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Liner genişlikleri</h1><p>Malzeme adı Liner olan stok kartlarına göre iş emri liner eni tanımlayın.</p></div></div></div><section class="section"><p class="table-hint" id="liner-width-status" aria-live="polite">Genişlik girildikten sonra ilgili liner iş emrinin toplam stok tüketimi otomatik hesaplanır.</p><div class="table-wrap"><table class="liner-width-table" id="liner-widths-table"><colgroup><col style="width:62px" /><col style="width:118px" /><col /><col style="width:112px" /><col style="width:150px" /></colgroup><thead><tr><th>Görsel</th><th>Stok kodu</th><th>Liner desen / renk</th><th>Mevcut stok</th><th>Liner genişliği</th></tr></thead><tbody id="liner-width-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Sevkiyat</h1><p>Sevke hazır iş emirleri otomatik olarak bu listede görünür.</p></div></div><div class="shipping-report-actions"><button class="primary-button" type="button" data-export-shipping-pdf>PDF raporu al</button></div></div><section class="section"><p class="table-hint" id="shipping-status" aria-live="polite">Sevke hazır iş emirleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Sevkiyatlarda ara" data-table-search-input="shipping-table" aria-label="Sevkiyatlarda ara" /><button class="secondary-button" type="button" data-table-search-button="shipping-table">Ara</button></div><div class="table-wrap"><table id="shipping-table"><thead><tr><th>Sevk no</th><th>Müşteri</th><th>İş emri</th><th>Havuz / adres</th><th>Planlanan tarih</th><th>Durum</th></tr></thead><tbody id="shipping-list-body"></tbody></table></div></section></section>
+      <section class="view report-view" data-page="service-history-search">
+        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis geçmiş arama</h1><p>Servis geçmişi Excel dosyanızı yükleyin ve tüm sütunlarda arayın.</p></div></div><div class="form-actions"><input id="service-history-import-file" type="file" accept=".xlsx,.xls,.csv" hidden /><button class="secondary-button" type="button" data-import-service-history>Excel yükle</button></div></div>
+        <section class="section"><p class="table-hint" id="service-history-status" aria-live="polite">Henüz servis geçmişi dosyası yüklenmedi.</p><div class="table-search"><input id="service-history-search-input" type="search" placeholder="Servis geçmişinde ara" aria-label="Servis geçmişinde ara" /><button class="secondary-button" type="button" data-search-service-history>Ara</button></div><div class="table-wrap"><table id="service-history-table"><thead id="service-history-table-head"></thead><tbody id="service-history-table-body"></tbody></table></div></section>
+      </section>
       <section class="view" data-page="series">
         <div class="page-head"><div><h1>Üretim kodu başlangıçları</h1><p>Seçilen ekipman için sıradaki kod, sipariş kaydedilirken otomatik atanır.</p></div></div>
         <section class="section">
@@ -945,6 +950,7 @@
         if (page === 'warehouse-shipping') renderWarehouseShipments();
         if (page === 'liner-widths') renderLinerWidths();
         if (page === 'shipping') renderShipping();
+        if (page === 'service-history-search') renderServiceHistory();
         if (page === 'settings') renderBackupStatus();
       };
       const decorateOperationViews = () => {
@@ -2144,6 +2150,7 @@
       const manualDocuments = [];
       let nextManualDocumentId = 1;
       let editingManualDeliveryId = null;
+      const serviceHistoryRecords = [];
       let editingWarehouseShipmentId = null;
       let stockSummaryFilteredRows = [];
       const consumptionValue = (value, unit) => value === null || value === undefined || value === '' ? '—' : `${numberFormat(value)} ${unit}`;
@@ -2610,6 +2617,47 @@
       const exportHistoricalSalesTemplate = () => { if (!window.XLSX) return; const sheet = window.XLSX.utils.aoa_to_sheet([historicalSalesHeaders, ['GEC-SAT-0001', '2026-01-15', 'Örnek Müşteri', 'Örnek Cari', '05xx xxx xx xx', 'Teslimat adresi', 'URUN-001', 'Örnek ürün', 1, 'adet', 0, '', 'Sevk edildi', '2026-01-16', 'Geçmiş kayıt - stok etkilenmez']]); const book = window.XLSX.utils.book_new(); window.XLSX.utils.book_append_sheet(book, sheet, 'Geçmiş satışlar'); window.XLSX.writeFile(book, 'gecmis-hazir-urun-satis-sablonu.xlsx'); };
       const importHistoricalSalesFile = async (file) => { const status = root.querySelector('#imported-sales-status'); if (!file || !window.XLSX) { if (status) status.textContent = 'Excel dosyası veya Excel okuyucusu bulunamadı.'; return; } try { const book = window.XLSX.read(await file.arrayBuffer(), { type: 'array', cellDates: false }); const rows = window.XLSX.utils.sheet_to_json(book.Sheets[book.SheetNames[0]], { header: 1, defval: '', raw: false }); const columns = new Map((rows[0] || []).map((value, index) => [normaliseSearchText(value), index])); if (!columns.has(normaliseSearchText('Sipariş No')) || !columns.has(normaliseSearchText('Ürün Adı'))) throw new Error('Başlıklarda Sipariş No ve Ürün Adı bulunmalı.'); const orders = new Map(); rows.slice(1).forEach((row) => { const orderNo = historicalSalesValue(row, columns, 'Sipariş No'); const product = historicalSalesValue(row, columns, 'Ürün Adı'); if (!orderNo || !product) return; let order = orders.get(orderNo); if (!order) { order = { id: nextImportedSalesOrderId++, orderNo, date: historicalSalesDate(historicalSalesValue(row, columns, 'Tarih')), customer: historicalSalesValue(row, columns, 'Müşteri') || '—', customerId: null, contact: historicalSalesValue(row, columns, 'Telefon / E-posta'), address: historicalSalesValue(row, columns, 'Teslimat Adresi'), status: historicalSalesValue(row, columns, 'Durum') || 'Sevk edildi', shippedAt: historicalSalesDate(historicalSalesValue(row, columns, 'Sevk Tarihi')), serialNo: historicalSalesValue(row, columns, 'Seri No'), note: historicalSalesValue(row, columns, 'Açıklama'), items: [], total: 0, stockPosted: false, stockPostingMovementIds: [], historical: true }; orders.set(orderNo, order); } const quantity = Number(historicalSalesValue(row, columns, 'Miktar').replace(',', '.')) || 0; const unitPrice = Number(historicalSalesValue(row, columns, 'Birim Fiyat').replace(',', '.')) || 0; order.items.push({ cardId: null, cardCode: historicalSalesValue(row, columns, 'Ürün Kodu') || '—', cardLabel: product, unit: historicalSalesValue(row, columns, 'Birim') || 'adet', quantity, unitPrice }); order.total += quantity * unitPrice; }); const imported = [...orders.values()].filter((order) => !importedSalesOrders.some((existing) => existing.orderNo === order.orderNo)); importedSalesOrders.unshift(...imported); renderImportedSalesOrders(); saveProductionState(); if (status) status.textContent = `${imported.length} geçmiş satış siparişi yüklendi. Stok değişmedi.`; } catch (error) { if (status) status.textContent = `Excel aktarımı yapılamadı: ${error.message || 'Dosya okunamadı.'}`; } };
       const setupHistoricalSalesImport = () => { const page = root.querySelector('[data-page="imported-sales"] .page-head'); const open = page?.querySelector('[data-open-imported-sales]'); if (!page || !open || root.querySelector('#historical-sales-import-file')) return; const actions = document.createElement('div'); actions.className = 'dashboard-actions'; actions.innerHTML = '<input id="historical-sales-import-file" type="file" accept=".xlsx,.xls,.csv" hidden /><button class="secondary-button" type="button" data-export-historical-sales-template>Excel şablonu indir</button><button class="secondary-button" type="button" data-import-historical-sales>Geçmiş satış Excel’i yükle</button>'; open.before(actions); root.querySelector('#historical-sales-import-file').addEventListener('change', (event) => { const file = event.target.files?.[0]; if (file) void importHistoricalSalesFile(file); event.target.value = ''; }); };
+      const serviceHistoryColumns = () => Array.isArray(serviceHistoryRecords[0]?.columns) ? serviceHistoryRecords[0].columns : [];
+      const renderServiceHistory = () => {
+        const head = root.querySelector('#service-history-table-head');
+        const body = root.querySelector('#service-history-table-body');
+        const status = root.querySelector('#service-history-status');
+        const query = normaliseSearchText(root.querySelector('#service-history-search-input')?.value.trim() || '');
+        if (!head || !body || !status) return;
+        head.replaceChildren(); body.replaceChildren();
+        const columns = serviceHistoryColumns();
+        if (!columns.length) { status.textContent = 'Henüz servis geçmişi dosyası yüklenmedi.'; return; }
+        const headerRow = document.createElement('tr');
+        columns.forEach((column) => { const cell = document.createElement('th'); cell.textContent = column; headerRow.appendChild(cell); });
+        head.appendChild(headerRow);
+        const matches = serviceHistoryRecords.filter((record) => !query || normaliseSearchText((record.values || []).join(' ')).includes(query));
+        const displayRows = matches.slice(0, 500);
+        displayRows.forEach((record) => { const row = document.createElement('tr'); columns.forEach((_, index) => { const cell = document.createElement('td'); cell.textContent = String(record.values?.[index] ?? ''); row.appendChild(cell); }); body.appendChild(row); });
+        if (!matches.length) { const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = columns.length; cell.textContent = 'Aramanızla eşleşen servis kaydı yok.'; row.appendChild(cell); body.appendChild(row); }
+        status.textContent = query ? `${matches.length} servis kaydı bulundu.` : `${serviceHistoryRecords.length} servis kaydı yüklendi.`;
+        if (matches.length > displayRows.length) status.textContent += ` İlk ${displayRows.length} kayıt gösteriliyor.`;
+      };
+      const importServiceHistoryFile = async (file) => {
+        const status = root.querySelector('#service-history-status');
+        if (!file || !window.XLSX) { if (status) status.textContent = 'Excel dosyası veya Excel okuyucusu bulunamadı.'; return; }
+        try {
+          const book = window.XLSX.read(await file.arrayBuffer(), { type: 'array', cellDates: false });
+          const sheet = book.Sheets[book.SheetNames[0]];
+          const rows = window.XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '', raw: false });
+          const headerIndex = rows.findIndex((row) => Array.isArray(row) && row.some((value) => String(value ?? '').trim()));
+          if (headerIndex < 0) throw new Error('Dosyada başlık veya kayıt bulunamadı.');
+          const usedNames = new Set();
+          const columns = rows[headerIndex].map((value, index) => { let name = String(value ?? '').trim() || `Sütun ${index + 1}`; while (usedNames.has(normaliseSearchText(name))) name = `${name} (${index + 1})`; usedNames.add(normaliseSearchText(name)); return name; });
+          const values = rows.slice(headerIndex + 1).filter((row) => Array.isArray(row) && row.some((value) => String(value ?? '').trim())).map((row) => columns.map((_, index) => String(row[index] ?? '').trim()));
+          if (!values.length) throw new Error('Başlıkların altında aranacak kayıt bulunamadı.');
+          if (serviceHistoryRecords.length && !window.confirm('Mevcut servis geçmişi yeni Excel dosyasıyla değiştirilecek. Devam etmek istiyor musunuz?')) return;
+          const uploadId = `service-history-${Date.now()}`;
+          serviceHistoryRecords.splice(0, serviceHistoryRecords.length, ...values.map((value, index) => ({ id: `${uploadId}-${index + 1}`, columns, values: value })));
+          saveProductionState();
+          renderServiceHistory();
+          if (status) status.textContent = `${values.length} servis kaydı yüklendi. Arama kutusundan tüm sütunlarda arayabilirsiniz.`;
+        } catch (error) { if (status) status.textContent = `Excel aktarımı yapılamadı: ${error.message || 'Dosya okunamadı.'}`; }
+      };
       setupHistoricalSalesImport();
       const updateSuggestedStockCode = () => {
         const codeField = root.querySelector('#stock-card-code');
@@ -5583,7 +5631,7 @@
         list.innerHTML = templates.map((template) => `<button type="button" class="template-button" data-workorder-template="${template.id}"><strong>${template.label}</strong><span>${template.detail}</span></button>`).join('');
       };
       const persistentStateKey = 'csp-production-management-state-v2';
-      const deletionTrackedStateKeys = ['orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'workorderRecords'];
+      const deletionTrackedStateKeys = ['orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords'];
       let deletedRecords = {};
       let deletionBaseline = {};
       const copyStateValue = (value) => JSON.parse(JSON.stringify(value));
@@ -5825,6 +5873,7 @@
         importedCustomers: importedCustomers.map((customer) => ({ ...customer })),
         warehouseShipments: warehouseShipments.map((shipment) => ({ ...shipment, items: (shipment.items || []).map((item) => ({ ...item })) })),
         manualDocuments: manualDocuments.map((document) => ({ ...document, items: (document.items || []).map((item) => ({ ...item })) })),
+        serviceHistoryRecords: serviceHistoryRecords.map((record) => ({ ...record, columns: [...(record.columns || [])], values: [...(record.values || [])] })),
         nextManualDocumentId,
         workorderRecords: workorderRecords.map((record) => {
           const { orderRow, ...savedRecord } = record;
@@ -5930,6 +5979,7 @@
           nextWarehouseShipmentId = Math.max(Number(saved.nextWarehouseShipmentId) || 1, ...warehouseShipments.map((shipment) => Number(shipment.id) + 1 || 1));
           manualDocuments.splice(0, manualDocuments.length, ...(Array.isArray(saved.manualDocuments) ? saved.manualDocuments : []));
           nextManualDocumentId = Math.max(Number(saved.nextManualDocumentId) || 1, ...manualDocuments.map((document) => Number(document.id) + 1 || 1));
+          serviceHistoryRecords.splice(0, serviceHistoryRecords.length, ...(Array.isArray(saved.serviceHistoryRecords) ? saved.serviceHistoryRecords : []));
           renderManualDocumentList();
           resetManualDocumentNumbers();
           linerStarterCardsImported = Number(saved.linerStarterCardsImported) || 0;
@@ -5997,6 +6047,7 @@
       renderImportedSalesOrders();
       renderImportedCustomers();
       renderImportedCustomerOptions();
+      renderServiceHistory();
       void hydrateStockCardImages();
       void hydrateImportedStockCardImages();
       captureDeletionBaseline();
@@ -6061,6 +6112,8 @@
         const openImportedSalesButton = event.target.closest('[data-open-imported-sales]');
         const exportHistoricalSalesTemplateButton = event.target.closest('[data-export-historical-sales-template]');
         const importHistoricalSalesButton = event.target.closest('[data-import-historical-sales]');
+        const importServiceHistoryButton = event.target.closest('[data-import-service-history]');
+        const searchServiceHistoryButton = event.target.closest('[data-search-service-history]');
         const removeImportedSalesItemButton = event.target.closest('[data-remove-imported-sales-item]');
         const openImportedSalesPickerButton = event.target.closest('[data-open-imported-sales-picker]');
         const closeImportedSalesPickerButton = event.target.closest('[data-close-imported-sales-picker]');
@@ -6092,6 +6145,8 @@
         if (openImportedSalesButton) { resetImportedSalesForm(); show('imported-sales-form'); return; }
         if (exportHistoricalSalesTemplateButton) { exportHistoricalSalesTemplate(); return; }
         if (importHistoricalSalesButton) { root.querySelector('#historical-sales-import-file')?.click(); return; }
+        if (importServiceHistoryButton) { root.querySelector('#service-history-import-file')?.click(); return; }
+        if (searchServiceHistoryButton) { renderServiceHistory(); return; }
         if (removeImportedSalesItemButton) {
           importedSalesDraftItems.splice(Number(removeImportedSalesItemButton.dataset.removeImportedSalesItem), 1);
           renderImportedSalesDraft();
@@ -6507,6 +6562,13 @@
         }
       });
       root.addEventListener('change', (event) => {
+        const serviceHistoryImportField = event.target.closest('#service-history-import-file');
+        if (serviceHistoryImportField) {
+          const file = serviceHistoryImportField.files?.[0];
+          serviceHistoryImportField.value = '';
+          if (file) void importServiceHistoryFile(file);
+          return;
+        }
         const importedSalesDraftQuantity = event.target.closest('[data-imported-sales-draft-quantity]');
         if (importedSalesDraftQuantity) {
           const index = Number(importedSalesDraftQuantity.dataset.importedSalesDraftQuantity);
@@ -6883,7 +6945,7 @@
       const pageAccessDefinitions = [
         ['dashboard', 'Ana panel'], ['orders', 'Siparişler'], ['workorders', 'İş emirleri'], ['planning', 'Üretim planı'],
         ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
-        ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['settings', 'Ayarlar ve yedek'],
+        ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['service-history-search', 'Servis geçmiş arama'], ['settings', 'Ayarlar ve yedek'],
         ['imported-stock', 'Hazır ürün stokları'], ['imported-stock-entry', 'Hazır ürün girişi'], ['imported-stock-exit', 'Hazır ürün çıkışı'], ['imported-sales', 'Hazır ürün satışları'], ['imported-customers', 'Cariler'],
         ['warehouse-shipping', 'Depo sevkiyat'], ['manual-cargo-label', 'Manuel']
       ];
@@ -6935,7 +6997,7 @@
       const setSessionLabel = (message) => { if (sessionLabel) sessionLabel.textContent = message; };
       const hasState = (value) => Boolean(value && Array.isArray(value.orders) && Array.isArray(value.stockCards));
       const hasMeaningfulRecords = (value) => Boolean(value && [
-        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'workorderRecords'
+        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords'
       ].some((key) => Array.isArray(value[key]) && value[key].length));
       const safeJson = (value) => {
         try { return JSON.parse(value || 'null'); } catch (error) { return null; }
