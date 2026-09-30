@@ -47,8 +47,6 @@
       border: 0; background: transparent; color: inherit; border-radius: 8px; padding: 8px 10px;
     }
     #csp-production-sketch .top-button { color: #e7f5f8; }
-    /* Yatay kaydırmada da görünür kalması için yenileme düğmesi ekranın sağ üstüne sabitlenir. */
-    #csp-production-sketch #refresh-page-button { position: fixed; z-index: 120; top: 10px; right: clamp(185px, 16vw, 255px); display: inline-flex; align-items: center; min-height: 38px; color: #e7f5f8; background: #0b6f8d; border: 1px solid rgba(255,255,255,.38); box-shadow: 0 3px 12px rgba(0,0,0,.2); }
     #csp-production-sketch .top-button:hover, #csp-production-sketch .nav-button:hover, #csp-production-sketch .secondary-button:hover { background: light-dark(#e6edf1, #253444); }
     #csp-production-sketch .top-button.is-alert { color: #fff3e4; background: rgba(239, 123, 26, .22); }
     #csp-production-sketch .notification-badge { display: inline-grid; min-width: 17px; height: 17px; margin-left: 5px; padding: 0 4px; place-items: center; color: #fff; background: #ef7b1a; border-radius: 10px; font-size: 10px; font-weight: 700; }
@@ -402,7 +400,6 @@
     @media (max-width: 680px) {
       #csp-production-sketch .app-topbar { padding: 11px 14px; }
       #csp-production-sketch .top-actions .top-button { display: none; }
-      #csp-production-sketch #refresh-page-button { display: inline-flex; top: 10px; right: 12px; }
       #csp-production-sketch .shell { grid-template-columns: 1fr; }
       #csp-production-sketch .side-nav { border-right: 0; border-bottom: 1px solid light-dark(#dde3eb, #2b3645); display: flex; overflow-x: auto; padding: 8px; }
       #csp-production-sketch .nav-label { display: none; }
