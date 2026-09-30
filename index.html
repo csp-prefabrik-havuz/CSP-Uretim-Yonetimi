@@ -616,7 +616,7 @@
       <section class="view report-view" data-page="shipping"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Sevkiyat</h1><p>Sevke hazır iş emirleri otomatik olarak bu listede görünür.</p></div></div><div class="shipping-report-actions"><button class="primary-button" type="button" data-export-shipping-pdf>PDF raporu al</button></div></div><section class="section"><p class="table-hint" id="shipping-status" aria-live="polite">Sevke hazır iş emirleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Sevkiyatlarda ara" data-table-search-input="shipping-table" aria-label="Sevkiyatlarda ara" /><button class="secondary-button" type="button" data-table-search-button="shipping-table">Ara</button></div><div class="table-wrap"><table id="shipping-table"><thead><tr><th>Sevk no</th><th>Müşteri</th><th>İş emri</th><th>Havuz / adres</th><th>Planlanan tarih</th><th>Durum</th></tr></thead><tbody id="shipping-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="service-history-search">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis geçmiş arama</h1><p>Servis geçmişi Excel dosyanızı yükleyin ve tüm sütunlarda arayın.</p></div></div><div class="form-actions"><input id="service-history-import-file" type="file" accept=".xlsx,.xls,.csv" hidden /><button class="secondary-button" type="button" data-import-service-history>Excel yükle</button></div></div>
-        <section class="section"><p class="table-hint" id="service-history-status" aria-live="polite">Henüz servis geçmişi dosyası yüklenmedi.</p><div class="table-search"><input id="service-history-search-input" type="search" placeholder="Servis geçmişinde ara" aria-label="Servis geçmişinde ara" /><button class="secondary-button" type="button" data-search-service-history>Ara</button></div><div class="table-wrap"><table id="service-history-table"><thead id="service-history-table-head"></thead><tbody id="service-history-table-body"></tbody></table></div></section>
+        <section class="section"><p class="table-hint" id="service-history-status" aria-live="polite">Henüz servis geçmişi dosyası yüklenmedi.</p><div class="table-search"><input id="service-history-search-input" type="search" placeholder="Servis geçmişinde ara" aria-label="Servis geçmişinde ara" /><button class="secondary-button" type="button" data-search-service-history>Ara</button><button class="secondary-button" type="button" data-clear-service-history-search>Aramayı temizle</button><button class="secondary-button" type="button" data-delete-service-history>Tüm kayıtları sil</button></div><div class="table-wrap"><table id="service-history-table"><thead id="service-history-table-head"></thead><tbody id="service-history-table-body"></tbody></table></div></section>
       </section>
       <section class="view" data-page="series">
         <div class="page-head"><div><h1>Üretim kodu başlangıçları</h1><p>Seçilen ekipman için sıradaki kod, sipariş kaydedilirken otomatik atanır.</p></div></div>
@@ -6114,6 +6114,8 @@
         const importHistoricalSalesButton = event.target.closest('[data-import-historical-sales]');
         const importServiceHistoryButton = event.target.closest('[data-import-service-history]');
         const searchServiceHistoryButton = event.target.closest('[data-search-service-history]');
+        const clearServiceHistorySearchButton = event.target.closest('[data-clear-service-history-search]');
+        const deleteServiceHistoryButton = event.target.closest('[data-delete-service-history]');
         const removeImportedSalesItemButton = event.target.closest('[data-remove-imported-sales-item]');
         const openImportedSalesPickerButton = event.target.closest('[data-open-imported-sales-picker]');
         const closeImportedSalesPickerButton = event.target.closest('[data-close-imported-sales-picker]');
@@ -6147,6 +6149,8 @@
         if (importHistoricalSalesButton) { root.querySelector('#historical-sales-import-file')?.click(); return; }
         if (importServiceHistoryButton) { root.querySelector('#service-history-import-file')?.click(); return; }
         if (searchServiceHistoryButton) { renderServiceHistory(); return; }
+        if (clearServiceHistorySearchButton) { const input = root.querySelector('#service-history-search-input'); if (input) input.value = ''; renderServiceHistory(); return; }
+        if (deleteServiceHistoryButton) { if (!serviceHistoryRecords.length || !window.confirm('Tüm servis geçmişi kayıtları silinecek. Bu işlem diğer yetkili kullanıcıların ekranından da kaldırır. Devam etmek istiyor musunuz?')) return; serviceHistoryRecords.splice(0, serviceHistoryRecords.length); saveProductionState(); renderServiceHistory(); return; }
         if (removeImportedSalesItemButton) {
           importedSalesDraftItems.splice(Number(removeImportedSalesItemButton.dataset.removeImportedSalesItem), 1);
           renderImportedSalesDraft();
