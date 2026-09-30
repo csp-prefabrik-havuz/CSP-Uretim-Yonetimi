@@ -24,7 +24,13 @@
       overflow: hidden;
     }
     #csp-production-sketch * { box-sizing: border-box; }
+    #csp-production-sketch #manual-delivery-items { display: block; }
     #csp-production-sketch .manual-delivery-item-row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(110px, .65fr) minmax(110px, .65fr); gap: 12px; margin-bottom: 10px; }
+    #csp-production-sketch .manual-document-record { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid light-dark(#dbe5eb, #304250); }
+    #csp-production-sketch .manual-document-info { display: grid; gap: 4px; min-width: 0; }
+    #csp-production-sketch .manual-document-details { color: light-dark(#566577, #bdc9d8); font-size: 12px; line-height: 1.45; white-space: pre-line; }
+    #csp-production-sketch .manual-document-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+    @media (max-width: 640px) { #csp-production-sketch .manual-document-record { flex-direction: column; } #csp-production-sketch .manual-document-actions { justify-content: flex-start; } }
     @media (max-width: 640px) { #csp-production-sketch .manual-delivery-item-row { grid-template-columns: 1fr; } }
     #csp-production-sketch .app-topbar {
       min-height: 62px;
@@ -2137,6 +2143,7 @@
       let nextWarehouseShipmentId = 1;
       const manualDocuments = [];
       let nextManualDocumentId = 1;
+      let editingManualDeliveryId = null;
       let editingWarehouseShipmentId = null;
       let stockSummaryFilteredRows = [];
       const consumptionValue = (value, unit) => value === null || value === undefined || value === '' ? '—' : `${numberFormat(value)} ${unit}`;
@@ -4007,28 +4014,42 @@
       const manualDocumentNumber = (type) => { const used = new Set(manualDocuments.filter((item) => item.type === type).map((item) => Number(item.number)).filter(Number.isFinite)); let number = 1; while (used.has(number)) number += 1; return number; };
       const resetManualDocumentNumbers = () => { const cargoNo = root.querySelector('#manual-cargo-no'); if (cargoNo) cargoNo.value = manualDocumentNumber('cargo'); const deliveryNo = root.querySelector('#manual-delivery-no'); if (deliveryNo) deliveryNo.value = manualDocumentNumber('delivery'); const today = new Date().toISOString().slice(0, 10); ['#manual-cargo-date', '#manual-delivery-date'].forEach((id) => { const field = root.querySelector(id); if (field && !field.value) field.value = today; }); };
       const renderManualDocumentList = () => {
-        ['cargo', 'delivery'].forEach((type) => { const target = root.querySelector(`#manual-${type}-document-list`); if (!target) return; target.replaceChildren(); const records = manualDocuments.filter((item) => item.type === type).sort((a, b) => Number(b.number) - Number(a.number)); if (!records.length) { target.textContent = 'Henüz kayıtlı belge yok.'; return; } records.forEach((record) => { const line = document.createElement('div'); line.className = 'form-actions'; const text = document.createElement('span'); text.textContent = `No: ${record.number} · ${formatImportedMovementDate(record.date)} · ${record.customer || '—'}`; const print = document.createElement('button'); print.className = 'secondary-button'; print.type = 'button'; print.dataset.printManualDocument = record.id; print.textContent = 'PDF al'; const remove = document.createElement('button'); remove.className = 'secondary-button'; remove.type = 'button'; remove.dataset.deleteManualDocument = record.id; remove.textContent = 'Sil'; line.append(text, print, remove); target.appendChild(line); }); });
+        ['cargo', 'delivery'].forEach((type) => { const target = root.querySelector(`#manual-${type}-document-list`); if (!target) return; target.replaceChildren(); const records = manualDocuments.filter((item) => item.type === type).sort((a, b) => Number(b.number) - Number(a.number)); if (!records.length) { target.textContent = 'Henüz kayıtlı belge yok.'; return; } records.forEach((record) => { const line = document.createElement('div'); line.className = 'manual-document-record'; const info = document.createElement('div'); info.className = 'manual-document-info'; const text = document.createElement('strong'); text.textContent = `No: ${record.number} · ${formatImportedMovementDate(record.date)} · ${record.customer || '—'}`; info.appendChild(text); if (type === 'delivery') { const details = document.createElement('div'); details.className = 'manual-document-details'; details.textContent = `Adres: ${record.address || '—'}\nAçıklama: ${record.serialNo || '—'}`; info.appendChild(details); } const actions = document.createElement('div'); actions.className = 'manual-document-actions'; const print = document.createElement('button'); print.className = 'secondary-button'; print.type = 'button'; print.dataset.printManualDocument = record.id; print.textContent = 'PDF al'; const remove = document.createElement('button'); remove.className = 'secondary-button'; remove.type = 'button'; remove.dataset.deleteManualDocument = record.id; remove.textContent = 'Sil'; if (type === 'delivery') { const edit = document.createElement('button'); edit.className = 'secondary-button'; edit.type = 'button'; edit.dataset.editManualDelivery = record.id; edit.textContent = 'Düzenle'; actions.append(edit, print, remove); } else actions.append(print, remove); line.append(info, actions); target.appendChild(line); }); });
       };
       const saveManualDocument = (document) => { document.id = nextManualDocumentId++; document.number = manualDocumentNumber(document.type); manualDocuments.push(document); saveProductionState(); renderManualDocumentList(); resetManualDocumentNumbers(); return document; };
       const setupManualDocumentControls = () => { const cargo = root.querySelector('[data-manual-pane="cargo"]'); if (cargo && !root.querySelector('#manual-cargo-no')) { const fields = document.createElement('div'); fields.className = 'form-grid'; fields.innerHTML = '<div class="field"><label>Etiket no</label><input id="manual-cargo-no" readonly /></div><div class="field"><label>Tarih</label><input id="manual-cargo-date" type="date" /></div>'; cargo.querySelector('.table-hint')?.after(fields); } const deliveryNo = root.querySelector('#manual-delivery-no'); if (deliveryNo) deliveryNo.readOnly = true; ['cargo', 'delivery'].forEach((type) => { const pane = root.querySelector(`[data-manual-pane="${type}"]`); if (!pane || root.querySelector(`#manual-${type}-document-list`)) return; const list = document.createElement('section'); list.className = 'section'; list.innerHTML = `<h2>${type === 'cargo' ? 'Kargo etiketi kayıtları' : 'Teslim fişi kayıtları'}</h2><div id="manual-${type}-document-list"></div>`; pane.appendChild(list); }); resetManualDocumentNumbers(); renderManualDocumentList(); };
+      const manualDeliveryActions = root.querySelector('[data-manual-pane="delivery"] .form-actions');
+      if (manualDeliveryActions && !manualDeliveryActions.querySelector('[data-save-manual-delivery]')) { const save = document.createElement('button'); save.className = 'secondary-button'; save.type = 'button'; save.dataset.saveManualDelivery = ''; save.textContent = 'Kaydet'; manualDeliveryActions.insertBefore(save, manualDeliveryActions.querySelector('[data-export-manual-delivery]')); }
       const manualDeliveryItemRow = () => { const row = document.createElement('div'); row.className = 'manual-delivery-item-row'; row.innerHTML = '<div class="field"><label>Ürün</label><input data-manual-delivery-item-name placeholder="Ürün adı" /></div><div class="field"><label>Miktar</label><input data-manual-delivery-item-quantity type="number" min="0" step="0.01" placeholder="Miktar" /></div><div class="field"><label>Birim</label><input data-manual-delivery-item-unit placeholder="Örn. adet" /></div>'; return row; };
       const setupManualDeliveryItems = () => { const list = root.querySelector('#manual-delivery-items'); if (!list || list.dataset.initialized) return; const name = list.querySelector('[data-manual-delivery-item-name]')?.value || ''; const quantity = list.querySelector('[data-manual-delivery-item-quantity]')?.value || ''; const row = manualDeliveryItemRow(); row.querySelector('[data-manual-delivery-item-name]').value = name; row.querySelector('[data-manual-delivery-item-quantity]').value = quantity; list.replaceChildren(row); list.dataset.initialized = 'true'; };
       setupManualDeliveryItems();
       setupManualDocumentControls();
       const manualDeliveryDate = root.querySelector('#manual-delivery-date'); if (manualDeliveryDate && !manualDeliveryDate.value) manualDeliveryDate.value = new Date().toISOString().slice(0, 10);
       const clearManualDelivery = () => {
-        ['#manual-delivery-no', '#manual-delivery-date', '#manual-delivery-customer', '#manual-delivery-contact', '#manual-delivery-address', '#manual-delivery-note'].forEach((id) => { const field = root.querySelector(id); if (field) field.value = ''; }); root.querySelector('#manual-delivery-items')?.replaceChildren(manualDeliveryItemRow());
+        editingManualDeliveryId = null; ['#manual-delivery-no', '#manual-delivery-date', '#manual-delivery-customer', '#manual-delivery-contact', '#manual-delivery-address', '#manual-delivery-note'].forEach((id) => { const field = root.querySelector(id); if (field) field.value = ''; }); root.querySelector('#manual-delivery-items')?.replaceChildren(manualDeliveryItemRow()); resetManualDocumentNumbers();
         const status = root.querySelector('#manual-delivery-status'); if (status) status.textContent = 'Form temizlendi.';
       };
-      const exportManualDeliveryPdf = () => {
+      const openManualDeliveryForEdit = (record) => {
+        if (!record || record.type !== 'delivery') return;
+        editingManualDeliveryId = record.id;
+        const values = { '#manual-delivery-no': record.number, '#manual-delivery-date': record.date || '', '#manual-delivery-customer': record.customer || '', '#manual-delivery-contact': record.contact || '', '#manual-delivery-address': record.address || '', '#manual-delivery-note': record.serialNo || '' };
+        Object.entries(values).forEach(([id, value]) => { const field = root.querySelector(id); if (field) field.value = value; });
+        const list = root.querySelector('#manual-delivery-items');
+        if (list) { list.replaceChildren(); const items = record.items?.length ? record.items : [{}]; items.forEach((item) => { const row = manualDeliveryItemRow(); row.querySelector('[data-manual-delivery-item-name]').value = item.cardLabel || item.name || ''; row.querySelector('[data-manual-delivery-item-quantity]').value = item.quantity || ''; row.querySelector('[data-manual-delivery-item-unit]').value = item.unit || ''; list.appendChild(row); }); }
+        const status = root.querySelector('#manual-delivery-status'); if (status) status.textContent = `Fiş no ${record.number} düzenleniyor. PDF al ile kaydedin.`;
+      };
+      const manualDeliveryOrderFromForm = () => {
+        const products = Array.from(root.querySelectorAll('#manual-delivery-items .manual-delivery-item-row')).map((row) => ({ name: row.querySelector('[data-manual-delivery-item-name]')?.value.trim() || '', quantity: row.querySelector('[data-manual-delivery-item-quantity]')?.value.trim() || '', unit: row.querySelector('[data-manual-delivery-item-unit]')?.value.trim() || '' })).filter((item) => item.name).map((item) => ({ cardCode: '—', cardLabel: item.name, quantity: item.quantity || '—', unit: item.unit }));
+        return { documentTitle: 'TESLİM FİŞİ', date: manualDeliveryValue('#manual-delivery-date'), customer: manualDeliveryValue('#manual-delivery-customer') || '—', contact: manualDeliveryValue('#manual-delivery-contact') || '—', address: manualDeliveryValue('#manual-delivery-address') || 'Teslimat adresi belirtilmedi.', items: products.length ? products : [{ cardCode: '—', cardLabel: 'Ürün bilgisi girilmedi.', quantity: 1, unit: '' }], serialNo: manualDeliveryValue('#manual-delivery-note') || '—', total: 0 };
+      };
+      const saveManualDelivery = () => {
         const status = root.querySelector('#manual-delivery-status');
-        try {
-          const products = Array.from(root.querySelectorAll('#manual-delivery-items .manual-delivery-item-row')).map((row) => ({ name: row.querySelector('[data-manual-delivery-item-name]')?.value.trim() || '', quantity: row.querySelector('[data-manual-delivery-item-quantity]')?.value.trim() || '', unit: row.querySelector('[data-manual-delivery-item-unit]')?.value.trim() || '' })).filter((item) => item.name).map((item) => ({ cardCode: '—', cardLabel: item.name, quantity: item.quantity || '—', unit: item.unit }));
-          const order = { documentTitle: 'TESLİM FİŞİ', date: manualDeliveryValue('#manual-delivery-date'), customer: manualDeliveryValue('#manual-delivery-customer') || '—', contact: manualDeliveryValue('#manual-delivery-contact') || '—', address: manualDeliveryValue('#manual-delivery-address') || 'Teslimat adresi belirtilmedi.', items: products.length ? products : [{ cardCode: '—', cardLabel: 'Ürün bilgisi girilmedi.', quantity: 1, unit: '' }], serialNo: manualDeliveryValue('#manual-delivery-note') || '—', total: 0 };
-          const record = saveManualDocument({ type: 'delivery', ...order }); order.orderNo = record.number;
-          downloadReportFile(makeCanvasPdf(importedSalesShippingPdfCanvases(order), 595, 842), 'manuel-teslim-fisi-' + new Date().toISOString().slice(0, 10) + '.pdf');
-          if (status) status.textContent = 'Teslim fişi indirildi.';
-        } catch (error) { if (status) status.textContent = 'Teslim fişi hazırlanamadı. Lütfen tekrar deneyin.'; }
+        try { const order = manualDeliveryOrderFromForm(); let record = editingManualDeliveryId ? manualDocuments.find((item) => item.id === editingManualDeliveryId && item.type === 'delivery') : null; const updating = Boolean(record); if (record) { Object.assign(record, { type: 'delivery', ...order }); saveProductionState(); renderManualDocumentList(); } else record = saveManualDocument({ type: 'delivery', ...order }); editingManualDeliveryId = record.id; const numberField = root.querySelector('#manual-delivery-no'); if (numberField) numberField.value = record.number; if (status) status.textContent = updating ? `Teslim fişi no ${record.number} güncellendi.` : `Teslim fişi no ${record.number} kaydedildi.`; return record; } catch (error) { if (status) status.textContent = 'Teslim fişi kaydedilemedi. Lütfen tekrar deneyin.'; return null; }
+      };
+      const exportManualDeliveryPdf = () => {
+        const status = root.querySelector('#manual-delivery-status'); const record = editingManualDeliveryId ? manualDocuments.find((item) => item.id === editingManualDeliveryId && item.type === 'delivery') : null;
+        if (!record) { if (status) status.textContent = 'PDF almadan önce fişi kaydedin.'; return; }
+        try { downloadReportFile(makeCanvasPdf(importedSalesShippingPdfCanvases({ ...record, documentTitle: 'TESLİM FİŞİ', orderNo: record.number }), 595, 842), 'manuel-teslim-fisi-' + record.number + '.pdf'); if (status) status.textContent = `Teslim fişi no ${record.number} indirildi.`; } catch (error) { if (status) status.textContent = 'Teslim fişi hazırlanamadı. Lütfen tekrar deneyin.'; }
       };
       const deleteImportedSalesOrder = (id) => {
         const index = importedSalesOrders.findIndex((order) => order.id === Number(id));
@@ -6043,10 +6064,12 @@
         const exportManualCargoLabelButton = event.target.closest('[data-export-manual-cargo-label]');
         const refreshPageButton = event.target.closest('#refresh-page-button');
         const clearManualCargoLabelButton = event.target.closest('[data-clear-manual-cargo-label]');
+        const saveManualDeliveryButton = event.target.closest('[data-save-manual-delivery]');
         const exportManualDeliveryButton = event.target.closest('[data-export-manual-delivery]');
         const clearManualDeliveryButton = event.target.closest('[data-clear-manual-delivery]');
         const manualTabButton = event.target.closest('[data-manual-tab]');
         const addManualDeliveryItemButton = event.target.closest('[data-add-manual-delivery-item]');
+        const editManualDeliveryButton = event.target.closest('[data-edit-manual-delivery]');
         const printManualDocumentButton = event.target.closest('[data-print-manual-document]');
         const deleteManualDocumentButton = event.target.closest('[data-delete-manual-document]');
         const openWarehouseShippingButton = event.target.closest('[data-open-warehouse-shipping]');
@@ -6088,10 +6111,12 @@
         if (refreshPageButton) { window.location.reload(); return; }
         if (exportManualCargoLabelButton) { exportManualCargoLabelPdf(); return; }
         if (clearManualCargoLabelButton) { clearManualCargoLabel(); return; }
+        if (saveManualDeliveryButton) { saveManualDelivery(); return; }
         if (exportManualDeliveryButton) { exportManualDeliveryPdf(); return; }
         if (clearManualDeliveryButton) { clearManualDelivery(); return; }
         if (manualTabButton) { const tab = manualTabButton.dataset.manualTab; root.querySelectorAll('[data-manual-tab]').forEach((button) => { const active = button.dataset.manualTab === tab; button.classList.toggle('is-active', active); button.setAttribute('aria-selected', String(active)); }); root.querySelectorAll('[data-manual-pane]').forEach((pane) => { pane.hidden = pane.dataset.manualPane !== tab; }); return; }
         if (addManualDeliveryItemButton) { root.querySelector('#manual-delivery-items')?.append(manualDeliveryItemRow()); return; }
+        if (editManualDeliveryButton) { openManualDeliveryForEdit(manualDocuments.find((item) => item.id === Number(editManualDeliveryButton.dataset.editManualDelivery))); return; }
         if (printManualDocumentButton) { const record = manualDocuments.find((item) => item.id === Number(printManualDocumentButton.dataset.printManualDocument)); if (!record) return; const pdf = record.type === 'cargo' ? makeCanvasPdf(importedSalesCargoLabelPdfCanvases({ customer: record.customer, contact: record.contact, address: record.address, manualCargo: record.manualCargo }), 283.46, 212.6) : makeCanvasPdf(importedSalesShippingPdfCanvases({ ...record, documentTitle: 'TESLİM FİŞİ', orderNo: record.number }), 595, 842); downloadReportFile(pdf, `manuel-${record.type === 'cargo' ? 'kargo-etiketi' : 'teslim-fisi'}-${record.number}.pdf`); return; }
         if (deleteManualDocumentButton) { const index = manualDocuments.findIndex((item) => item.id === Number(deleteManualDocumentButton.dataset.deleteManualDocument)); if (index < 0 || !window.confirm('Bu belge silinsin mi? Numarası yeniden kullanılabilir.')) return; manualDocuments.splice(index, 1); saveProductionState(); renderManualDocumentList(); resetManualDocumentNumbers(); return; }
         if (openWarehouseShippingButton) { resetWarehouseShippingForm(); show('warehouse-shipping-form'); return; }
