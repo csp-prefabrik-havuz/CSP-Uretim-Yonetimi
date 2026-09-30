@@ -7479,3 +7479,8 @@
 </html>
 
 <script src="github-image-autolink.js?v=202609241830"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+  }
+</script>
