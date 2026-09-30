@@ -10,7 +10,8 @@ const pageIds = new Set([
   'dashboard', 'orders', 'workorders', 'planning', 'stock', 'stock-summary',
   'stock-report', 'liner-widths', 'shipping', 'series', 'settings',
   'imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales',
-  'warehouse-shipping',
+  'imported-customers', 'warehouse-shipping', 'manual-cargo-label',
+  'service-history-search',
 ])
 
 const json = (body: unknown, status = 200) =>
