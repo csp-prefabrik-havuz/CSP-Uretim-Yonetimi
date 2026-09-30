@@ -1,4 +1,4 @@
-const CACHE_NAME = 'csp-uretim-v1';
+const CACHE_NAME = 'csp-uretim-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -21,6 +21,16 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  // Uygulama sayfası güncel sürümü öncelikle ağdan alır; bağlantı yoksa önbelleğe döner.
+  if (event.request.mode === 'navigate') {
+    event.respondWith(fetch(event.request).then((response) => {
+      if (response.ok) {
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+      }
+      return response;
+    }).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html'))));
+    return;
+  }
   event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
     if (new URL(event.request.url).origin === self.location.origin && response.ok) {
       const copy = response.clone();
