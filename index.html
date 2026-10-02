@@ -653,18 +653,15 @@
         <section class="section"><div class="form-grid"><div class="field"><label for="imported-stock-code">Stok kodu</label><input id="imported-stock-code" placeholder="Otomatik oluşturulur" /></div><div class="field"><label for="imported-stock-category">Kategori</label><input id="imported-stock-category" placeholder="Örn. Pompa, filtre veya aksesuar" /></div><div class="field span-two"><label for="imported-stock-name">Ürün adı</label><input id="imported-stock-name" placeholder="Ürün adı" /></div><div class="field span-two"><label for="imported-stock-variant">Varyant / özellik</label><input id="imported-stock-variant" placeholder="Model, renk, ölçü veya açıklama" /></div><div class="field span-two"><label for="imported-stock-image">Ürün görseli</label><input id="imported-stock-image" type="file" accept="image/*" data-imported-stock-card-image /><div class="stock-card-image-preview" id="imported-stock-image-preview" hidden><img id="imported-stock-image-preview-image" alt="Hazır ürün stok görseli" /><button class="secondary-button" type="button" data-clear-imported-stock-card-image>Görseli kaldır</button></div></div><div class="field"><label for="imported-stock-unit">Birim</label><select id="imported-stock-unit"><option value="adet">adet</option><option value="m">m</option><option value="m²">m²</option><option value="kg">kg</option><option value="lt">lt</option><option value="takım">takım</option></select></div><div class="field"><label for="imported-stock-initial">İlk stok miktarı</label><input id="imported-stock-initial" type="number" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-stock-onhand">Mevcut miktar</label><input id="imported-stock-onhand" type="number" step="0.01" placeholder="İlk stokla aynı" /></div><div class="field"><label for="imported-stock-minimum">Minimum seviye</label><input id="imported-stock-minimum" type="number" min="0" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-stock-package-count">Koli adedi</label><input id="imported-stock-package-count" type="number" min="0" step="1" placeholder="0" /></div><div class="field"><label for="imported-stock-package-weight">Ağırlık (kg)</label><input id="imported-stock-package-weight" type="number" min="0" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-stock-package-width">En (cm)</label><input id="imported-stock-package-width" type="number" min="0" step="0.01" placeholder="0" data-imported-stock-desi-input /></div><div class="field"><label for="imported-stock-package-length">Boy (cm)</label><input id="imported-stock-package-length" type="number" min="0" step="0.01" placeholder="0" data-imported-stock-desi-input /></div><div class="field"><label for="imported-stock-package-height">Yükseklik (cm)</label><input id="imported-stock-package-height" type="number" min="0" step="0.01" placeholder="0" data-imported-stock-desi-input /></div><div class="field"><label for="imported-stock-desi">Desi</label><input id="imported-stock-desi" readonly value="0,00" aria-label="Desi: en çarpı boy çarpı yükseklik bölü 3000" /></div><div class="field span-two"><label for="imported-stock-note">Not</label><textarea id="imported-stock-note" placeholder="Tedarikçi, raf yeri veya açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-stock-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="imported-stock">Vazgeç</button><button class="primary-button" type="button" data-save-import-stock-card>Hazır ürün stok kartını kaydet</button></div></section>
       </section>
       <section class="view report-view" data-page="imported-product-stats">
-        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Ürün istatistikleri</h1><p>Hazır ürün stokları ile giriş, çıkış ve satış sevkiyatlarının güncel özeti.</p></div></div></div>
-        <div class="summary-grid" aria-label="Ürün istatistikleri">
-          <div class="summary"><div class="summary-label">Ürün kartı</div><div class="summary-value" id="imported-stats-card-count">0</div><div class="summary-note">Kayıtlı hazır ürün çeşidi</div></div>
-          <div class="summary"><div class="summary-label">Stokta ürün</div><div class="summary-value" id="imported-stats-onhand">0</div><div class="summary-note" id="imported-stats-onhand-note">Birim bazında mevcut miktar</div></div>
-          <div class="summary"><div class="summary-label">Kritik stok</div><div class="summary-value" id="imported-stats-critical">0</div><div class="summary-note">Minimum seviyeye inen ürün</div></div>
-          <div class="summary"><div class="summary-label">Toplam hareket</div><div class="summary-value" id="imported-stats-movement-count">0</div><div class="summary-note">Giriş, çıkış ve satış sevki</div></div>
+        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Ürün satış istatistikleri</h1><p>Sevk edilmiş hazır ürün satışlarını ürün grubuna göre aylık olarak izleyin.</p></div></div><div class="form-actions"><div class="field"><label for="imported-stats-month">Satış ayı</label><input id="imported-stats-month" type="month" /></div></div></div>
+        <div class="summary-grid" aria-label="Ürün satış göstergeleri">
+          <div class="summary"><div class="summary-label">Aylık satış</div><div class="summary-value" id="imported-stats-monthly-total">0</div><div class="summary-note" id="imported-stats-monthly-total-note">Sevk edilmiş satış miktarı</div></div>
+          <div class="summary"><div class="summary-label">Satılan grup</div><div class="summary-value" id="imported-stats-group-count">0</div><div class="summary-note">Bu ay satış yapılan ürün grubu</div></div>
+          <div class="summary"><div class="summary-label">En çok satılan</div><div class="summary-value" id="imported-stats-top-group">—</div><div class="summary-note" id="imported-stats-top-group-note">Satış bulunmuyor</div></div>
+          <div class="summary"><div class="summary-label">En az satılan</div><div class="summary-value" id="imported-stats-low-group">—</div><div class="summary-note" id="imported-stats-low-group-note">Satış bulunmuyor</div></div>
         </div>
-        <div class="content-grid">
-          <section class="section"><div class="section-head"><div><h2>Hareket özeti</h2><p class="table-hint">Tüm zamanlardaki stok giriş ve çıkış toplamları.</p></div></div><div class="table-wrap"><table><thead><tr><th>Hareket</th><th>Toplam miktar</th><th>Kayıt adedi</th></tr></thead><tbody id="imported-stats-movement-summary"></tbody></table></div></section>
-          <section class="section"><div class="section-head"><div><h2>Kritik stoklar</h2><p class="table-hint">Mevcut miktarı minimum seviyeye eşit veya altında olan ürünler.</p></div></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Mevcut</th><th>Minimum</th></tr></thead><tbody id="imported-stats-critical-list"></tbody></table></div></section>
-        </div>
-        <section class="section"><div class="section-head"><div><h2>En çok hareket gören ürünler</h2><p class="table-hint">Giriş, çıkış ve satış sevklerindeki toplam hareket miktarına göre ilk 10 ürün.</p></div></div><div class="table-wrap"><table><thead><tr><th>Stok kodu</th><th>Ürün</th><th>Giriş</th><th>Çıkış / sevk</th><th>Toplam hareket</th><th>Mevcut stok</th></tr></thead><tbody id="imported-stats-top-products"></tbody></table></div></section>
+        <section class="section"><div class="section-head"><div><h2>Ürün grubuna göre aylık satışlar</h2><p class="table-hint" id="imported-stats-status">Sevk edilmiş satış siparişleri ürün gruplarına göre burada listelenir.</p></div></div><div class="table-wrap"><table><thead><tr><th>Ürün grubu</th><th>Satış adedi</th><th>Satış siparişi</th><th>En son sevk tarihi</th></tr></thead><tbody id="imported-stats-group-list"></tbody></table></div></section>
+        <section class="section"><div class="section-head"><div><h2>Aylık satış dağılımı</h2><p class="table-hint">Son 12 ayın toplam sevk edilmiş satış adetleri.</p></div></div><div class="table-wrap"><table><thead><tr><th>Ay</th><th>Satış adedi</th><th>Satılan ürün grubu</th><th>Sipariş sayısı</th></tr></thead><tbody id="imported-stats-month-list"></tbody></table></div></section>
       </section>
       <section class="view report-view" data-page="imported-stock-entry">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Hazır ürün girişi</h1><p>Gelen hazır ürünleri stok kartına işleyin; miktar mevcut stoğa eklenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-stock">Hazır ürün stoklarına dön</button></div>
@@ -3022,61 +3019,71 @@
         renderImportedProductStats();
       };
       const renderImportedProductStats = () => {
-        const cardCount = root.querySelector('#imported-stats-card-count');
-        const onHand = root.querySelector('#imported-stats-onhand');
-        const onHandNote = root.querySelector('#imported-stats-onhand-note');
-        const critical = root.querySelector('#imported-stats-critical');
-        const movementCount = root.querySelector('#imported-stats-movement-count');
-        const movementSummary = root.querySelector('#imported-stats-movement-summary');
-        const criticalList = root.querySelector('#imported-stats-critical-list');
-        const topProducts = root.querySelector('#imported-stats-top-products');
-        if (!cardCount || !onHand || !onHandNote || !critical || !movementCount || !movementSummary || !criticalList || !topProducts) return;
-        const criticalCards = importedStockCards.filter((card) => Number(card.minimum) > 0 && Number(card.onHand) <= Number(card.minimum));
-        const stockedCards = importedStockCards.filter((card) => Number(card.onHand) > 0);
-        const unitTotals = new Map();
-        importedStockCards.forEach((card) => unitTotals.set(card.unit || 'adet', (unitTotals.get(card.unit || 'adet') || 0) + (Number(card.onHand) || 0)));
-        cardCount.textContent = String(importedStockCards.length);
-        onHand.textContent = String(stockedCards.length);
-        onHandNote.textContent = Array.from(unitTotals.entries()).map(([unit, amount]) => `${numberFormat(amount)} ${unit}`).join(' · ') || 'Stok kaydı yok';
-        critical.textContent = String(criticalCards.length);
-        movementCount.textContent = String(importedStockMovements.length);
-        const movementGroups = [
-          ['Giriş', importedStockMovements.filter((movement) => movement.type === 'entry')],
-          ['Çıkış / satış sevki', importedStockMovements.filter((movement) => movement.type === 'exit')]
-        ];
-        movementSummary.replaceChildren();
-        movementGroups.forEach(([label, movements]) => {
-          const totals = new Map();
-          movements.forEach((movement) => totals.set(movement.unit || 'adet', (totals.get(movement.unit || 'adet') || 0) + (Number(movement.quantity) || 0)));
+        const monthInput = root.querySelector('#imported-stats-month');
+        const monthlyTotal = root.querySelector('#imported-stats-monthly-total');
+        const monthlyTotalNote = root.querySelector('#imported-stats-monthly-total-note');
+        const groupCount = root.querySelector('#imported-stats-group-count');
+        const topGroup = root.querySelector('#imported-stats-top-group');
+        const topGroupNote = root.querySelector('#imported-stats-top-group-note');
+        const lowGroup = root.querySelector('#imported-stats-low-group');
+        const lowGroupNote = root.querySelector('#imported-stats-low-group-note');
+        const status = root.querySelector('#imported-stats-status');
+        const groupList = root.querySelector('#imported-stats-group-list');
+        const monthList = root.querySelector('#imported-stats-month-list');
+        if (!monthInput || !monthlyTotal || !monthlyTotalNote || !groupCount || !topGroup || !topGroupNote || !lowGroup || !lowGroupNote || !status || !groupList || !monthList) return;
+        const shippedOrders = importedSalesOrders.filter((order) => order.status === 'Sevk edildi');
+        const saleMonth = (order) => String(order.shippedAt || order.date || '').slice(0, 7);
+        const availableMonths = shippedOrders.map(saleMonth).filter(Boolean).sort();
+        if (!monthInput.value) monthInput.value = availableMonths.at(-1) || new Date().toISOString().slice(0, 7);
+        const selectedMonth = monthInput.value;
+        const groupSales = (orders) => {
+          const groups = new Map();
+          orders.forEach((order) => (order.items || []).forEach((item) => {
+            const card = importedStockCards.find((entry) => Number(entry.id) === Number(item.cardId) || entry.code === item.cardCode);
+            const group = card?.group || card?.category || 'Diğer';
+            const current = groups.get(group) || { group, quantity: 0, orders: new Set(), latestDate: '' };
+            current.quantity += Number(item.quantity) || 0;
+            current.orders.add(order.id);
+            const date = order.shippedAt || order.date || '';
+            if (date > current.latestDate) current.latestDate = date;
+            groups.set(group, current);
+          }));
+          return Array.from(groups.values()).sort((left, right) => right.quantity - left.quantity || left.group.localeCompare(right.group, 'tr'));
+        };
+        const selectedOrders = shippedOrders.filter((order) => saleMonth(order) === selectedMonth);
+        const selectedGroups = groupSales(selectedOrders);
+        const selectedTotal = selectedGroups.reduce((total, group) => total + group.quantity, 0);
+        monthlyTotal.textContent = numberFormat(selectedTotal);
+        monthlyTotalNote.textContent = `${selectedOrders.length} sevk edilmiş sipariş`;
+        groupCount.textContent = String(selectedGroups.length);
+        const highest = selectedGroups.at(0);
+        const lowest = selectedGroups.at(-1);
+        topGroup.textContent = highest?.group || '—'; topGroupNote.textContent = highest ? `${numberFormat(highest.quantity)} adet` : 'Satış bulunmuyor';
+        lowGroup.textContent = lowest?.group || '—'; lowGroupNote.textContent = lowest ? `${numberFormat(lowest.quantity)} adet` : 'Satış bulunmuyor';
+        status.textContent = selectedOrders.length ? `${selectedMonth} döneminde ${selectedOrders.length} sevk edilmiş siparişten gelen satışlar listeleniyor.` : `${selectedMonth} döneminde sevk edilmiş satış bulunmuyor.`;
+        groupList.replaceChildren();
+        if (!selectedGroups.length) {
+          const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 4; cell.className = 'empty-workorders'; cell.textContent = 'Bu ay için satış verisi yok.'; row.appendChild(cell); groupList.appendChild(row);
+        } else selectedGroups.forEach((group) => {
           const row = document.createElement('tr');
-          [label, Array.from(totals.entries()).map(([unit, amount]) => `${numberFormat(amount)} ${unit}`).join(' · ') || '—', String(movements.length)].forEach((value, index) => {
-            const cell = document.createElement('td'); cell.textContent = value; if (index === 0) cell.classList.add('order'); row.appendChild(cell);
-          });
-          movementSummary.appendChild(row);
+          [group.group, `${numberFormat(group.quantity)} adet`, String(group.orders.size), formatImportedMovementDate(group.latestDate)].forEach((value, index) => { const cell = document.createElement('td'); cell.textContent = value; if (index === 0) cell.classList.add('order'); if (index === 1) cell.classList.add('stock-usage'); row.appendChild(cell); });
+          groupList.appendChild(row);
         });
-        criticalList.replaceChildren();
-        if (!criticalCards.length) {
-          const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 4; cell.className = 'empty-workorders'; cell.textContent = 'Kritik seviyede hazır ürün yok.'; row.appendChild(cell); criticalList.appendChild(row);
-        } else criticalCards.sort((left, right) => (Number(left.onHand) - Number(left.minimum)) - (Number(right.onHand) - Number(right.minimum))).forEach((card) => {
+        const monthKeys = Array.from(new Set(availableMonths)).sort().slice(-12).reverse();
+        monthList.replaceChildren();
+        if (!monthKeys.length) {
+          const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 4; cell.className = 'empty-workorders'; cell.textContent = 'Henüz sevk edilmiş satış verisi yok.'; row.appendChild(cell); monthList.appendChild(row);
+        } else monthKeys.forEach((month) => {
+          const orders = shippedOrders.filter((order) => saleMonth(order) === month);
+          const groups = groupSales(orders);
+          const total = groups.reduce((sum, group) => sum + group.quantity, 0);
           const row = document.createElement('tr');
-          [card.code, importedCardLabel(card), `${numberFormat(Number(card.onHand) || 0)} ${card.unit}`, `${numberFormat(Number(card.minimum) || 0)} ${card.unit}`].forEach((value, index) => { const cell = document.createElement('td'); cell.textContent = value; if (index === 0) cell.className = 'code'; if (index === 1) cell.classList.add('order'); row.appendChild(cell); });
-          criticalList.appendChild(row);
-        });
-        const productStats = importedStockCards.map((card) => {
-          const movements = importedStockMovements.filter((movement) => Number(movement.cardId) === Number(card.id));
-          const entries = movements.filter((movement) => movement.type === 'entry').reduce((total, movement) => total + (Number(movement.quantity) || 0), 0);
-          const exits = movements.filter((movement) => movement.type === 'exit').reduce((total, movement) => total + (Number(movement.quantity) || 0), 0);
-          return { card, entries, exits, total: entries + exits };
-        }).filter((item) => item.total > 0).sort((left, right) => right.total - left.total).slice(0, 10);
-        topProducts.replaceChildren();
-        if (!productStats.length) {
-          const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 6; cell.className = 'empty-workorders'; cell.textContent = 'Henüz ürün hareketi bulunmuyor.'; row.appendChild(cell); topProducts.appendChild(row);
-        } else productStats.forEach((item) => {
-          const row = document.createElement('tr'); const { card } = item;
-          [card.code, importedCardLabel(card), `${numberFormat(item.entries)} ${card.unit}`, `${numberFormat(item.exits)} ${card.unit}`, `${numberFormat(item.total)} ${card.unit}`, `${numberFormat(Number(card.onHand) || 0)} ${card.unit}`].forEach((value, index) => { const cell = document.createElement('td'); cell.textContent = value; if (index === 0) cell.className = 'code'; if (index === 1) cell.classList.add('order'); if (index > 1) cell.classList.add('stock-usage'); row.appendChild(cell); });
-          topProducts.appendChild(row);
+          [month, `${numberFormat(total)} adet`, groups.map((group) => group.group).join(' · ') || '—', String(orders.length)].forEach((value, index) => { const cell = document.createElement('td'); cell.textContent = value; if (index === 0) cell.className = 'code'; if (index === 1) cell.classList.add('stock-usage'); row.appendChild(cell); });
+          monthList.appendChild(row);
         });
       };
+      root.addEventListener('input', (event) => { if (event.target.matches('#imported-stats-month')) renderImportedProductStats(); });
+      root.addEventListener('change', (event) => { if (event.target.matches('#imported-stats-month')) renderImportedProductStats(); });
       const importedStockDesi = (width, length, height) => { const values = [width, length, height].map((value) => Number(value) || 0); return values.every((value) => value > 0) ? Number(((values[0] * values[1] * values[2]) / 3000).toFixed(2)) : 0; }; const formatImportedDesi = (value) => Number(value || 0).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); const updateImportedStockDesi = () => { const input = root.querySelector('#imported-stock-desi'); if (!input) return; input.value = formatImportedDesi(importedStockDesi(root.querySelector('#imported-stock-package-width')?.value, root.querySelector('#imported-stock-package-length')?.value, root.querySelector('#imported-stock-package-height')?.value)); }; const resetImportedStockForm = () => {
         editingImportedStockCardId = null;
         pendingImportedStockCardImage = '';
