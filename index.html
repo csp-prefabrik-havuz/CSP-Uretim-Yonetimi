@@ -653,12 +653,12 @@
       </section>
       <section class="view report-view" data-page="imported-stock-entry">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Hazır ürün girişi</h1><p>Gelen hazır ürünleri stok kartına işleyin; miktar mevcut stoğa eklenir.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-stock">Hazır ürün stoklarına dön</button></div>
-        <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-entry-card">Hazır ürün stok kartı</label><select id="imported-entry-card"></select></div><div class="field"><label for="imported-entry-date">Giriş tarihi</label><input id="imported-entry-date" type="date" /></div><div class="field"><label for="imported-entry-quantity">Giriş miktarı</label><input id="imported-entry-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-entry-reference">İrsaliye / belge no</label><input id="imported-entry-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-entry-partner">Tedarikçi</label><input id="imported-entry-partner" placeholder="Tedarikçi adı" /></div><div class="field span-two"><label for="imported-entry-note">Not</label><textarea id="imported-entry-note" placeholder="Girişle ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-entry-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="entry">Girişi stoğa işle</button></div></section>
+        <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-entry-card">Hazır ürün stok kartı</label><input id="imported-entry-card" type="search" list="imported-entry-card-options" placeholder="Stok kodu veya ürün adı yazarak arayın" autocomplete="off" /><datalist id="imported-entry-card-options"></datalist><input id="imported-entry-card-id" type="hidden" /></div><div class="field"><label for="imported-entry-date">Giriş tarihi</label><input id="imported-entry-date" type="date" /></div><div class="field"><label for="imported-entry-quantity">Giriş miktarı</label><input id="imported-entry-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-entry-reference">İrsaliye / belge no</label><input id="imported-entry-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-entry-partner">Tedarikçi</label><input id="imported-entry-partner" placeholder="Tedarikçi adı" /></div><div class="field span-two"><label for="imported-entry-note">Not</label><textarea id="imported-entry-note" placeholder="Girişle ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-entry-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="entry">Girişi stoğa işle</button></div></section>
         <section class="section"><h2>Son hazır ürün girişleri</h2><p class="table-hint">Bir giriş yanlış kaydedilirse işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="imported-entry-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Tedarikçi</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-entry-movements-body"></tbody></table></div></section>
       </section>
       <section class="view report-view" data-page="imported-stock-exit">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Hazır ürün çıkışı</h1><p>Çıkan hazır ürünleri stok kartından düşerek izleyin.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-stock">Hazır ürün stoklarına dön</button></div>
-        <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-exit-card">Hazır ürün stok kartı</label><select id="imported-exit-card"></select></div><div class="field"><label for="imported-exit-date">Çıkış tarihi</label><input id="imported-exit-date" type="date" /></div><div class="field"><label for="imported-exit-quantity">Çıkış miktarı</label><input id="imported-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-exit-reference">İrsaliye / belge no</label><input id="imported-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-exit-partner">Çıkış yeri / teslim alan</label><input id="imported-exit-partner" placeholder="Bölüm, müşteri veya personel" /></div><div class="field span-two"><label for="imported-exit-note">Not</label><textarea id="imported-exit-note" placeholder="Çıkışla ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="exit">Çıkışı stoktan düş</button></div></section>
+        <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-exit-card">Hazır ürün stok kartı</label><input id="imported-exit-card" type="search" list="imported-exit-card-options" placeholder="Stok kodu veya ürün adı yazarak arayın" autocomplete="off" /><datalist id="imported-exit-card-options"></datalist><input id="imported-exit-card-id" type="hidden" /></div><div class="field"><label for="imported-exit-date">Çıkış tarihi</label><input id="imported-exit-date" type="date" /></div><div class="field"><label for="imported-exit-quantity">Çıkış miktarı</label><input id="imported-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-exit-reference">İrsaliye / belge no</label><input id="imported-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-exit-partner">Çıkış yeri / teslim alan</label><input id="imported-exit-partner" placeholder="Bölüm, müşteri veya personel" /></div><div class="field span-two"><label for="imported-exit-note">Not</label><textarea id="imported-exit-note" placeholder="Çıkışla ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="exit">Çıkışı stoktan düş</button></div></section>
         <section class="section"><h2>Son hazır ürün çıkışları</h2><p class="table-hint">Çıkış miktarı mevcut stoktan fazla olamaz. Yanlış işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="imported-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Çıkış yeri / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-exit-movements-body"></tbody></table></div></section>
       </section>
       <section class="view report-view" data-page="imported-customers"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Cariler</h1><p>Hazır ürün satışlarında kullanılacak cari bilgilerini yönetin.</p></div></div></div><section class="section"><h2 id="imported-customer-form-title">Yeni cari</h2><input id="imported-customer-id" type="hidden" /><div class="form-grid"><div class="field"><label for="imported-customer-name">Cari adı</label><input id="imported-customer-name" placeholder="Firma veya kişi adı" /></div><div class="field"><label for="imported-customer-contact">Telefon / e-posta</label><input id="imported-customer-contact" placeholder="Telefon veya e-posta" /></div><div class="field span-two"><label for="imported-customer-address">Adres</label><textarea id="imported-customer-address" placeholder="Cari adresi"></textarea></div><div class="field span-two"><label for="imported-customer-note">Not</label><textarea id="imported-customer-note" placeholder="Cariyle ilgili not"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-customer-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-imported-customer>Temizle</button><button class="primary-button" type="button" data-save-imported-customer>Cariyi kaydet</button></div></section><section class="section"><h2>Kayıtlı cariler</h2><div class="table-wrap"><table id="imported-customers-table"><thead><tr><th>Cari</th><th>Telefon / e-posta</th><th>Adres</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-customers-list-body"></tbody></table></div></section></section>
@@ -3137,23 +3137,40 @@
         if (modal) modal.hidden = true;
       };
       const renderImportedMovementOptions = (type) => {
-        const select = root.querySelector(`#imported-${type}-card`);
-        if (!select) return;
-        const selectedId = Number(select.value);
-        select.replaceChildren();
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent = importedStockCards.length ? 'Stok kartı seçin' : 'Önce hazır ürün stok kartı ekleyin';
-        select.appendChild(placeholder);
+        const input = root.querySelector(`#imported-${type}-card`);
+        const options = root.querySelector(`#imported-${type}-card-options`);
+        const selectedInput = root.querySelector(`#imported-${type}-card-id`);
+        if (!input || !options || !selectedInput) return;
+        const selectedId = Number(selectedInput.value);
+        options.replaceChildren();
         importedStockCards.forEach((card) => {
           const option = document.createElement('option');
-          option.value = card.id;
-          option.textContent = `${card.code} · ${importedCardLabel(card)} · Mevcut: ${numberFormat(Number(card.onHand) || 0)} ${card.unit}`;
-          if (card.id === selectedId) option.selected = true;
-          select.appendChild(option);
+          option.value = `${card.code} · ${importedCardLabel(card)} · Mevcut: ${numberFormat(Number(card.onHand) || 0)} ${card.unit}`;
+          options.appendChild(option);
         });
-        select.disabled = importedStockCards.length === 0;
+        const selected = importedStockCards.find((card) => Number(card.id) === selectedId);
+        selectedInput.value = selected ? String(selected.id) : '';
+        input.value = selected ? `${selected.code} · ${importedCardLabel(selected)} · Mevcut: ${numberFormat(Number(selected.onHand) || 0)} ${selected.unit}` : '';
+        input.disabled = importedStockCards.length === 0;
       };
+      const selectedImportedMovementCard = (type) => {
+        const input = root.querySelector(`#imported-${type}-card`);
+        const selectedInput = root.querySelector(`#imported-${type}-card-id`);
+        if (!input || !selectedInput) return null;
+        const label = input.value.trim();
+        const card = importedStockCards.find((item) => `${item.code} · ${importedCardLabel(item)} · Mevcut: ${numberFormat(Number(item.onHand) || 0)} ${item.unit}` === label)
+          || importedStockCards.find((item) => String(item.code).toLocaleLowerCase('tr') === label.toLocaleLowerCase('tr') || String(importedCardLabel(item)).toLocaleLowerCase('tr') === label.toLocaleLowerCase('tr'));
+        selectedInput.value = card ? String(card.id) : '';
+        return card || null;
+      };
+      root.addEventListener('input', (event) => {
+        if (event.target.matches('#imported-entry-card')) selectedImportedMovementCard('entry');
+        if (event.target.matches('#imported-exit-card')) selectedImportedMovementCard('exit');
+      });
+      root.addEventListener('change', (event) => {
+        if (event.target.matches('#imported-entry-card')) selectedImportedMovementCard('entry');
+        if (event.target.matches('#imported-exit-card')) selectedImportedMovementCard('exit');
+      });
       const renderImportedMovements = (type) => {
         const body = type === 'entry' ? importedEntryMovementsBody : importedExitMovementsBody;
         const tableId = type === 'entry' ? 'imported-entry-movements-table' : 'imported-exit-movements-table';
@@ -3205,7 +3222,7 @@
       };
       const saveImportedStockMovement = (type) => {
         const status = root.querySelector(`#imported-${type}-status`);
-        const card = importedStockCards.find((item) => item.id === Number(root.querySelector(`#imported-${type}-card`).value));
+        const card = selectedImportedMovementCard(type);
         const quantity = Number(root.querySelector(`#imported-${type}-quantity`).value);
         if (!card) { status.textContent = 'Önce bir hazır ürün stok kartı seçin.'; return false; }
         if (!Number.isFinite(quantity) || quantity <= 0) { status.textContent = 'Sıfırdan büyük bir miktar girin.'; return false; }
