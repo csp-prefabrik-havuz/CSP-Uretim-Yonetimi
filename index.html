@@ -3946,24 +3946,23 @@
             drawImportedSalesReportText(context, order?.serialNo || '—', 30, cursor + 39, 535, 12, 3);
           }
           if (pageIndex === pages.length - 1) {
-            context.fillStyle = '#ef7b1a';
-            context.font = '700 14px Arial, sans-serif';
-            context.textAlign = 'right';
-            context.fillText(`Toplam: ${importedSalesCurrency(order?.total)}`, width - 30, height - 53);
-            context.textAlign = 'left';
+            const signature = (label, x, signatureWidth) => {
+              context.fillStyle = '#527180';
+              context.font = '700 10px Arial, sans-serif';
+              context.fillText(label, x, height - 92);
+              context.strokeStyle = '#527180';
+              context.lineWidth = 1;
+              context.beginPath();
+              context.moveTo(x, height - 42);
+              context.lineTo(x + signatureWidth, height - 42);
+              context.stroke();
+              context.fillStyle = '#527180';
+              context.font = '8px Arial, sans-serif';
+              context.fillText('Ad soyad / imza', x, height - 26);
+            };
+            signature('TESLİM EDEN', 50, 205);
+            signature('TESLİM ALAN', 340, 205);
           }
-          context.strokeStyle = '#ef7b1a';
-          context.lineWidth = 1;
-          context.beginPath();
-          context.moveTo(30, height - 30);
-          context.lineTo(width - 30, height - 30);
-          context.stroke();
-          context.fillStyle = '#527180';
-          context.font = '8px Arial, sans-serif';
-          context.fillText(`CSP Prefabrik Havuz · ${String(order?.documentTitle || 'Sevk fişi').toLocaleLowerCase('tr-TR')}`, 30, height - 14);
-          context.textAlign = 'right';
-          context.fillText(`Sayfa ${pageIndex + 1} / ${pages.length}`, width - 30, height - 14);
-          context.textAlign = 'left';
           return canvas;
         });
       };
