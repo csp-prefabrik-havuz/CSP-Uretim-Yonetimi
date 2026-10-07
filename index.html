@@ -243,6 +243,13 @@
     #csp-production-sketch .sales-picker-table { min-width: 760px; }
     #csp-production-sketch .sales-picker-table input[type="number"] { min-width: 92px; width: 100%; padding: 6px 8px; }
     #csp-production-sketch .sales-picker-empty { text-align: center; color: light-dark(#697687, #a9b6c6); }
+    #csp-production-sketch .messages-modal-card { width: min(1180px, 100%); }
+    #csp-production-sketch .message-detail-card { width: min(680px, 100%); }
+    #csp-production-sketch .message-detail-meta { display: grid; gap: 4px; margin: 0 0 14px; color: light-dark(#697687, #a9b6c6); font-size: 13px; }
+    #csp-production-sketch .message-thread { display: grid; gap: 10px; max-height: 48vh; margin: 0 0 14px; padding: 4px; overflow: auto; }
+    #csp-production-sketch .message-bubble { width: fit-content; max-width: min(82%, 560px); padding: 10px 12px; overflow-wrap: anywhere; white-space: pre-wrap; border-radius: 12px; background: light-dark(#eef5f7, #233543); }
+    #csp-production-sketch .message-bubble.is-own { justify-self: end; background: light-dark(#dff5fc, #0c586f); }
+    #csp-production-sketch .message-bubble-meta { display: block; margin-top: 6px; color: light-dark(#697687, #c1d0d9); font-size: 11px; white-space: normal; }
     #csp-production-sketch .stock-card-link { padding: 0; border: 0; background: transparent; color: light-dark(#087da8, #8fe3f3); font: inherit; font-weight: 600; text-align: left; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
     #csp-production-sketch .stock-card-link:hover { color: light-dark(#ef7b1a, #ffab68); }
     #csp-production-sketch .stock-report-table { min-width: 1160px; }
@@ -619,11 +626,12 @@
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis geçmiş arama</h1><p>Servis geçmişi Excel dosyanızı yükleyin ve tüm sütunlarda arayın.</p></div></div><div class="form-actions"><input id="service-history-import-file" type="file" accept=".xlsx,.xls,.csv" hidden /><button class="secondary-button" type="button" data-import-service-history>Excel yükle</button></div></div>
         <section class="section"><p class="table-hint" id="service-history-status" aria-live="polite">Henüz servis geçmişi dosyası yüklenmedi.</p><div class="table-search"><input id="service-history-search-input" type="search" placeholder="Servis geçmişinde ara" aria-label="Servis geçmişinde ara" /><button class="secondary-button" type="button" data-search-service-history>Ara</button><button class="secondary-button" type="button" data-clear-service-history-search>Aramayı temizle</button><button class="secondary-button" type="button" data-delete-service-history>Tüm kayıtları sil</button></div><div class="table-wrap"><table id="service-history-table"><thead id="service-history-table-head"></thead><tbody id="service-history-table-body"></tbody></table></div></section>
       </section>
-      <section class="view report-view" data-page="messages">
-        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Mesajlar</h1><p>Yetkili kullanıcılarla güvenli şekilde mesajlaşın.</p></div></div></div>
+      <div class="sales-picker-modal" id="messages-modal" hidden role="dialog" aria-modal="true" aria-labelledby="messages-modal-title"><div class="sales-picker-card messages-modal-card">
+        <div class="sales-picker-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h2 id="messages-modal-title">Mesajlar</h2><p class="table-hint">Yetkili kullanıcılarla güvenli şekilde mesajlaşın.</p></div></div><button class="secondary-button" type="button" data-close-messages-modal>Kapat</button></div>
         <section class="section"><h2>Yeni mesaj</h2><div class="form-grid"><div class="field"><label for="message-recipient">Alıcı</label><select id="message-recipient"><option value="">Alıcı seçin</option></select></div><div class="field"><label for="message-subject">Konu</label><input id="message-subject" maxlength="120" placeholder="İsteğe bağlı konu" /></div><div class="field span-two"><label for="message-body">Mesaj</label><textarea id="message-body" maxlength="2000" placeholder="Mesajınızı yazın"></textarea></div></div><div class="form-actions"><span class="muted-note" id="messages-status" aria-live="polite"></span><button class="primary-button" type="button" data-send-message>Gönder</button></div></section>
-        <section class="section"><div class="section-head"><div><h2>Gelen ve giden mesajlar</h2><p class="table-hint">Okunmamış gelen mesajlar vurgulanır. Yönetici tüm mesajları, kullanıcılar ise kendi mesajlarını görür.</p></div><button class="secondary-button" type="button" data-refresh-messages>Yenile</button></div><div class="table-wrap"><table id="messages-table"><thead><tr><th>Tarih</th><th>Yön</th><th>Kullanıcı</th><th>Konu</th><th>Mesaj</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="messages-list"></tbody></table></div></section>
-      </section>
+        <section class="section"><div class="section-head"><div><h2>Sohbetler</h2><p class="table-hint">Aynı kişiyle yapılan tüm mesajlar tek sohbet halinde görünür. İçeriği okumak için “Aç” düğmesini kullanın.</p></div><button class="secondary-button" type="button" data-refresh-messages>Yenile</button></div><div class="table-wrap"><table id="messages-table"><thead><tr><th>Kişi / sohbet</th><th>Son konu</th><th>Son mesaj tarihi</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="messages-list"></tbody></table></div></section>
+      </div></div>
+      <div class="sales-picker-modal" id="message-detail-modal" hidden role="dialog" aria-modal="true" aria-labelledby="message-detail-title"><div class="sales-picker-card message-detail-card"><div class="sales-picker-head"><div><h2 id="message-detail-title">Sohbet</h2><p class="table-hint" id="message-detail-subject"></p></div><button class="secondary-button" type="button" data-close-message-detail>Kapat</button></div><div class="message-thread" id="message-detail-body"></div><div class="field" id="message-thread-reply-field"><label for="message-thread-reply">Yanıt</label><textarea id="message-thread-reply" maxlength="2000" placeholder="Mesajınızı yazın"></textarea></div><div class="form-actions" id="message-thread-reply-actions"><span class="muted-note" id="message-thread-status" aria-live="polite"></span><button class="primary-button" type="button" data-send-thread-reply>Gönder</button></div></div></div>
       <section class="view" data-page="series">
         <div class="page-head"><div><h1>Üretim kodu başlangıçları</h1><p>Seçilen ekipman için sıradaki kod, sipariş kaydedilirken otomatik atanır.</p></div></div>
         <section class="section">
@@ -6976,6 +6984,7 @@
       let suppressCloudSync = false;
       let unreadMessageCount = 0;
       let messageCurrentUserId = '';
+      const messageConversations = new Map();
       let editingManagedUserId = '';
       const managedUsers = new Map();
       const publicPageSettings = new Map();
@@ -7293,8 +7302,8 @@
         renderNotifications();
       });
       const openMessagesPage = () => {
-        root.querySelectorAll('[data-page]').forEach((node) => node.classList.toggle('is-visible', node.dataset.page === 'messages'));
-        root.querySelectorAll('[data-view]').forEach((node) => node.classList.remove('is-active'));
+        const modal = root.querySelector('#messages-modal');
+        if (modal) modal.hidden = false;
         void renderMessages();
       };
       messagesButton?.addEventListener('click', () => {
@@ -7594,6 +7603,40 @@
         const date = new Date(value);
         return Number.isNaN(date.getTime()) ? '—' : date.toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
       };
+      const openMessageConversation = (key) => {
+        const conversation = messageConversations.get(key);
+        const modal = root.querySelector('#message-detail-modal');
+        const thread = root.querySelector('#message-detail-body');
+        const title = root.querySelector('#message-detail-title');
+        const subject = root.querySelector('#message-detail-subject');
+        const reply = root.querySelector('#message-thread-reply');
+        const replyField = root.querySelector('#message-thread-reply-field');
+        const replyActions = root.querySelector('#message-thread-reply-actions');
+        if (!conversation || !modal || !thread) return;
+        title.textContent = conversation.label;
+        subject.textContent = conversation.messages.at(-1)?.subject || 'Konu belirtilmemiş';
+        thread.replaceChildren();
+        conversation.messages.forEach((message) => {
+          const bubble = document.createElement('div');
+          const own = message.sender_id === messageCurrentUserId;
+          bubble.className = 'message-bubble' + (own ? ' is-own' : '');
+          bubble.textContent = message.body;
+          const meta = document.createElement('span');
+          meta.className = 'message-bubble-meta';
+          meta.textContent = `${own ? 'Siz' : (message.sender_name || 'Kullanıcı')} · ${messageDate(message.created_at)}`;
+          bubble.appendChild(meta);
+          thread.appendChild(bubble);
+        });
+        const canReply = Boolean(conversation.recipientId);
+        replyField.hidden = !canReply;
+        replyActions.hidden = !canReply;
+        modal.dataset.recipientId = conversation.recipientId || '';
+        modal.dataset.conversationKey = key;
+        if (reply) reply.value = '';
+        modal.hidden = false;
+        conversation.messages.filter((message) => message.recipient_id === messageCurrentUserId && !message.read_at)
+          .forEach((message) => { void markMessageRead(message.id); });
+      };
       const renderMessages = async () => {
         if (!currentUser || !canAccessPage('messages')) return;
         const list = root.querySelector('#messages-list');
@@ -7615,30 +7658,44 @@
           unreadMessageCount = Number(messageResult.unread_count) || 0;
           renderNotifications();
           list.replaceChildren();
+          messageConversations.clear();
           (messageResult.messages || []).forEach((message) => {
+            const currentIsSender = message.sender_id === messageCurrentUserId;
+            const currentIsRecipient = message.recipient_id === messageCurrentUserId;
+            const otherId = currentIsSender ? message.recipient_id : (currentIsRecipient ? message.sender_id : '');
+            const pair = [message.sender_id, message.recipient_id].sort().join(':');
+            const key = otherId ? `user:${otherId}` : `pair:${pair}`;
+            const label = otherId
+              ? (currentIsSender ? message.recipient_name : message.sender_name) || 'Kullanıcı'
+              : `${message.sender_name || 'Kullanıcı'} ↔ ${message.recipient_name || 'Kullanıcı'}`;
+            const conversation = messageConversations.get(key) || { key, label, recipientId: otherId, messages: [], unread: 0 };
+            conversation.messages.push(message);
+            if (message.recipient_id === messageCurrentUserId && !message.read_at) conversation.unread += 1;
+            messageConversations.set(key, conversation);
+          });
+          [...messageConversations.values()].forEach((conversation) => conversation.messages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at)));
+          [...messageConversations.values()].sort((a, b) => new Date(b.messages.at(-1).created_at) - new Date(a.messages.at(-1).created_at)).forEach((conversation) => {
+            const message = conversation.messages.at(-1);
             const row = document.createElement('tr');
+            if (conversation.unread) row.classList.add('is-unread');
             const incoming = message.recipient_id === messageCurrentUserId;
-            if (incoming && !message.read_at) row.classList.add('is-unread');
-            const user = incoming ? message.sender_name : message.recipient_name;
-            const values = [messageDate(message.created_at), incoming ? 'Gelen' : 'Giden', user || '—', message.subject || '—', message.body || '—', incoming ? (message.read_at ? 'Okundu' : 'Okunmadı') : 'Gönderildi'];
+            const values = [conversation.label, message.subject || 'Konu yok', messageDate(message.created_at), conversation.unread ? `${conversation.unread} okunmamış` : (incoming ? 'Okundu' : 'Gönderildi')];
             values.forEach((value) => { const cell = document.createElement('td'); cell.textContent = value; row.appendChild(cell); });
             const actions = document.createElement('td');
-            if (incoming && !message.read_at) {
-              const read = document.createElement('button');
-              read.type = 'button'; read.className = 'secondary-button compact-button';
-              read.dataset.markMessageRead = message.id; read.textContent = 'Okundu'; actions.appendChild(read);
-            }
+            const open = document.createElement('button');
+            open.type = 'button'; open.className = 'primary-button compact-button';
+            open.dataset.openMessageConversation = conversation.key; open.textContent = 'Aç'; actions.appendChild(open);
             if (message.can_delete) {
               const remove = document.createElement('button');
               remove.type = 'button'; remove.className = 'secondary-button compact-button';
-              remove.dataset.deleteMessage = message.id; remove.textContent = 'Sil'; actions.appendChild(remove);
+              remove.dataset.deleteMessage = message.id; remove.textContent = 'Son mesajı sil'; actions.appendChild(remove);
             }
             row.appendChild(actions);
             list.appendChild(row);
           });
           if (!list.children.length) {
             const row = document.createElement('tr'); const cell = document.createElement('td');
-            cell.colSpan = 7; cell.textContent = 'Henüz mesaj bulunmuyor.'; row.appendChild(cell); list.appendChild(row);
+            cell.colSpan = 5; cell.textContent = 'Henüz mesaj bulunmuyor.'; row.appendChild(cell); list.appendChild(row);
           }
           messagesStatus('');
         } catch (error) {
@@ -7661,6 +7718,21 @@
       const markMessageRead = async (messageId) => {
         try { await invokeMessages({ action: 'read', messageId }); await renderMessages(); }
         catch (error) { messagesStatus(error?.message || 'Mesaj güncellenemedi.'); }
+      };
+      const sendThreadReply = async () => {
+        const modal = root.querySelector('#message-detail-modal');
+        const reply = root.querySelector('#message-thread-reply');
+        const status = root.querySelector('#message-thread-status');
+        const recipientId = modal?.dataset.recipientId;
+        if (!recipientId || !reply?.value.trim()) return;
+        if (status) status.textContent = 'Mesaj gönderiliyor…';
+        try {
+          await invokeMessages({ action: 'send', recipientId, body: reply.value });
+          if (status) status.textContent = 'Mesaj gönderildi.';
+          await renderMessages();
+          const key = modal.dataset.conversationKey;
+          if (key) openMessageConversation(key);
+        } catch (error) { if (status) status.textContent = error?.message || 'Mesaj gönderilemedi.'; }
       };
       const deleteMessage = async (messageId) => {
         if (!window.confirm('Bu mesaj silinsin mi?')) return;
@@ -7687,8 +7759,13 @@
         if (event.target.closest('[data-save-managed-user]')) { void saveManagedUser(); return; }
         if (event.target.closest('[data-save-public-access]')) { void savePublicAccess(); return; }
         if (event.target.closest('[data-copy-public-stock-link]')) { void copyPublicStockSummaryLink(); }
+        if (event.target.closest('[data-close-messages-modal]')) { root.querySelector('#messages-modal').hidden = true; return; }
+        if (event.target.closest('[data-close-message-detail]')) { root.querySelector('#message-detail-modal').hidden = true; return; }
         if (event.target.closest('[data-send-message]')) { void sendMessage(); return; }
+        if (event.target.closest('[data-send-thread-reply]')) { void sendThreadReply(); return; }
         if (event.target.closest('[data-refresh-messages]')) { void renderMessages(); return; }
+        const openConversation = event.target.closest('[data-open-message-conversation]');
+        if (openConversation) { openMessageConversation(openConversation.dataset.openMessageConversation); return; }
         const markRead = event.target.closest('[data-mark-message-read]');
         if (markRead) { void markMessageRead(markRead.dataset.markMessageRead); return; }
         const deleteButton = event.target.closest('[data-delete-message]');
