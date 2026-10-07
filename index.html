@@ -490,6 +490,7 @@
     <div class="top-actions">
       <button class="top-button" id="refresh-page-button" type="button" title="Sayfayı yenile">Yenile</button>
       <button class="top-button" id="notifications-button" type="button" aria-haspopup="dialog">Bildirimler<span class="notification-badge" id="notification-badge" hidden>1</span></button>
+      <button class="top-button" id="messages-button" type="button">Mesajlar<span class="notification-badge" id="message-badge" hidden>1</span></button>
       <button class="top-button" id="cloud-session-button" type="button" aria-haspopup="dialog"><span id="cloud-session-label">Giriş yap</span></button>
     </div>
   </header>
@@ -525,7 +526,6 @@
       <button class="nav-button" type="button" data-view="manual-cargo-label"><i data-lucide="printer" aria-hidden="true"></i> Manuel</button>
       <div class="nav-label">Yönetim</div>
       <button class="nav-button" type="button" data-view="service-history-search"><i data-lucide="search" aria-hidden="true"></i> Servis geçmiş arama</button>
-      <button class="nav-button" type="button" data-view="messages"><i data-lucide="messages-square" aria-hidden="true"></i> Mesajlar</button>
       <button class="nav-button" type="button" data-view="user-management" data-admin-only hidden><i data-lucide="users-round" aria-hidden="true"></i> Kullanıcı ve erişim</button>
     </nav>
 
@@ -6959,8 +6959,10 @@
       const newPasswordConfirm = root.querySelector('#cloud-new-password-confirm');
       const passwordStatus = root.querySelector('#cloud-password-status');
       const notificationsButton = root.querySelector('#notifications-button');
+      const messagesButton = root.querySelector('#messages-button');
       const notificationsPanel = root.querySelector('#panel-notifications');
       const notificationBadge = root.querySelector('#notification-badge');
+      const messageBadge = root.querySelector('#message-badge');
       const notificationsList = root.querySelector('#panel-notifications-list');
       const applyPendingChangesButton = root.querySelector('[data-apply-pending-changes]');
       const nativeStorageSet = Storage.prototype.setItem;
@@ -6980,7 +6982,7 @@
       const pageAccessDefinitions = [
         ['dashboard', 'Ana panel'], ['orders', 'Siparişler'], ['workorders', 'İş emirleri'], ['planning', 'Üretim planı'],
         ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
-        ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['service-history-search', 'Servis geçmiş arama'], ['messages', 'Mesajlar'], ['settings', 'Ayarlar ve yedek'],
+        ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['service-history-search', 'Servis geçmiş arama'], ['settings', 'Ayarlar ve yedek'],
         ['imported-stock', 'Hazır ürün stokları'], ['imported-stock-entry', 'Hazır ürün girişi'], ['imported-stock-exit', 'Hazır ürün çıkışı'], ['imported-sales', 'Hazır ürün satışları'], ['imported-customers', 'Cariler'],
         ['warehouse-shipping', 'Depo sevkiyat'], ['manual-cargo-label', 'Manuel']
       ];
@@ -6999,6 +7001,10 @@
         notificationBadge.hidden = !notificationCount;
         notificationBadge.textContent = String(notificationCount);
         notificationsButton.classList.toggle('is-alert', Boolean(notificationCount));
+        if (messageBadge) {
+          messageBadge.hidden = !unreadMessageCount;
+          messageBadge.textContent = String(unreadMessageCount);
+        }
         applyPendingChangesButton.hidden = !pendingRemoteUpdate;
         if (!pendingRemoteUpdate && !unreadMessageCount) {
           const empty = document.createElement('p');
@@ -7286,6 +7292,10 @@
         notificationsPanel.hidden = !notificationsPanel.hidden;
         renderNotifications();
       });
+      messagesButton?.addEventListener('click', () => {
+        if (!currentUser) { showGate('login'); return; }
+        show('messages');
+      });
       root.addEventListener('click', (event) => {
         if (event.target.closest('[data-close-notifications]')) {
           if (notificationsPanel) notificationsPanel.hidden = true;
@@ -7406,6 +7416,7 @@
       const canAccessPage = (page) => {
         if (isPanelAdmin()) return true;
         const permission = pageAliases[page] || page;
+        if (permission === 'messages') return Boolean(currentProfile?.is_active);
         return Boolean(permission && (currentProfile?.allowed_pages || []).includes(permission));
       };
       const applyPageAccess = () => {

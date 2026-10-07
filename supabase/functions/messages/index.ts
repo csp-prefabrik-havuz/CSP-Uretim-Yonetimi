@@ -20,7 +20,6 @@ const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: corsHeaders })
 
 const text = (value: unknown, limit = 2000) => String(value ?? '').trim().slice(0, limit)
-const canUseMessages = (profile: Profile) => profile.role === 'admin' || (profile.allowed_pages ?? []).includes('messages')
 const labelFor = (profile: Profile | undefined) => profile?.display_name?.trim() || profile?.username || 'Bilinmeyen kullanıcı'
 
 Deno.serve(async (request) => {
@@ -45,7 +44,7 @@ Deno.serve(async (request) => {
     .from('profiles').select('id, username, display_name, department, role, allowed_pages, is_active')
     .eq('id', sessionData.user.id).maybeSingle()
   const profile = profileData as Profile | null
-  if (profileError || !profile?.is_active || !canUseMessages(profile)) return json({ error: 'Mesajlar için erişiminiz yok.' }, 403)
+  if (profileError || !profile?.is_active) return json({ error: 'Mesajlar için erişiminiz yok.' }, 403)
 
   let body: Record<string, unknown>
   try { body = await request.json() } catch { return json({ error: 'Geçersiz istek içeriği.' }, 400) }
@@ -56,7 +55,10 @@ Deno.serve(async (request) => {
     .eq('is_active', true)
   if (profilesError) return json({ error: 'Kullanıcılar alınamadı.' }, 500)
   const profiles = (profilesData ?? []) as Profile[]
-  const visibleProfiles = profiles.filter((item) => canUseMessages(item))
+  // Aktif panel hesabı olan herkes mesajlaşabilir. Böylece yeni eklenen
+  // kullanıcıların ayrıca bir sayfa kutusu işaretlenmeden alıcı listesine
+  // gelmesi ve kendilerine gelen mesajları açabilmesi sağlanır.
+  const visibleProfiles = profiles.filter((item) => item.is_active)
   const profileMap = new Map(visibleProfiles.map((item) => [item.id, item]))
 
   if (action === 'recipients') {

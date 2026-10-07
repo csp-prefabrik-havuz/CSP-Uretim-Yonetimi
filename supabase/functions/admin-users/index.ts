@@ -11,7 +11,7 @@ const pageIds = new Set([
   'stock-report', 'liner-widths', 'shipping', 'series', 'settings',
   'imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales',
   'imported-customers', 'warehouse-shipping', 'manual-cargo-label',
-  'service-history-search', 'messages',
+  'service-history-search',
 ])
 
 const json = (body: unknown, status = 200) =>
