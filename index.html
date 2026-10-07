@@ -7292,9 +7292,14 @@
         notificationsPanel.hidden = !notificationsPanel.hidden;
         renderNotifications();
       });
+      const openMessagesPage = () => {
+        root.querySelectorAll('[data-page]').forEach((node) => node.classList.toggle('is-visible', node.dataset.page === 'messages'));
+        root.querySelectorAll('[data-view]').forEach((node) => node.classList.remove('is-active'));
+        void renderMessages();
+      };
       messagesButton?.addEventListener('click', () => {
         if (!currentUser) { showGate('login'); return; }
-        show('messages');
+        openMessagesPage();
       });
       root.addEventListener('click', (event) => {
         if (event.target.closest('[data-close-notifications]')) {
@@ -7673,7 +7678,7 @@
         }
         if (page === 'messages' && navigation?.dataset.viewButton === 'messages') {
           if (notificationsPanel) notificationsPanel.hidden = true;
-          show('messages');
+          openMessagesPage();
           return;
         }
         const edit = event.target.closest('[data-edit-managed-user]');
