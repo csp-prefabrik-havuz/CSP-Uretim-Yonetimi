@@ -525,6 +525,7 @@
       <button class="nav-button" type="button" data-view="manual-cargo-label"><i data-lucide="printer" aria-hidden="true"></i> Manuel</button>
       <div class="nav-label">Yönetim</div>
       <button class="nav-button" type="button" data-view="service-history-search"><i data-lucide="search" aria-hidden="true"></i> Servis geçmiş arama</button>
+      <button class="nav-button" type="button" data-view="messages"><i data-lucide="messages-square" aria-hidden="true"></i> Mesajlar</button>
       <button class="nav-button" type="button" data-view="user-management" data-admin-only hidden><i data-lucide="users-round" aria-hidden="true"></i> Kullanıcı ve erişim</button>
     </nav>
 
@@ -617,6 +618,11 @@
       <section class="view report-view" data-page="service-history-search">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis geçmiş arama</h1><p>Servis geçmişi Excel dosyanızı yükleyin ve tüm sütunlarda arayın.</p></div></div><div class="form-actions"><input id="service-history-import-file" type="file" accept=".xlsx,.xls,.csv" hidden /><button class="secondary-button" type="button" data-import-service-history>Excel yükle</button></div></div>
         <section class="section"><p class="table-hint" id="service-history-status" aria-live="polite">Henüz servis geçmişi dosyası yüklenmedi.</p><div class="table-search"><input id="service-history-search-input" type="search" placeholder="Servis geçmişinde ara" aria-label="Servis geçmişinde ara" /><button class="secondary-button" type="button" data-search-service-history>Ara</button><button class="secondary-button" type="button" data-clear-service-history-search>Aramayı temizle</button><button class="secondary-button" type="button" data-delete-service-history>Tüm kayıtları sil</button></div><div class="table-wrap"><table id="service-history-table"><thead id="service-history-table-head"></thead><tbody id="service-history-table-body"></tbody></table></div></section>
+      </section>
+      <section class="view report-view" data-page="messages">
+        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Mesajlar</h1><p>Yetkili kullanıcılarla güvenli şekilde mesajlaşın.</p></div></div></div>
+        <section class="section"><h2>Yeni mesaj</h2><div class="form-grid"><div class="field"><label for="message-recipient">Alıcı</label><select id="message-recipient"><option value="">Alıcı seçin</option></select></div><div class="field"><label for="message-subject">Konu</label><input id="message-subject" maxlength="120" placeholder="İsteğe bağlı konu" /></div><div class="field span-two"><label for="message-body">Mesaj</label><textarea id="message-body" maxlength="2000" placeholder="Mesajınızı yazın"></textarea></div></div><div class="form-actions"><span class="muted-note" id="messages-status" aria-live="polite"></span><button class="primary-button" type="button" data-send-message>Gönder</button></div></section>
+        <section class="section"><div class="section-head"><div><h2>Gelen ve giden mesajlar</h2><p class="table-hint">Okunmamış gelen mesajlar vurgulanır. Yönetici tüm mesajları, kullanıcılar ise kendi mesajlarını görür.</p></div><button class="secondary-button" type="button" data-refresh-messages>Yenile</button></div><div class="table-wrap"><table id="messages-table"><thead><tr><th>Tarih</th><th>Yön</th><th>Kullanıcı</th><th>Konu</th><th>Mesaj</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="messages-list"></tbody></table></div></section>
       </section>
       <section class="view" data-page="series">
         <div class="page-head"><div><h1>Üretim kodu başlangıçları</h1><p>Seçilen ekipman için sıradaki kod, sipariş kaydedilirken otomatik atanır.</p></div></div>
@@ -951,6 +957,7 @@
         if (page === 'liner-widths') renderLinerWidths();
         if (page === 'shipping') renderShipping();
         if (page === 'service-history-search') renderServiceHistory();
+        if (page === 'messages') void renderMessages();
         if (page === 'settings') renderBackupStatus();
       };
       const decorateOperationViews = () => {
@@ -6965,13 +6972,15 @@
       let localSyncQueued = false;
       let pendingRemoteUpdate = false;
       let suppressCloudSync = false;
+      let unreadMessageCount = 0;
+      let messageCurrentUserId = '';
       let editingManagedUserId = '';
       const managedUsers = new Map();
       const publicPageSettings = new Map();
       const pageAccessDefinitions = [
         ['dashboard', 'Ana panel'], ['orders', 'Siparişler'], ['workorders', 'İş emirleri'], ['planning', 'Üretim planı'],
         ['stock', 'Stok ve hammadde'], ['stock-summary', 'Genel stok özeti'], ['stock-report', 'Stok raporu'],
-        ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['service-history-search', 'Servis geçmiş arama'], ['settings', 'Ayarlar ve yedek'],
+        ['liner-widths', 'Liner genişlikleri'], ['shipping', 'Sevkiyat'], ['series', 'Seri numaraları'], ['service-history-search', 'Servis geçmiş arama'], ['messages', 'Mesajlar'], ['settings', 'Ayarlar ve yedek'],
         ['imported-stock', 'Hazır ürün stokları'], ['imported-stock-entry', 'Hazır ürün girişi'], ['imported-stock-exit', 'Hazır ürün çıkışı'], ['imported-sales', 'Hazır ürün satışları'], ['imported-customers', 'Cariler'],
         ['warehouse-shipping', 'Depo sevkiyat'], ['manual-cargo-label', 'Manuel']
       ];
@@ -6986,26 +6995,45 @@
       const renderNotifications = () => {
         if (!notificationsList || !notificationBadge || !notificationsButton || !applyPendingChangesButton) return;
         notificationsList.replaceChildren();
-        notificationBadge.hidden = !pendingRemoteUpdate;
-        notificationsButton.classList.toggle('is-alert', pendingRemoteUpdate);
+        const notificationCount = (pendingRemoteUpdate ? 1 : 0) + unreadMessageCount;
+        notificationBadge.hidden = !notificationCount;
+        notificationBadge.textContent = String(notificationCount);
+        notificationsButton.classList.toggle('is-alert', Boolean(notificationCount));
         applyPendingChangesButton.hidden = !pendingRemoteUpdate;
-        if (!pendingRemoteUpdate) {
+        if (!pendingRemoteUpdate && !unreadMessageCount) {
           const empty = document.createElement('p');
           empty.className = 'muted-note';
           empty.textContent = 'Yeni bildirim bulunmuyor.';
           notificationsList.appendChild(empty);
           return;
         }
-        const item = document.createElement('div');
-        item.className = 'panel-notification-item';
-        const title = document.createElement('strong');
-        title.textContent = 'Yeni panel değişiklikleri hazır';
-        const detail = document.createElement('span');
-        detail.textContent = hasOpenForm()
-          ? 'Formda yaptığınız işlemler korunuyor. Kaydedip formdan çıktıktan sonra “Şimdi güncelle” ile diğer kullanıcıların değişikliklerini alın.'
-          : 'Başka bir kullanıcı stok, sipariş veya sevkiyat kaydı değiştirdi. Hazır olduğunuzda güncelleyebilirsiniz.';
-        item.append(title, detail);
-        notificationsList.appendChild(item);
+        if (pendingRemoteUpdate) {
+          const item = document.createElement('div');
+          item.className = 'panel-notification-item';
+          const title = document.createElement('strong');
+          title.textContent = 'Yeni panel değişiklikleri hazır';
+          const detail = document.createElement('span');
+          detail.textContent = hasOpenForm()
+            ? 'Formda yaptığınız işlemler korunuyor. Kaydedip formdan çıktıktan sonra “Şimdi güncelle” ile diğer kullanıcıların değişikliklerini alın.'
+            : 'Başka bir kullanıcı stok, sipariş veya sevkiyat kaydı değiştirdi. Hazır olduğunuzda güncelleyebilirsiniz.';
+          item.append(title, detail);
+          notificationsList.appendChild(item);
+        }
+        if (unreadMessageCount) {
+          const item = document.createElement('div');
+          item.className = 'panel-notification-item';
+          const title = document.createElement('strong');
+          title.textContent = `${unreadMessageCount} okunmamış mesajınız var`;
+          const detail = document.createElement('span');
+          detail.textContent = 'Mesajları açarak okuyabilir ve yanıtlayabilirsiniz.';
+          const open = document.createElement('button');
+          open.type = 'button';
+          open.className = 'secondary-button compact-button';
+          open.dataset.viewButton = 'messages';
+          open.textContent = 'Mesajları aç';
+          item.append(title, detail, open);
+          notificationsList.appendChild(item);
+        }
       };
       const setPendingRemoteUpdate = (pending) => {
         pendingRemoteUpdate = Boolean(pending);
@@ -7250,6 +7278,7 @@
         cloudRefreshTimer = window.setInterval(() => {
           if (!currentUser || syncInProgress || localSyncQueued || suppressCloudSync) return;
           void pullState().catch(() => { /* Bağlantı geçici olarak kesik olabilir. */ });
+          if (canAccessPage('messages')) void renderMessages();
         }, 10000);
       };
       notificationsButton?.addEventListener('click', () => {
@@ -7533,6 +7562,95 @@
           userManagementStatus(error?.message || 'Kullanıcı bilgileri kaydedilemedi.');
         }
       };
+      const messagesStatus = (message, ok) => {
+        const node = root.querySelector('#messages-status');
+        if (!node) return;
+        node.textContent = message || '';
+        node.classList.toggle('is-ok', Boolean(ok));
+      };
+      const invokeMessages = async (body) => {
+        const result = await cloud.functions.invoke('messages', { body });
+        if (result.error) throw result.error;
+        if (result.data?.error) throw new Error(result.data.error);
+        return result.data || {};
+      };
+      const messageDate = (value) => {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? '—' : date.toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
+      };
+      const renderMessages = async () => {
+        if (!currentUser || !canAccessPage('messages')) return;
+        const list = root.querySelector('#messages-list');
+        const recipient = root.querySelector('#message-recipient');
+        if (!list || !recipient) return;
+        messagesStatus('Mesajlar yükleniyor…', true);
+        try {
+          const [recipientResult, messageResult] = await Promise.all([
+            invokeMessages({ action: 'recipients' }),
+            invokeMessages({ action: 'list' })
+          ]);
+          const selectedRecipient = recipient.value;
+          recipient.replaceChildren(new Option('Alıcı seçin', ''));
+          (recipientResult.recipients || []).forEach((user) => {
+            recipient.add(new Option(user.department ? `${user.name} · ${user.department}` : user.name, user.id));
+          });
+          recipient.value = selectedRecipient;
+          messageCurrentUserId = messageResult.current_user_id || currentUser.id;
+          unreadMessageCount = Number(messageResult.unread_count) || 0;
+          renderNotifications();
+          list.replaceChildren();
+          (messageResult.messages || []).forEach((message) => {
+            const row = document.createElement('tr');
+            const incoming = message.recipient_id === messageCurrentUserId;
+            if (incoming && !message.read_at) row.classList.add('is-unread');
+            const user = incoming ? message.sender_name : message.recipient_name;
+            const values = [messageDate(message.created_at), incoming ? 'Gelen' : 'Giden', user || '—', message.subject || '—', message.body || '—', incoming ? (message.read_at ? 'Okundu' : 'Okunmadı') : 'Gönderildi'];
+            values.forEach((value) => { const cell = document.createElement('td'); cell.textContent = value; row.appendChild(cell); });
+            const actions = document.createElement('td');
+            if (incoming && !message.read_at) {
+              const read = document.createElement('button');
+              read.type = 'button'; read.className = 'secondary-button compact-button';
+              read.dataset.markMessageRead = message.id; read.textContent = 'Okundu'; actions.appendChild(read);
+            }
+            if (message.can_delete) {
+              const remove = document.createElement('button');
+              remove.type = 'button'; remove.className = 'secondary-button compact-button';
+              remove.dataset.deleteMessage = message.id; remove.textContent = 'Sil'; actions.appendChild(remove);
+            }
+            row.appendChild(actions);
+            list.appendChild(row);
+          });
+          if (!list.children.length) {
+            const row = document.createElement('tr'); const cell = document.createElement('td');
+            cell.colSpan = 7; cell.textContent = 'Henüz mesaj bulunmuyor.'; row.appendChild(cell); list.appendChild(row);
+          }
+          messagesStatus('');
+        } catch (error) {
+          messagesStatus(error?.message || 'Mesajlar şu anda yüklenemedi.');
+        }
+      };
+      const sendMessage = async () => {
+        const recipient = root.querySelector('#message-recipient');
+        const subject = root.querySelector('#message-subject');
+        const body = root.querySelector('#message-body');
+        if (!recipient?.value || !body?.value.trim()) { messagesStatus('Alıcı ve mesaj metni zorunludur.'); return; }
+        messagesStatus('Mesaj gönderiliyor…', true);
+        try {
+          await invokeMessages({ action: 'send', recipientId: recipient.value, subject: subject.value, body: body.value });
+          subject.value = ''; body.value = '';
+          messagesStatus('Mesaj gönderildi.', true);
+          await renderMessages();
+        } catch (error) { messagesStatus(error?.message || 'Mesaj gönderilemedi.'); }
+      };
+      const markMessageRead = async (messageId) => {
+        try { await invokeMessages({ action: 'read', messageId }); await renderMessages(); }
+        catch (error) { messagesStatus(error?.message || 'Mesaj güncellenemedi.'); }
+      };
+      const deleteMessage = async (messageId) => {
+        if (!window.confirm('Bu mesaj silinsin mi?')) return;
+        try { await invokeMessages({ action: 'delete', messageId }); await renderMessages(); }
+        catch (error) { messagesStatus(error?.message || 'Mesaj silinemedi.'); }
+      };
       root.addEventListener('click', (event) => {
         const navigation = event.target.closest('[data-view], [data-view-button]');
         const page = navigation?.dataset.view || navigation?.dataset.viewButton;
@@ -7542,12 +7660,23 @@
           setSessionLabel('Bu sayfa için erişiminiz yok');
           return;
         }
+        if (page === 'messages' && navigation?.dataset.viewButton === 'messages') {
+          if (notificationsPanel) notificationsPanel.hidden = true;
+          show('messages');
+          return;
+        }
         const edit = event.target.closest('[data-edit-managed-user]');
         if (edit) { editManagedUser(managedUsers.get(edit.dataset.editManagedUser)); return; }
         if (event.target.closest('[data-reset-managed-user]')) { resetManagedUserForm(); return; }
         if (event.target.closest('[data-save-managed-user]')) { void saveManagedUser(); return; }
         if (event.target.closest('[data-save-public-access]')) { void savePublicAccess(); return; }
         if (event.target.closest('[data-copy-public-stock-link]')) { void copyPublicStockSummaryLink(); }
+        if (event.target.closest('[data-send-message]')) { void sendMessage(); return; }
+        if (event.target.closest('[data-refresh-messages]')) { void renderMessages(); return; }
+        const markRead = event.target.closest('[data-mark-message-read]');
+        if (markRead) { void markMessageRead(markRead.dataset.markMessageRead); return; }
+        const deleteButton = event.target.closest('[data-delete-message]');
+        if (deleteButton) { void deleteMessage(deleteButton.dataset.deleteMessage); }
       }, true);
       const establishSession = async (session) => {
         currentUser = session?.user || null;
@@ -7571,6 +7700,7 @@
           void loadPublicPageSettings().catch(() => publicAccessStatus('Şifresiz erişim ayarları şu anda yüklenemedi.'));
         }
         closeGate();
+        if (canAccessPage('messages')) void renderMessages();
         await pullState(true);
         startCloudRefresh();
       };
