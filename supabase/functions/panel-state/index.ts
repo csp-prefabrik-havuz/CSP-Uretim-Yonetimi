@@ -53,6 +53,14 @@ const stateAreas = [
     write: ['imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales'],
   },
   {
+    // Cariler satış ekranındaki seçim listesinde de kullanılır. Bu nedenle
+    // cari yönetimi yetkisi olan kullanıcıların eklediği kayıtlar, satış
+    // yetkisi olan tüm kullanıcılar tarafından okunabilmelidir.
+    keys: ['importedCustomers', 'nextImportedCustomerId'],
+    read: ['imported-customers', 'imported-sales'],
+    write: ['imported-customers'],
+  },
+  {
     keys: ['warehouseShipments', 'nextWarehouseShipmentId'],
     read: ['warehouse-shipping'],
     write: ['warehouse-shipping'],
@@ -80,6 +88,7 @@ const defaults: JsonRecord = {
   importedStockCards: [],
   importedStockMovements: [],
   importedSalesOrders: [],
+  importedCustomers: [],
   warehouseShipments: [],
   manualDocuments: [],
   serviceHistoryRecords: [],
@@ -92,6 +101,7 @@ const defaults: JsonRecord = {
   nextImportedStockCardId: 1,
   nextImportedStockMovementId: 1,
   nextImportedSalesOrderId: 1,
+  nextImportedCustomerId: 1,
   nextWarehouseShipmentId: 1,
   linerStarterCardsImported: 0,
   savedWorkorderId: 1,
@@ -112,7 +122,7 @@ const keysFor = (pages: Set<string>, mode: 'read' | 'write') => {
 }
 
 const collectionKeys = new Set([
-  'orders', 'stockCards', 'importedStockCards', 'importedStockMovements',
+  'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedCustomers',
   'importedSalesOrders', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords',
 ])
 
@@ -178,7 +188,7 @@ const mergeArray = (area: string, current: unknown[], incoming: unknown[]) => {
 }
 const counterKeys = new Set([
   'nextOrderId', 'nextStockCardId', 'nextImportedStockCardId',
-  'nextImportedStockMovementId', 'nextImportedSalesOrderId', 'nextWarehouseShipmentId',
+  'nextImportedStockMovementId', 'nextImportedSalesOrderId', 'nextImportedCustomerId', 'nextWarehouseShipmentId',
   'linerStarterCardsImported', 'savedWorkorderId',
 ])
 const mergeWritableState = (current: JsonRecord, incoming: JsonRecord, writableKeys: Set<string>) => {
