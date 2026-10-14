@@ -3372,7 +3372,28 @@
           const serviceMovement = serviceStockMovements[serviceMovementIndex];
           const serviceCard = serviceMovement && serviceStockCards.find((item) => Number(item.id) === Number(serviceMovement.cardId));
           const quantity = Number(movement.quantity) || 0;
-          if (!card || !serviceMovement || !serviceCard) { if (status) status.textContent = 'Servis tarafındaki aktarım kaydı bulunamadığı için geri alma yapılamadı.'; return; }
+          if (!card) { if (status) status.textContent = 'Bu hareketin hazır ürün stok kartı bulunamadı.'; return; }
+          if (!serviceMovement || !serviceCard) {
+            // Eski aktarımlarda servis tarafındaki eş hareket kaydı tutulmamış olabilir.
+            // Aynı stok kodu ve birimdeki servis kartını bulup denetlenebilir bir düzeltme
+            // hareketi oluşturarak bu eski kayıtların da güvenle geri alınmasını sağlarız.
+            const legacyServiceCard = serviceStockCards.find((item) => normaliseSearchText(item.code) === normaliseSearchText(movement.cardCode || card.code) && item.unit === movement.unit);
+            if (!legacyServiceCard) { if (status) status.textContent = 'Servis tarafında aynı stok kodu ve birimde ürün bulunamadığı için geri alma yapılamadı.'; return; }
+            if ((Number(legacyServiceCard.onHand) || 0) < quantity) { if (status) status.textContent = 'Bu aktarım geri alınamaz; servis stoğunda sonradan yapılan çıkışları önce geri alın.'; return; }
+            card.onHand = (Number(card.onHand) || 0) + quantity;
+            legacyServiceCard.onHand = (Number(legacyServiceCard.onHand) || 0) - quantity;
+            importedStockMovements.splice(index, 1);
+            serviceStockMovements.unshift({ id: nextServiceStockMovementId++, type: 'exit', cardId: legacyServiceCard.id, cardCode: legacyServiceCard.code, cardLabel: serviceStockLabel(legacyServiceCard), unit: legacyServiceCard.unit, date: movement.date || importedMovementDate(), quantity, reference: movement.reference || '', partner: 'Hazır ürün deposu', note: 'Eski servis aktarımı geri alındı; miktar hazır ürün stoğuna iade edildi.', source: 'imported-stock-transfer-reversal', sourceImportedMovementId: movement.id });
+            renderImportedStock();
+            renderImportedMovementPage('entry');
+            renderImportedMovementPage('exit');
+            renderServiceStock();
+            renderServiceStockEntry();
+            renderServiceStockExit();
+            saveProductionState();
+            if (status) status.textContent = 'Eski servis aktarımı geri alındı; miktar hazır ürün stoğuna iade edildi.';
+            return;
+          }
           if ((Number(serviceCard.onHand) || 0) < quantity) { if (status) status.textContent = 'Bu aktarım geri alınamaz; servis stoğunda sonradan yapılan çıkışları önce geri alın.'; return; }
           card.onHand = (Number(card.onHand) || 0) + quantity;
           serviceCard.onHand = (Number(serviceCard.onHand) || 0) - quantity;
