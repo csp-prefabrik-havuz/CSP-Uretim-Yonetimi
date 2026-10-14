@@ -84,8 +84,17 @@
     #csp-production-sketch.public-stock-mode .app-topbar { padding-inline: clamp(18px, 3vw, 38px); }
     #csp-production-sketch .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
     #csp-production-sketch .dashboard-actions, #csp-production-sketch .table-search { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
-    #csp-production-sketch .stock-summary-filters { display: grid; grid-template-columns: minmax(200px, 1.5fr) minmax(165px, .85fr) minmax(150px, .7fr); gap: 9px; margin: 14px 0 10px; }
+    #csp-production-sketch .stock-summary-filters { display: grid; grid-template-columns: minmax(200px, 1.5fr) minmax(180px, .9fr) minmax(170px, .8fr) minmax(180px, .9fr); gap: 9px; margin: 14px 0 10px; }
     #csp-production-sketch .stock-summary-filters input, #csp-production-sketch .stock-summary-filters select { width: 100%; min-width: 0; padding: 10px 12px; color: light-dark(#173f50, #d7eff6); background: light-dark(#f8fffb, #15261f); border: 1px solid light-dark(#c9dfd1, #315545); border-radius: 9px; font: inherit; font-size: 13px; }
+    #csp-production-sketch .stock-category-filter { position: relative; min-width: 0; }
+    #csp-production-sketch .stock-category-filter-trigger { width: 100%; min-width: 0; min-height: 41px; padding: 10px 34px 10px 12px; overflow: hidden; color: light-dark(#173f50, #d7eff6); text-align: left; text-overflow: ellipsis; white-space: nowrap; background: light-dark(#f8fffb, #15261f); border: 1px solid light-dark(#c9dfd1, #315545); border-radius: 9px; font: inherit; font-size: 13px; }
+    #csp-production-sketch .stock-category-filter-trigger::after { position: absolute; top: 16px; right: 12px; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; content: ''; transform: rotate(45deg); pointer-events: none; }
+    #csp-production-sketch .stock-category-filter-panel { position: absolute; z-index: 12; top: calc(100% + 5px); left: 0; right: 0; display: grid; gap: 2px; max-height: 260px; padding: 8px; overflow: auto; color: light-dark(#173f50, #d7eff6); background: light-dark(#ffffff, #15261f); border: 1px solid light-dark(#a8ceda, #315545); border-radius: 9px; box-shadow: 0 12px 26px rgba(7, 42, 56, .16); }
+    #csp-production-sketch .stock-category-filter-panel[hidden] { display: none; }
+    #csp-production-sketch .stock-category-filter-option { display: flex; align-items: center; gap: 8px; padding: 7px 6px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    #csp-production-sketch .stock-category-filter-option:hover { background: light-dark(#edf9f2, #1d3528); }
+    #csp-production-sketch .stock-category-filter-option input { width: auto; min-height: 0; margin: 0; }
+    #csp-production-sketch .stock-category-filter-clear { width: 100%; margin-bottom: 4px; padding: 6px; color: light-dark(#0876a6, #9edff4); text-align: left; background: transparent; border: 0; border-bottom: 1px solid light-dark(#d6e6dc, #315545); font: inherit; font-size: 12px; cursor: pointer; }
     #csp-production-sketch .stock-summary-report-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
     #csp-production-sketch .stock-summary-report-actions .muted-note { margin-right: auto; }
     #csp-production-sketch [data-page="stock-summary"] .table-search, #csp-production-sketch [data-page="stock-summary"] .table-filter-controls { display: none; }
@@ -841,13 +850,19 @@
         productSearch.type = 'search';
         productSearch.placeholder = 'Ürün ara...';
         productSearch.setAttribute('aria-label', 'Stok özetinde ürün ara');
-        const categorySelect = document.createElement('select');
+        const categorySelect = document.createElement('div');
         categorySelect.id = 'stock-summary-category-filter';
-        categorySelect.setAttribute('aria-label', 'Stok özetinde kategori seç');
-        const allCategories = document.createElement('option');
-        allCategories.value = '';
-        allCategories.textContent = 'Tüm kategoriler';
-        categorySelect.appendChild(allCategories);
+        categorySelect.className = 'stock-category-filter';
+        categorySelect.dataset.selectedCategories = '';
+        const categoryTrigger = document.createElement('button');
+        categoryTrigger.type = 'button';
+        categoryTrigger.className = 'stock-category-filter-trigger';
+        categoryTrigger.setAttribute('aria-expanded', 'false');
+        categoryTrigger.textContent = 'Tüm kategoriler';
+        const categoryPanel = document.createElement('div');
+        categoryPanel.className = 'stock-category-filter-panel';
+        categoryPanel.hidden = true;
+        categorySelect.append(categoryTrigger, categoryPanel);
         const categorySortSelect = document.createElement('select');
         categorySortSelect.id = 'stock-summary-category-sort';
         categorySortSelect.setAttribute('aria-label', 'Stok özetinde kategori sırala');
@@ -884,7 +899,11 @@
         const stockSummaryReportActions = root.querySelector('.stock-summary-report-actions');
         if (stockSummaryReportActions) stockSummaryReportActions.prepend(zeroStockButton);
         productSearch.addEventListener('input', () => renderStockSummary());
-        categorySelect.addEventListener('change', () => renderStockSummary());
+        categoryTrigger.addEventListener('click', () => {
+          const isOpen = !categoryPanel.hidden;
+          categoryPanel.hidden = isOpen;
+          categoryTrigger.setAttribute('aria-expanded', String(!isOpen));
+        });
         categorySortSelect.addEventListener('change', () => renderStockSummary());
         sortSelect.addEventListener('change', () => renderStockSummary());
       }
@@ -2912,27 +2931,48 @@
           ...importedStockCards.map((card) => ({ card, source: 'Hazır ürünler', group: `${card.group || '—'}${card.category ? ` · ${card.category}` : ''}`, category: card.category || card.group || 'Kategorisiz', name: importedCardLabel(card), amount: Number(card.onHand) || 0, quantity: `${numberFormat(Number(card.onHand) || 0)} ${card.unit}` }))
         ];
         const categoryFilter = root.querySelector('#stock-summary-category-filter');
-        const selectedCategory = categoryFilter?.value || '';
+        const selectedCategories = new Set((categoryFilter?.dataset.selectedCategories || '').split('\u001f').filter(Boolean));
         if (categoryFilter) {
           const categories = [...new Set(allRows.map((item) => item.category).filter(Boolean))].sort((left, right) => left.localeCompare(right, 'tr'));
-          categoryFilter.replaceChildren();
-          const allCategories = document.createElement('option');
-          allCategories.value = '';
-          allCategories.textContent = 'Tüm kategoriler';
-          categoryFilter.appendChild(allCategories);
+          const availableSelection = new Set([...selectedCategories].filter((category) => categories.includes(category)));
+          categoryFilter.dataset.selectedCategories = [...availableSelection].join('\u001f');
+          const categoryTrigger = categoryFilter.querySelector('.stock-category-filter-trigger');
+          const categoryPanel = categoryFilter.querySelector('.stock-category-filter-panel');
+          if (categoryTrigger) categoryTrigger.textContent = availableSelection.size ? (availableSelection.size === 1 ? [...availableSelection][0] : `${availableSelection.size} kategori seçildi`) : 'Tüm kategoriler';
+          if (categoryPanel) {
+            categoryPanel.replaceChildren();
+            const clearButton = document.createElement('button');
+            clearButton.type = 'button';
+            clearButton.className = 'stock-category-filter-clear';
+            clearButton.textContent = 'Tüm kategorileri göster';
+            clearButton.addEventListener('click', () => {
+              categoryFilter.dataset.selectedCategories = '';
+              renderStockSummary();
+            });
+            categoryPanel.appendChild(clearButton);
           categories.forEach((category) => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-          });
-          categoryFilter.value = categories.includes(selectedCategory) ? selectedCategory : '';
+              const option = document.createElement('label');
+              option.className = 'stock-category-filter-option';
+              const checkbox = document.createElement('input');
+              checkbox.type = 'checkbox';
+              checkbox.checked = availableSelection.has(category);
+              checkbox.setAttribute('aria-label', `${category} kategorisini göster`);
+              checkbox.addEventListener('change', () => {
+                if (checkbox.checked) availableSelection.add(category);
+                else availableSelection.delete(category);
+                categoryFilter.dataset.selectedCategories = [...availableSelection].join('\u001f');
+                renderStockSummary();
+              });
+              option.append(checkbox, document.createTextNode(category));
+              categoryPanel.appendChild(option);
+            });
+          }
         }
         const productTerm = normaliseSearchText(root.querySelector('#stock-summary-product-search')?.value.trim() || '');
         const categorySort = root.querySelector('#stock-summary-category-sort')?.value || 'category-asc';
         const sort = root.querySelector('#stock-summary-sort')?.value || 'name-asc';
         const hideZeroStock = root.querySelector('#stock-summary-zero-toggle')?.getAttribute('aria-pressed') === 'true';
-        const rows = allRows.filter((item) => (!hideZeroStock || item.amount !== 0) && (!productTerm || normaliseSearchText(`${item.name} ${item.source} ${item.group} ${item.category}`).includes(productTerm)) && (!categoryFilter?.value || item.category === categoryFilter.value));
+        const rows = allRows.filter((item) => (!hideZeroStock || item.amount !== 0) && (!productTerm || normaliseSearchText(`${item.name} ${item.source} ${item.group} ${item.category}`).includes(productTerm)) && (!selectedCategories.size || selectedCategories.has(item.category)));
         rows.sort((left, right) => {
           const categoryCompare = String(left.category || '').localeCompare(String(right.category || ''), 'tr');
           if (categoryCompare) return categorySort === 'category-desc' ? -categoryCompare : categoryCompare;
