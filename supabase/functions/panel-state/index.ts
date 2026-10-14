@@ -49,8 +49,15 @@ const stateAreas = [
   },
   {
     keys: ['importedStockMovements', 'importedSalesOrders', 'nextImportedStockMovementId', 'nextImportedSalesOrderId'],
-    read: ['imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales'],
-    write: ['imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales'],
+    read: ['imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales', 'service-stock', 'service-stock-entry', 'service-stock-exit'],
+    write: ['imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales', 'service-stock', 'service-stock-entry', 'service-stock-exit'],
+  },
+  {
+    // Servis stokları ve hazır ürün → servis aktarımı tek işlemde güncellenir.
+    // Bu sayede yetkisi olan tüm kullanıcılar aynı servis miktarını görür.
+    keys: ['serviceStockCards', 'serviceStockMovements', 'nextServiceStockCardId', 'nextServiceStockMovementId'],
+    read: ['service-stock', 'service-stock-entry', 'service-stock-exit', 'imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales'],
+    write: ['service-stock', 'service-stock-entry', 'service-stock-exit', 'imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales'],
   },
   {
     // Cariler satış ekranındaki seçim listesinde de kullanılır. Bu nedenle
@@ -87,6 +94,8 @@ const defaults: JsonRecord = {
   stockCards: [],
   importedStockCards: [],
   importedStockMovements: [],
+  serviceStockCards: [],
+  serviceStockMovements: [],
   importedSalesOrders: [],
   importedCustomers: [],
   warehouseShipments: [],
@@ -100,6 +109,8 @@ const defaults: JsonRecord = {
   nextStockCardId: 1,
   nextImportedStockCardId: 1,
   nextImportedStockMovementId: 1,
+  nextServiceStockCardId: 1,
+  nextServiceStockMovementId: 1,
   nextImportedSalesOrderId: 1,
   nextImportedCustomerId: 1,
   nextWarehouseShipmentId: 1,
@@ -122,7 +133,7 @@ const keysFor = (pages: Set<string>, mode: 'read' | 'write') => {
 }
 
 const collectionKeys = new Set([
-  'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedCustomers',
+  'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'serviceStockCards', 'serviceStockMovements', 'importedCustomers',
   'importedSalesOrders', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords',
 ])
 

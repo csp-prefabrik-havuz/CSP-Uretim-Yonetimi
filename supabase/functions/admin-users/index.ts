@@ -6,14 +6,6 @@ const corsHeaders = {
   'Content-Type': 'application/json; charset=utf-8',
 }
 
-const pageIds = new Set([
-  'dashboard', 'orders', 'workorders', 'planning', 'stock', 'stock-summary',
-  'stock-report', 'liner-widths', 'shipping', 'series', 'settings',
-  'imported-stock', 'imported-stock-entry', 'imported-stock-exit', 'imported-sales',
-  'imported-customers', 'warehouse-shipping', 'manual-cargo-label',
-  'service-history-search',
-])
-
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: corsHeaders })
 
@@ -24,8 +16,12 @@ const normalizeUsername = (value: unknown) => String(value ?? '')
   .replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u')
   .replace(/[^a-z0-9._-]/g, '')
 
+// Sayfa kimlikleri istemci menüsünden gelir. Sıkı bir sabit liste kullanmak,
+// yeni ekranların yetki kaydının sessizce atılmasına neden oluyordu. Güvenli
+// kimlik biçimini kabul ederek yeni sayfaları ayrıca fonksiyon yayımlamadan
+// yetkilendirilebilir yapıyoruz; '*' ise gelecekte eklenecek tüm sayfaları kapsar.
 const allowedPages = (value: unknown) => Array.isArray(value)
-  ? [...new Set(value.map((item) => String(item)).filter((item) => pageIds.has(item)))]
+  ? [...new Set(value.map((item) => String(item)).filter((item) => item === '*' || /^[a-z][a-z0-9-]{0,63}$/.test(item)))]
   : []
 
 Deno.serve(async (request) => {
