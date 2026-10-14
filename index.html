@@ -556,7 +556,7 @@
       <section class="view is-visible" data-page="dashboard">
         <div class="page-head">
           <div><h1>Günlük operasyon özeti</h1><p id="dashboard-today">Güncel üretim, stok ve sevkiyat durumu</p></div>
-          <div class="dashboard-actions"><input id="global-search-input" type="search" placeholder="Müşteri, kod veya ölçü ara" aria-label="Genel arama" /><button class="secondary-button" type="button" data-global-search>Genel ara</button><button class="primary-button" type="button" data-open-order>+ Yeni sipariş</button><span class="global-search-status" id="global-search-status" aria-live="polite"></span></div>
+          <div class="dashboard-actions"><input id="global-search-input" type="search" placeholder="Tüm panelde ara: ürün, cari, kod, belge..." aria-label="Tüm panelde ara" /><button class="secondary-button" type="button" data-global-search>Tüm panelde ara</button><button class="primary-button" type="button" data-open-order>+ Yeni sipariş</button><span class="global-search-status" id="global-search-status" aria-live="polite"></span></div>
         </div>
         <div class="summary-grid" aria-label="Operasyon göstergeleri">
           <div class="summary"><div class="summary-label">Açık sipariş</div><div class="summary-value" id="dashboard-open-orders">0</div><div class="summary-note" id="dashboard-open-orders-note">Sipariş bekleniyor</div></div>
@@ -707,7 +707,7 @@
       <section class="view report-view" data-page="service-stock-exit">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis ürün çıkışı</h1><p>Serviste kullanılan ürünleri stoktan düşerek kayıt altında tutun.</p></div></div><button class="secondary-button" type="button" data-view-button="service-stock">Servis ürün stoklarına dön</button></div>
         <section class="section"><div class="form-grid"><div class="field span-two"><label for="service-exit-card">Servis ürün stok kartı</label><input id="service-exit-card" type="search" list="service-exit-card-options" placeholder="Stok kodu veya ürün adı yazarak arayın" autocomplete="off" /><datalist id="service-exit-card-options"></datalist><input id="service-exit-card-id" type="hidden" /></div><div class="field"><label for="service-exit-date">Çıkış tarihi</label><input id="service-exit-date" type="date" /></div><div class="field"><label for="service-exit-quantity">Çıkış miktarı</label><input id="service-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="service-exit-reference">Servis formu / belge no</label><input id="service-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="service-exit-partner">Teknisyen / teslim alan</label><input id="service-exit-partner" placeholder="Personel veya servis kaydı" /></div><div class="field span-two"><label for="service-exit-note">Not</label><textarea id="service-exit-note" placeholder="Kullanım veya servis açıklaması"></textarea></div></div><div class="form-actions"><span class="muted-note" id="service-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-service-stock-exit>Çıkışı stoktan düş</button></div></section>
-        <section class="section"><h2>Son servis ürün çıkışları</h2><p class="table-hint">Yanlış kayıt işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="service-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Teknisyen / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="service-exit-movements-body"></tbody></table></div></section>
+        <section class="section"><h2>Son servis ürün çıkışları</h2><p class="table-hint">Yanlış kayıt işlem satırından geri alınabilir.</p><div class="table-search"><input type="search" placeholder="Ürün, stok kodu, belge veya teknisyen ara" data-table-search-input="service-exit-movements-table" aria-label="Servis ürün çıkışlarında ara" /><button class="secondary-button" type="button" data-table-search-button="service-exit-movements-table">Ara</button></div><div class="table-wrap"><table id="service-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Teknisyen / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="service-exit-movements-body"></tbody></table></div></section>
       </section>
       <section class="view report-view" data-page="service-stock-entry">
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis ürün girişi</h1><p>Teknik servis için gelen ürünleri servis stoğuna kaydedin.</p></div></div><button class="secondary-button" type="button" data-view-button="service-stock">Servis ürün stoklarına dön</button></div>
@@ -3458,6 +3458,7 @@
         const movements = serviceStockMovements.filter((movement) => movement.type === 'exit' || (!movement.type && movement.source !== 'imported-stock-transfer')).sort((left, right) => Number(right.id) - Number(left.id));
         if (!movements.length) { const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 8; cell.className = 'empty-workorders'; cell.textContent = 'Henüz servis ürün çıkışı yok.'; row.appendChild(cell); body.appendChild(row); return; }
         movements.forEach((movement) => { const card = serviceStockCards.find((item) => item.id === Number(movement.cardId)); const row = document.createElement('tr'); [formatImportedMovementDate(movement.date), card?.code || movement.cardCode || '—', card ? serviceStockLabel(card) : movement.cardLabel || 'Silinmiş stok kartı', `${numberFormat(Number(movement.quantity) || 0)} ${movement.unit || card?.unit || 'adet'}`, movement.partner || '—', movement.reference || '—', movement.note || '—'].forEach((value, index) => { const cell = document.createElement('td'); cell.textContent = value; if (index === 1) cell.className = 'code'; row.appendChild(cell); }); const actions = document.createElement('td'); const undo = document.createElement('button'); undo.type = 'button'; undo.className = 'secondary-button'; undo.dataset.reverseServiceStockMovement = movement.id; undo.textContent = 'Geri al'; actions.appendChild(undo); row.appendChild(actions); body.appendChild(row); });
+        applyTableSearch('service-exit-movements-table');
       };
       const selectedServiceExitCard = () => {
         const input = root.querySelector('#service-exit-card'); const selectedInput = root.querySelector('#service-exit-card-id'); if (!input || !selectedInput) return null;
@@ -5165,6 +5166,25 @@
           root.querySelector('#order-selection-status').textContent = ` Genel arama: ${total} sipariş bulundu.`;
           if (status) status.textContent = `${total} sipariş sonucu bulundu.`;
           show('orders');
+          return;
+        }
+        const recordSearchTargets = [
+          { page: 'imported-sales', tableId: 'imported-sales-table', label: 'hazır ürün satış siparişi', records: importedSalesOrders },
+          { page: 'imported-customers', label: 'cari', records: importedCustomers },
+          { page: 'warehouse-shipping', tableId: 'warehouse-shipping-table', label: 'depo sevkiyatı', records: warehouseShipments },
+          { page: 'manual-cargo-label', label: 'manuel belge', records: manualDocuments },
+          { page: 'service-stock', tableId: 'service-stock-table', label: 'servis ürün stok kartı', records: serviceStockCards },
+          { page: 'service-stock-entry', label: 'servis ürün giriş hareketi', records: serviceStockMovements.filter((movement) => movement.source === 'manual-service-entry') },
+          { page: 'service-stock-exit', tableId: 'service-exit-movements-table', label: 'servis ürün çıkış hareketi', records: serviceStockMovements.filter((movement) => movement.type === 'exit' || (!movement.type && movement.source !== 'imported-stock-transfer')) },
+          { page: 'service-history-search', label: 'servis geçmişi kaydı', records: serviceHistoryRecords }
+        ];
+        const recordTarget = recordSearchTargets.find((item) => item.records.some((record) => normaliseSearchText(JSON.stringify(record)).includes(normalisedQuery)));
+        if (recordTarget) {
+          const tableInput = recordTarget.tableId ? root.querySelector(`[data-table-search-input="${recordTarget.tableId}"]`) : null;
+          if (tableInput) { tableInput.value = query; applyTableSearch(recordTarget.tableId); }
+          if (recordTarget.page === 'service-history-search') { const serviceInput = root.querySelector('#service-history-search-input'); if (serviceInput) serviceInput.value = query; renderServiceHistory(); }
+          if (status) status.textContent = `${recordTarget.label} sonucu bulundu.`;
+          show(recordTarget.page);
           return;
         }
         const staticSearchTargets = [
