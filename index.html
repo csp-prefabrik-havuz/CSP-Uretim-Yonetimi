@@ -3367,7 +3367,27 @@
         const card = importedStockCards.find((item) => item.id === Number(movement.cardId));
         const status = root.querySelector(`#imported-${movement.type}-status`);
         if (movement.source === 'imported-sales') { if (status) status.textContent = 'Satış siparişine bağlı stok çıkışı, ilgili satış siparişinden yönetilir.'; return; }
-        if (movement.source === 'service-transfer') { if (status) status.textContent = 'Servis stoğuna yapılan aktarım, Teknik servis bölümünden yönetilir.'; return; }
+        if (movement.source === 'service-transfer') {
+          const serviceMovementIndex = serviceStockMovements.findIndex((item) => item.source === 'imported-stock-transfer' && Number(item.id) === Number(movement.sourceServiceMovementId));
+          const serviceMovement = serviceStockMovements[serviceMovementIndex];
+          const serviceCard = serviceMovement && serviceStockCards.find((item) => Number(item.id) === Number(serviceMovement.cardId));
+          const quantity = Number(movement.quantity) || 0;
+          if (!card || !serviceMovement || !serviceCard) { if (status) status.textContent = 'Servis tarafındaki aktarım kaydı bulunamadığı için geri alma yapılamadı.'; return; }
+          if ((Number(serviceCard.onHand) || 0) < quantity) { if (status) status.textContent = 'Bu aktarım geri alınamaz; servis stoğunda sonradan yapılan çıkışları önce geri alın.'; return; }
+          card.onHand = (Number(card.onHand) || 0) + quantity;
+          serviceCard.onHand = (Number(serviceCard.onHand) || 0) - quantity;
+          importedStockMovements.splice(index, 1);
+          serviceStockMovements.splice(serviceMovementIndex, 1);
+          renderImportedStock();
+          renderImportedMovementPage('entry');
+          renderImportedMovementPage('exit');
+          renderServiceStock();
+          renderServiceStockEntry();
+          renderServiceStockExit();
+          saveProductionState();
+          if (status) status.textContent = 'Servise yapılan aktarım geri alındı; miktar hazır ürün stoğuna iade edildi.';
+          return;
+        }
         if (!card) { if (status) status.textContent = 'Bu hareketin stok kartı bulunamadı.'; return; }
         const quantity = Number(movement.quantity) || 0;
         if (movement.type === 'entry' && Number(card.onHand) < quantity) {
