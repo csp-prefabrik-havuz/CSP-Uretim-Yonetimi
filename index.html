@@ -848,16 +848,25 @@
         allCategories.value = '';
         allCategories.textContent = 'Tüm kategoriler';
         categorySelect.appendChild(allCategories);
+        const categorySortSelect = document.createElement('select');
+        categorySortSelect.id = 'stock-summary-category-sort';
+        categorySortSelect.setAttribute('aria-label', 'Stok özetinde kategori sırala');
+        [['category-asc', 'Kategori sıralaması: A-Z'], ['category-desc', 'Kategori sıralaması: Z-A']].forEach(([value, label]) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = label;
+          categorySortSelect.appendChild(option);
+        });
         const sortSelect = document.createElement('select');
         sortSelect.id = 'stock-summary-sort';
         sortSelect.setAttribute('aria-label', 'Stok özetini sırala');
-        [['name-asc', 'Sıralama: Ürün A-Z'], ['name-desc', 'Ürün Z-A'], ['quantity-asc', 'Miktar: Azdan çoğa'], ['quantity-desc', 'Miktar: Çoktan aza']].forEach(([value, label]) => {
+        [['name-asc', 'Ürün sıralaması: A-Z'], ['name-desc', 'Ürün sıralaması: Z-A'], ['quantity-asc', 'Ürün sıralaması: Miktar azdan çoğa'], ['quantity-desc', 'Ürün sıralaması: Miktar çoktan aza']].forEach(([value, label]) => {
           const option = document.createElement('option');
           option.value = value;
           option.textContent = label;
           sortSelect.appendChild(option);
         });
-        filters.append(productSearch, categorySelect, sortSelect);
+        filters.append(productSearch, categorySelect, categorySortSelect, sortSelect);
         stockSummaryStatus.after(filters);
         const zeroStockButton = document.createElement('button');
         zeroStockButton.type = 'button';
@@ -876,6 +885,7 @@
         if (stockSummaryReportActions) stockSummaryReportActions.prepend(zeroStockButton);
         productSearch.addEventListener('input', () => renderStockSummary());
         categorySelect.addEventListener('change', () => renderStockSummary());
+        categorySortSelect.addEventListener('change', () => renderStockSummary());
         sortSelect.addEventListener('change', () => renderStockSummary());
       }
       const stockPageActions = root.querySelector('[data-page="stock"] .page-head .form-actions');
@@ -2919,10 +2929,13 @@
           categoryFilter.value = categories.includes(selectedCategory) ? selectedCategory : '';
         }
         const productTerm = normaliseSearchText(root.querySelector('#stock-summary-product-search')?.value.trim() || '');
+        const categorySort = root.querySelector('#stock-summary-category-sort')?.value || 'category-asc';
         const sort = root.querySelector('#stock-summary-sort')?.value || 'name-asc';
         const hideZeroStock = root.querySelector('#stock-summary-zero-toggle')?.getAttribute('aria-pressed') === 'true';
         const rows = allRows.filter((item) => (!hideZeroStock || item.amount !== 0) && (!productTerm || normaliseSearchText(`${item.name} ${item.source} ${item.group} ${item.category}`).includes(productTerm)) && (!categoryFilter?.value || item.category === categoryFilter.value));
         rows.sort((left, right) => {
+          const categoryCompare = String(left.category || '').localeCompare(String(right.category || ''), 'tr');
+          if (categoryCompare) return categorySort === 'category-desc' ? -categoryCompare : categoryCompare;
           if (sort === 'name-desc') return right.name.localeCompare(left.name, 'tr');
           if (sort === 'quantity-asc') return left.amount - right.amount || left.name.localeCompare(right.name, 'tr');
           if (sort === 'quantity-desc') return right.amount - left.amount || left.name.localeCompare(right.name, 'tr');
