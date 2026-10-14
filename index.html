@@ -323,6 +323,9 @@
     #csp-production-sketch .timeline-item strong { display: block; font-size: 13px; font-weight: 500; }
     #csp-production-sketch .timeline-item span { color: light-dark(#697687, #a9b6c6); font-size: 12px; display: block; margin-top: 2px; }
     #csp-production-sketch .alert-box { margin-top: 16px; padding: 12px; border-radius: 9px; color: light-dark(#86411f, #ffce9b); background: light-dark(#fff4e8, #3a2a1d); font-size: 13px; }
+    #csp-production-sketch .dashboard-stock-risk-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+    #csp-production-sketch .dashboard-stock-risk-link { padding: 5px 8px; color: light-dark(#9b4b20, #ffd4a9); background: light-dark(#ffffff, #49321e); border: 1px solid light-dark(#efc5a4, #7b5637); border-radius: 6px; font: inherit; font-size: 12px; cursor: pointer; }
+    #csp-production-sketch .dashboard-stock-risk-link:hover { color: light-dark(#ffffff, #ffffff); background: light-dark(#c9671d, #a65013); }
     #csp-production-sketch .workflow { margin-top: 16px; display: flex; gap: 0; flex-wrap: wrap; align-items: center; color: light-dark(#556577, #bdc9d8); font-size: 13px; }
     #csp-production-sketch .workflow-step { padding: 8px 10px; background: light-dark(#eaf0f3, #22303f); border-radius: 8px; margin: 3px; }
     #csp-production-sketch .workflow-step.active { background: light-dark(#d9f0f4, #19485a); color: light-dark(#083549, #e5fbff); font-weight: 500; }
@@ -540,8 +543,11 @@
       <div class="nav-label">Depo</div>
       <button class="nav-button" type="button" data-view="warehouse-shipping"><i data-lucide="warehouse" aria-hidden="true"></i> Depo sevkiyat</button>
       <button class="nav-button" type="button" data-view="manual-cargo-label"><i data-lucide="printer" aria-hidden="true"></i> Manuel</button>
-      <div class="nav-label">Yönetim</div>
+      <div class="nav-label">Teknik servis</div>
+      <button class="nav-button" type="button" data-view="service-stock"><i data-lucide="wrench" aria-hidden="true"></i> Servis ürün stokları</button>
+      <button class="nav-button" type="button" data-view="service-stock-exit"><i data-lucide="package-minus" aria-hidden="true"></i> Servis ürün çıkışı</button>
       <button class="nav-button" type="button" data-view="service-history-search"><i data-lucide="search" aria-hidden="true"></i> Servis geçmiş arama</button>
+      <div class="nav-label">Yönetim</div>
       <button class="nav-button" type="button" data-view="user-management" data-admin-only hidden><i data-lucide="users-round" aria-hidden="true"></i> Kullanıcı ve erişim</button>
     </nav>
 
@@ -683,6 +689,23 @@
         <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Hazır ürün çıkışı</h1><p>Çıkan hazır ürünleri stok kartından düşerek izleyin.</p></div></div><button class="secondary-button" type="button" data-view-button="imported-stock">Hazır ürün stoklarına dön</button></div>
         <section class="section"><div class="form-grid"><div class="field span-two"><label for="imported-exit-card">Hazır ürün stok kartı</label><input id="imported-exit-card" type="search" list="imported-exit-card-options" placeholder="Stok kodu veya ürün adı yazarak arayın" autocomplete="off" /><datalist id="imported-exit-card-options"></datalist><input id="imported-exit-card-id" type="hidden" /></div><div class="field"><label for="imported-exit-date">Çıkış tarihi</label><input id="imported-exit-date" type="date" /></div><div class="field"><label for="imported-exit-quantity">Çıkış miktarı</label><input id="imported-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="imported-exit-reference">İrsaliye / belge no</label><input id="imported-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="imported-exit-partner">Çıkış yeri / teslim alan</label><input id="imported-exit-partner" placeholder="Bölüm, müşteri veya personel" /></div><div class="field span-two"><label for="imported-exit-note">Not</label><textarea id="imported-exit-note" placeholder="Çıkışla ilgili açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-imported-movement="exit">Çıkışı stoktan düş</button></div></section>
         <section class="section"><h2>Son hazır ürün çıkışları</h2><p class="table-hint">Çıkış miktarı mevcut stoktan fazla olamaz. Yanlış işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="imported-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Çıkış yeri / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-exit-movements-body"></tbody></table></div></section>
+      </section>
+      <section class="view report-view" data-page="service-stock">
+        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis ürün stokları</h1><p>Teknik servis ekibinin kullandığı ürünleri hazır ürün stoklarından bağımsız takip edin.</p></div></div><div class="form-actions"><button class="secondary-button" type="button" data-open-service-stock-transfer>Hazır stoktan aktar</button><button class="primary-button" type="button" data-open-service-stock-card>+ Yeni servis ürünü</button></div></div>
+        <section class="section"><p class="table-hint" id="service-stock-status" aria-live="polite">Servis ürün stok kartları burada listelenir.</p><div class="table-search"><input type="search" placeholder="Servis ürün stoklarında ara" data-table-search-input="service-stock-table" aria-label="Servis ürün stoklarında ara" /><button class="secondary-button" type="button" data-table-search-button="service-stock-table">Ara</button></div><div class="table-wrap"><table class="stock-table" id="service-stock-table"><thead><tr><th>Stok kodu</th><th>Kategori</th><th>Ürün / varyant</th><th>Birim</th><th>İlk stok</th><th>Mevcut</th><th>Minimum</th><th>Durum</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="service-stock-list-body"></tbody></table></div></section>
+      </section>
+      <section class="view" data-page="service-stock-form">
+        <div class="page-head"><div><h1 id="service-stock-form-title">Yeni servis ürünü</h1><p>Teknik servis kullanımı için stok kartı oluşturun.</p></div><button class="secondary-button" type="button" data-view-button="service-stock">Servis ürün stoklarına dön</button></div>
+        <section class="section"><div class="form-grid"><div class="field"><label for="service-stock-code">Stok kodu</label><input id="service-stock-code" placeholder="Otomatik oluşturulur" /></div><div class="field"><label for="service-stock-category">Kategori</label><input id="service-stock-category" placeholder="Örn. Kimyasal, yedek parça veya sarf malzeme" /></div><div class="field span-two"><label for="service-stock-name">Ürün adı</label><input id="service-stock-name" placeholder="Ürün adı" /></div><div class="field span-two"><label for="service-stock-variant">Varyant / özellik</label><input id="service-stock-variant" placeholder="Model, ölçü veya açıklama" /></div><div class="field"><label for="service-stock-unit">Birim</label><select id="service-stock-unit"><option value="adet">adet</option><option value="m">m</option><option value="m²">m²</option><option value="kg">kg</option><option value="lt">lt</option><option value="takım">takım</option></select></div><div class="field"><label for="service-stock-initial">İlk stok miktarı</label><input id="service-stock-initial" type="number" step="0.01" placeholder="0" /></div><div class="field"><label for="service-stock-onhand">Mevcut miktar</label><input id="service-stock-onhand" type="number" step="0.01" placeholder="İlk stokla aynı" /></div><div class="field"><label for="service-stock-minimum">Minimum seviye</label><input id="service-stock-minimum" type="number" min="0" step="0.01" placeholder="0" /></div><div class="field span-two"><label for="service-stock-note">Not</label><textarea id="service-stock-note" placeholder="Raf yeri veya açıklama"></textarea></div></div><div class="form-actions"><span class="muted-note" id="service-stock-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-view-button="service-stock">Vazgeç</button><button class="primary-button" type="button" data-save-service-stock-card>Servis ürün stok kartını kaydet</button></div></section>
+      </section>
+      <section class="view report-view" data-page="service-stock-transfer">
+        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Hazır stoktan servis stoğuna aktarım</h1><p>Hazır ürün stoklarındaki ürünleri teknik servis kullanımına aktarın.</p></div></div><button class="secondary-button" type="button" data-view-button="service-stock">Servis ürün stoklarına dön</button></div>
+        <section class="section"><div class="form-grid"><div class="field span-two"><label for="service-transfer-source-card">Hazır ürün stok kartı</label><input id="service-transfer-source-card" type="search" list="service-transfer-source-options" placeholder="Stok kodu veya ürün adı yazarak arayın" autocomplete="off" /><datalist id="service-transfer-source-options"></datalist><input id="service-transfer-source-id" type="hidden" /></div><div class="field"><label for="service-transfer-date">Aktarım tarihi</label><input id="service-transfer-date" type="date" /></div><div class="field"><label for="service-transfer-quantity">Aktarım miktarı</label><input id="service-transfer-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="service-transfer-reference">Belge / irsaliye no</label><input id="service-transfer-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="service-transfer-note">Not</label><input id="service-transfer-note" placeholder="Aktarım açıklaması" /></div></div><div class="form-actions"><span class="muted-note" id="service-transfer-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-service-stock-transfer>Servis stoğuna aktar</button></div></section>
+      </section>
+      <section class="view report-view" data-page="service-stock-exit">
+        <div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Servis ürün çıkışı</h1><p>Serviste kullanılan ürünleri stoktan düşerek kayıt altında tutun.</p></div></div><button class="secondary-button" type="button" data-view-button="service-stock">Servis ürün stoklarına dön</button></div>
+        <section class="section"><div class="form-grid"><div class="field span-two"><label for="service-exit-card">Servis ürün stok kartı</label><input id="service-exit-card" type="search" list="service-exit-card-options" placeholder="Stok kodu veya ürün adı yazarak arayın" autocomplete="off" /><datalist id="service-exit-card-options"></datalist><input id="service-exit-card-id" type="hidden" /></div><div class="field"><label for="service-exit-date">Çıkış tarihi</label><input id="service-exit-date" type="date" /></div><div class="field"><label for="service-exit-quantity">Çıkış miktarı</label><input id="service-exit-quantity" type="number" min="0.01" step="0.01" placeholder="0" /></div><div class="field"><label for="service-exit-reference">Servis formu / belge no</label><input id="service-exit-reference" placeholder="İsteğe bağlı" /></div><div class="field"><label for="service-exit-partner">Teknisyen / teslim alan</label><input id="service-exit-partner" placeholder="Personel veya servis kaydı" /></div><div class="field span-two"><label for="service-exit-note">Not</label><textarea id="service-exit-note" placeholder="Kullanım veya servis açıklaması"></textarea></div></div><div class="form-actions"><span class="muted-note" id="service-exit-status" aria-live="polite"></span><button class="primary-button" type="button" data-save-service-stock-exit>Çıkışı stoktan düş</button></div></section>
+        <section class="section"><h2>Son servis ürün çıkışları</h2><p class="table-hint">Yanlış kayıt işlem satırından geri alınabilir.</p><div class="table-wrap"><table id="service-exit-movements-table"><thead><tr><th>Tarih</th><th>Stok kodu</th><th>Ürün</th><th>Miktar</th><th>Teknisyen / teslim alan</th><th>Belge no</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="service-exit-movements-body"></tbody></table></div></section>
       </section>
       <section class="view report-view" data-page="imported-customers"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Cariler</h1><p>Hazır ürün satışlarında kullanılacak cari bilgilerini yönetin.</p></div></div></div><section class="section"><h2 id="imported-customer-form-title">Yeni cari</h2><input id="imported-customer-id" type="hidden" /><div class="form-grid"><div class="field"><label for="imported-customer-name">Cari adı</label><input id="imported-customer-name" placeholder="Firma veya kişi adı" /></div><div class="field"><label for="imported-customer-contact">Telefon / e-posta</label><input id="imported-customer-contact" placeholder="Telefon veya e-posta" /></div><div class="field span-two"><label for="imported-customer-address">Adres</label><textarea id="imported-customer-address" placeholder="Cari adresi"></textarea></div><div class="field span-two"><label for="imported-customer-note">Not</label><textarea id="imported-customer-note" placeholder="Cariyle ilgili not"></textarea></div></div><div class="form-actions"><span class="muted-note" id="imported-customer-form-status" aria-live="polite"></span><button class="secondary-button" type="button" data-reset-imported-customer>Temizle</button><button class="primary-button" type="button" data-save-imported-customer>Cariyi kaydet</button></div></section><section class="section"><h2>Kayıtlı cariler</h2><div class="table-wrap"><table id="imported-customers-table"><thead><tr><th>Cari</th><th>Telefon / e-posta</th><th>Adres</th><th>Not</th><th>İşlem</th></tr></thead><tbody id="imported-customers-list-body"></tbody></table></div></section></section>
       <section class="view report-view" data-page="imported-sales"><div class="page-head"><div class="report-brand"><img src="csp-logo.png" alt="CSP Prefabrik Havuz logosu" /><div><h1>Hazır ürün satış siparişleri</h1><p>Ürünler hazır stok kartlarından seçilir. Sipariş “Sevk edildi” olduğunda stok, hazır ürün çıkışına otomatik işlenir.</p></div></div><button class="primary-button" type="button" data-open-imported-sales>+ Yeni satış siparişi</button></div><section class="section"><p class="table-hint" id="imported-sales-status" aria-live="polite">Hazır ürün satış siparişleri burada listelenir.</p><div class="table-search"><input type="search" placeholder="Satış siparişlerinde ara" data-table-search-input="imported-sales-table" aria-label="Satış siparişlerinde ara" /><button class="secondary-button" type="button" data-table-search-button="imported-sales-table">Ara</button></div><div class="table-wrap"><table id="imported-sales-table"><thead><tr><th>Sipariş no</th><th>Tarih</th><th>Müşteri</th><th>Cari</th><th>Ürünler</th><th>Toplam</th><th>Seri no</th><th>Durum</th><th>Sevk tarihi</th><th>Raporlar</th><th>İşlem</th></tr></thead><tbody id="imported-sales-list-body"></tbody></table></div></section></section>
@@ -989,6 +1012,9 @@
         if (page === 'imported-stock') renderImportedStock();
         if (page === 'imported-stock-entry') renderImportedMovementPage('entry');
         if (page === 'imported-stock-exit') renderImportedMovementPage('exit');
+        if (page === 'service-stock') renderServiceStock();
+        if (page === 'service-stock-transfer') renderServiceStockTransfer();
+        if (page === 'service-stock-exit') renderServiceStockExit();
         if (page === 'imported-sales') renderImportedSalesOrders();
         if (page === 'warehouse-shipping') renderWarehouseShipments();
         if (page === 'liner-widths') renderLinerWidths();
@@ -2181,6 +2207,11 @@
       let pendingImportedStockCardImage = '';
       const importedStockMovements = [];
       let nextImportedStockMovementId = 1;
+      const serviceStockCards = [];
+      let nextServiceStockCardId = 1;
+      let editingServiceStockCardId = null;
+      const serviceStockMovements = [];
+      let nextServiceStockMovementId = 1;
       const importedSalesOrders = [];
       let nextImportedSalesOrderId = 1;
       const importedCustomers = [];
@@ -3324,6 +3355,7 @@
         const card = importedStockCards.find((item) => item.id === Number(movement.cardId));
         const status = root.querySelector(`#imported-${movement.type}-status`);
         if (movement.source === 'imported-sales') { if (status) status.textContent = 'Satış siparişine bağlı stok çıkışı, ilgili satış siparişinden yönetilir.'; return; }
+        if (movement.source === 'service-transfer') { if (status) status.textContent = 'Servis stoğuna yapılan aktarım, Teknik servis bölümünden yönetilir.'; return; }
         if (!card) { if (status) status.textContent = 'Bu hareketin stok kartı bulunamadı.'; return; }
         const quantity = Number(movement.quantity) || 0;
         if (movement.type === 'entry' && Number(card.onHand) < quantity) {
@@ -3337,6 +3369,161 @@
         renderImportedMovementPage('exit');
         saveProductionState();
         if (status) status.textContent = 'Stok hareketi geri alındı ve miktar düzeltildi.';
+      };
+      const serviceStockLabel = (card) => `${card.name}${card.variant ? ` · ${card.variant}` : ''}`;
+      const serviceStockState = (card) => {
+        const quantity = Number(card.onHand) || 0;
+        const minimum = card.minimum === '' ? null : Number(card.minimum) || 0;
+        if (quantity <= 0) return { label: 'Tükenecek', className: 'risk' };
+        if (minimum !== null && quantity <= minimum) return { label: 'Kritik', className: 'production' };
+        return { label: 'Yeterli', className: 'ready' };
+      };
+      const suggestedServiceStockCode = (name, excludedId = null) => {
+        const material = normaliseSearchText(name).replace(/[^a-z0-9]+/g, '').toLocaleUpperCase('tr-TR').slice(0, 9) || 'URUN';
+        const base = `SRV-${material}`;
+        const used = new Set(serviceStockCards.filter((card) => card.id !== excludedId).map((card) => normaliseSearchText(card.code)));
+        let sequence = 1;
+        let code = `${base}-${String(sequence).padStart(3, '0')}`;
+        while (used.has(normaliseSearchText(code))) { sequence += 1; code = `${base}-${String(sequence).padStart(3, '0')}`; }
+        return code;
+      };
+      const renderServiceStock = () => {
+        const body = root.querySelector('#service-stock-list-body');
+        if (!body) return;
+        body.replaceChildren();
+        if (!serviceStockCards.length) {
+          const row = document.createElement('tr'); const cell = document.createElement('td');
+          cell.colSpan = 10; cell.className = 'empty-workorders'; cell.textContent = 'Henüz servis ürün stok kartı yok.';
+          row.appendChild(cell); body.appendChild(row);
+        } else serviceStockCards.forEach((card) => {
+          const row = document.createElement('tr'); const state = serviceStockState(card);
+          [card.code, card.category || '—', serviceStockLabel(card), card.unit || 'adet', `${numberFormat(Number(card.initialQuantity) || 0)} ${card.unit || 'adet'}`, `${numberFormat(Number(card.onHand) || 0)} ${card.unit || 'adet'}`, card.minimum === '' ? '—' : `${numberFormat(Number(card.minimum) || 0)} ${card.unit || 'adet'}`].forEach((value, index) => {
+            const cell = document.createElement('td'); cell.textContent = value; if (index === 0) cell.className = 'code'; row.appendChild(cell);
+          });
+          const stateCell = document.createElement('td'); const status = document.createElement('span'); status.className = `status ${state.className}`; status.textContent = state.label; stateCell.appendChild(status); row.appendChild(stateCell);
+          const noteCell = document.createElement('td'); noteCell.textContent = card.note || '—'; row.appendChild(noteCell);
+          const actions = document.createElement('td');
+          const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'secondary-button'; edit.dataset.editServiceStockCard = card.id; edit.textContent = 'Düzenle';
+          const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger-button'; remove.dataset.deleteServiceStockCard = card.id; remove.textContent = 'Sil';
+          actions.append(edit, remove); row.appendChild(actions); body.appendChild(row);
+        });
+        const status = root.querySelector('#service-stock-status');
+        if (status) status.textContent = serviceStockCards.length ? `${serviceStockCards.length} servis ürün stok kartı listeleniyor.` : 'Servis ürün stok kartları burada listelenir.';
+        applyTableSearch('service-stock-table');
+      };
+      const resetServiceStockForm = () => {
+        editingServiceStockCardId = null;
+        root.querySelector('#service-stock-form-title').textContent = 'Yeni servis ürünü';
+        ['code', 'category', 'name', 'variant', 'initial', 'onhand', 'minimum', 'note'].forEach((field) => { root.querySelector(`#service-stock-${field}`).value = ''; });
+        root.querySelector('#service-stock-unit').value = 'adet'; root.querySelector('#service-stock-form-status').textContent = '';
+      };
+      const openServiceStockCardForEdit = (card) => {
+        editingServiceStockCardId = card.id;
+        root.querySelector('#service-stock-form-title').textContent = 'Servis ürün stok kartını düzenle';
+        root.querySelector('#service-stock-code').value = card.code; root.querySelector('#service-stock-category').value = card.category || '';
+        root.querySelector('#service-stock-name').value = card.name; root.querySelector('#service-stock-variant').value = card.variant || '';
+        root.querySelector('#service-stock-unit').value = card.unit || 'adet'; root.querySelector('#service-stock-initial').value = card.initialQuantity ?? 0;
+        root.querySelector('#service-stock-onhand').value = card.onHand ?? 0; root.querySelector('#service-stock-minimum').value = card.minimum ?? '';
+        root.querySelector('#service-stock-note').value = card.note || ''; root.querySelector('#service-stock-form-status').textContent = '';
+        show('service-stock-form');
+      };
+      const saveServiceStockCard = () => {
+        const status = root.querySelector('#service-stock-form-status'); const name = root.querySelector('#service-stock-name').value.trim();
+        if (!name) { status.textContent = 'Ürün adı zorunludur.'; return false; }
+        const code = root.querySelector('#service-stock-code').value.trim() || suggestedServiceStockCode(name, editingServiceStockCardId);
+        const duplicate = serviceStockCards.find((card) => normaliseSearchText(card.code) === normaliseSearchText(code) && card.id !== editingServiceStockCardId);
+        if (duplicate) { status.textContent = 'Bu stok kodu zaten kullanılıyor.'; return false; }
+        const initialInput = root.querySelector('#service-stock-initial').value; const onHandInput = root.querySelector('#service-stock-onhand').value;
+        const initialQuantity = initialInput === '' ? 0 : Number(initialInput) || 0;
+        const card = { id: editingServiceStockCardId || nextServiceStockCardId++, code, category: root.querySelector('#service-stock-category').value.trim(), name, variant: root.querySelector('#service-stock-variant').value.trim(), unit: root.querySelector('#service-stock-unit').value, initialQuantity, onHand: onHandInput === '' ? initialQuantity : Number(onHandInput) || 0, minimum: root.querySelector('#service-stock-minimum').value === '' ? '' : Math.max(0, Number(root.querySelector('#service-stock-minimum').value) || 0), note: root.querySelector('#service-stock-note').value.trim() };
+        const index = serviceStockCards.findIndex((item) => item.id === editingServiceStockCardId);
+        if (index === -1) serviceStockCards.unshift(card); else serviceStockCards.splice(index, 1, card);
+        renderServiceStock(); saveProductionState(); return true;
+      };
+      const renderServiceStockExit = () => {
+        const input = root.querySelector('#service-exit-card'); const options = root.querySelector('#service-exit-card-options'); const body = root.querySelector('#service-exit-movements-body');
+        if (input && options) { options.replaceChildren(); serviceStockCards.forEach((card) => { const option = document.createElement('option'); option.value = `${card.code} · ${serviceStockLabel(card)} · Mevcut: ${numberFormat(Number(card.onHand) || 0)} ${card.unit}`; options.appendChild(option); }); input.disabled = !serviceStockCards.length; if (!root.querySelector('#service-exit-date').value) root.querySelector('#service-exit-date').value = importedMovementDate(); }
+        if (!body) return; body.replaceChildren();
+        const movements = serviceStockMovements.filter((movement) => movement.type === 'exit').sort((left, right) => Number(right.id) - Number(left.id));
+        if (!movements.length) { const row = document.createElement('tr'); const cell = document.createElement('td'); cell.colSpan = 8; cell.className = 'empty-workorders'; cell.textContent = 'Henüz servis ürün çıkışı yok.'; row.appendChild(cell); body.appendChild(row); return; }
+        movements.forEach((movement) => { const card = serviceStockCards.find((item) => item.id === Number(movement.cardId)); const row = document.createElement('tr'); [formatImportedMovementDate(movement.date), card?.code || movement.cardCode || '—', card ? serviceStockLabel(card) : movement.cardLabel || 'Silinmiş stok kartı', `${numberFormat(Number(movement.quantity) || 0)} ${movement.unit || card?.unit || 'adet'}`, movement.partner || '—', movement.reference || '—', movement.note || '—'].forEach((value, index) => { const cell = document.createElement('td'); cell.textContent = value; if (index === 1) cell.className = 'code'; row.appendChild(cell); }); const actions = document.createElement('td'); const undo = document.createElement('button'); undo.type = 'button'; undo.className = 'secondary-button'; undo.dataset.reverseServiceStockMovement = movement.id; undo.textContent = 'Geri al'; actions.appendChild(undo); row.appendChild(actions); body.appendChild(row); });
+      };
+      const selectedServiceExitCard = () => {
+        const input = root.querySelector('#service-exit-card'); const selectedInput = root.querySelector('#service-exit-card-id'); if (!input || !selectedInput) return null;
+        const label = input.value.trim(); const card = serviceStockCards.find((item) => `${item.code} · ${serviceStockLabel(item)} · Mevcut: ${numberFormat(Number(item.onHand) || 0)} ${item.unit}` === label) || serviceStockCards.find((item) => String(item.code).toLocaleLowerCase('tr') === label.toLocaleLowerCase('tr') || String(serviceStockLabel(item)).toLocaleLowerCase('tr') === label.toLocaleLowerCase('tr'));
+        selectedInput.value = card ? String(card.id) : ''; return card || null;
+      };
+      const saveServiceStockExit = () => {
+        const status = root.querySelector('#service-exit-status'); const card = selectedServiceExitCard(); const quantity = Number(root.querySelector('#service-exit-quantity').value);
+        if (!card) { status.textContent = 'Servis ürün stok kartı seçin.'; return false; }
+        if (!(quantity > 0)) { status.textContent = 'Çıkış miktarı sıfırdan büyük olmalıdır.'; return false; }
+        if ((Number(card.onHand) || 0) < quantity) { status.textContent = `Yetersiz stok: Mevcut miktar ${numberFormat(Number(card.onHand) || 0)} ${card.unit}.`; return false; }
+        const movement = { id: nextServiceStockMovementId++, cardId: card.id, cardCode: card.code, cardLabel: serviceStockLabel(card), unit: card.unit, date: root.querySelector('#service-exit-date').value || importedMovementDate(), quantity, reference: root.querySelector('#service-exit-reference').value.trim(), partner: root.querySelector('#service-exit-partner').value.trim(), note: root.querySelector('#service-exit-note').value.trim() };
+        card.onHand = (Number(card.onHand) || 0) - quantity; serviceStockMovements.unshift(movement); ['quantity', 'reference', 'partner', 'note'].forEach((field) => { root.querySelector(`#service-exit-${field}`).value = ''; }); root.querySelector('#service-exit-card').value = ''; root.querySelector('#service-exit-card-id').value = '';
+        renderServiceStock(); renderServiceStockExit(); saveProductionState(); status.textContent = `${serviceStockLabel(card)} için çıkış stoktan düşüldü.`; return true;
+      };
+      const reverseServiceStockMovement = (movementId) => {
+        const index = serviceStockMovements.findIndex((movement) => movement.id === Number(movementId)); const movement = serviceStockMovements[index]; if (!movement) return;
+        const card = serviceStockCards.find((item) => item.id === Number(movement.cardId)); const status = root.querySelector('#service-exit-status');
+        if (!card) { if (status) status.textContent = 'Stok kartı bulunamadığı için hareket geri alınamadı.'; return; }
+        card.onHand = (Number(card.onHand) || 0) + (Number(movement.quantity) || 0); serviceStockMovements.splice(index, 1); renderServiceStock(); renderServiceStockExit(); saveProductionState(); if (status) status.textContent = 'Stok hareketi geri alındı ve miktar düzeltildi.';
+      };
+      const renderServiceStockTransfer = () => {
+        const input = root.querySelector('#service-transfer-source-card');
+        const options = root.querySelector('#service-transfer-source-options');
+        const date = root.querySelector('#service-transfer-date');
+        if (!input || !options) return;
+        options.replaceChildren();
+        importedStockCards.forEach((card) => {
+          const option = document.createElement('option');
+          option.value = `${card.code} · ${importedCardLabel(card)} · Mevcut: ${numberFormat(Number(card.onHand) || 0)} ${card.unit}`;
+          options.appendChild(option);
+        });
+        input.disabled = !importedStockCards.length;
+        if (date && !date.value) date.value = importedMovementDate();
+      };
+      const resetServiceStockTransfer = () => {
+        ['source-card', 'source-id', 'quantity', 'reference', 'note'].forEach((field) => { const input = root.querySelector(`#service-transfer-${field}`); if (input) input.value = ''; });
+        const date = root.querySelector('#service-transfer-date'); if (date) date.value = importedMovementDate();
+        const status = root.querySelector('#service-transfer-status'); if (status) status.textContent = '';
+        renderServiceStockTransfer();
+      };
+      const selectedServiceTransferSource = () => {
+        const input = root.querySelector('#service-transfer-source-card');
+        const selectedInput = root.querySelector('#service-transfer-source-id');
+        if (!input || !selectedInput) return null;
+        const label = input.value.trim();
+        const card = importedStockCards.find((item) => `${item.code} · ${importedCardLabel(item)} · Mevcut: ${numberFormat(Number(item.onHand) || 0)} ${item.unit}` === label)
+          || importedStockCards.find((item) => String(item.code).toLocaleLowerCase('tr') === label.toLocaleLowerCase('tr') || String(importedCardLabel(item)).toLocaleLowerCase('tr') === label.toLocaleLowerCase('tr'));
+        selectedInput.value = card ? String(card.id) : '';
+        return card || null;
+      };
+      const saveServiceStockTransfer = () => {
+        const status = root.querySelector('#service-transfer-status');
+        const source = selectedServiceTransferSource();
+        const quantity = Number(root.querySelector('#service-transfer-quantity').value);
+        if (!source) { status.textContent = 'Hazır ürün stok kartı seçin.'; return false; }
+        if (!(quantity > 0)) { status.textContent = 'Aktarım miktarı sıfırdan büyük olmalıdır.'; return false; }
+        if ((Number(source.onHand) || 0) < quantity) { status.textContent = `Yetersiz hazır ürün stoğu: ${numberFormat(Number(source.onHand) || 0)} ${source.unit}.`; return false; }
+        let target = serviceStockCards.find((card) => normaliseSearchText(card.code) === normaliseSearchText(source.code));
+        if (!target) {
+          target = { id: nextServiceStockCardId++, code: source.code, category: source.category || '', name: source.name, variant: source.variant || '', unit: source.unit || 'adet', initialQuantity: 0, onHand: 0, minimum: source.minimum ?? '', note: 'Hazır ürün stokundan aktarıldı.' };
+          serviceStockCards.unshift(target);
+        }
+        if (target.unit !== source.unit) { status.textContent = 'Aynı stok kodlu servis kartının birimi hazır ürün stok kartıyla farklı.'; return false; }
+        const date = root.querySelector('#service-transfer-date').value || importedMovementDate();
+        const reference = root.querySelector('#service-transfer-reference').value.trim();
+        const note = root.querySelector('#service-transfer-note').value.trim();
+        const serviceMovement = { id: nextServiceStockMovementId++, type: 'entry', cardId: target.id, cardCode: target.code, cardLabel: serviceStockLabel(target), unit: target.unit, date, quantity, reference, partner: 'Hazır ürün deposu', note: note || 'Hazır ürün stokundan servis stoğuna aktarıldı.', source: 'imported-stock-transfer', sourceCardId: source.id };
+        const importedMovement = { id: nextImportedStockMovementId++, type: 'exit', cardId: source.id, cardCode: source.code, cardLabel: importedCardLabel(source), unit: source.unit, date, quantity, reference, partner: 'Teknik servis deposu', note: note || 'Servis stoğuna aktarıldı.', source: 'service-transfer', sourceServiceMovementId: serviceMovement.id };
+        source.onHand = (Number(source.onHand) || 0) - quantity;
+        target.onHand = (Number(target.onHand) || 0) + quantity;
+        serviceStockMovements.unshift(serviceMovement);
+        importedStockMovements.unshift(importedMovement);
+        ['source-card', 'source-id', 'quantity', 'reference', 'note'].forEach((field) => { root.querySelector(`#service-transfer-${field}`).value = ''; });
+        renderImportedStock(); renderImportedMovementPage('exit'); renderServiceStock(); renderServiceStockExit(); saveProductionState();
+        status.textContent = `${numberFormat(quantity)} ${source.unit} ${importedCardLabel(source)} servis stoğuna aktarıldı.`;
+        return true;
       };
       const importedSalesOrderNumber = (id) => {
         const year = new Date().getFullYear();
@@ -4823,9 +5010,26 @@
           });
         }
         const alert = root.querySelector('#dashboard-stock-alert');
-        if (alert) alert.innerHTML = riskCards.length
-          ? `<strong>Stok durumu:</strong> ${riskCards.length} kartta eksik, tükenecek veya kritik seviye var.`
-          : '<strong>Stok durumu:</strong> Kritik stok kartı yok.';
+        if (alert) {
+          alert.replaceChildren();
+          const title = document.createElement('strong');
+          title.textContent = 'Stok durumu:';
+          alert.append(title, document.createTextNode(riskCards.length ? ` ${riskCards.length} kartta eksik, tükenecek veya kritik seviye var.` : ' Kritik stok kartı yok.'));
+          if (riskCards.length) {
+            const list = document.createElement('div');
+            list.className = 'dashboard-stock-risk-list';
+            riskCards.forEach((card) => {
+              const metrics = stockCardMetrics(card);
+              const button = document.createElement('button');
+              button.type = 'button';
+              button.className = 'dashboard-stock-risk-link';
+              button.dataset.editStockCard = card.id;
+              button.textContent = `${card.name}${card.variant ? ` · ${card.variant}` : ''} — ${metrics.state.label}`;
+              list.appendChild(button);
+            });
+            alert.appendChild(list);
+          }
+        }
       };
       const createPlanningOrderRow = (orderRow) => {
         const values = Array.from(orderRow.cells).slice(0, 12).map((cell) => cell.textContent.trim());
@@ -5721,7 +5925,7 @@
         list.innerHTML = templates.map((template) => `<button type="button" class="template-button" data-workorder-template="${template.id}"><strong>${template.label}</strong><span>${template.detail}</span></button>`).join('');
       };
       const persistentStateKey = 'csp-production-management-state-v2';
-      const deletionTrackedStateKeys = ['orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords'];
+      const deletionTrackedStateKeys = ['orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'serviceStockCards', 'serviceStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords'];
       let deletedRecords = {};
       let deletionBaseline = {};
       const copyStateValue = (value) => JSON.parse(JSON.stringify(value));
@@ -5959,6 +6163,8 @@
         stockCards: stockCards.map((card) => ({ ...card, image: card.imageKey ? '' : card.image })),
         importedStockCards: importedStockCards.map((card) => ({ ...card, image: card.imageKey ? '' : card.image })),
         importedStockMovements: importedStockMovements.map((movement) => ({ ...movement })),
+        serviceStockCards: serviceStockCards.map((card) => ({ ...card })),
+        serviceStockMovements: serviceStockMovements.map((movement) => ({ ...movement })),
         importedSalesOrders: importedSalesOrders.map((order) => ({ ...order, items: (order.items || []).map((item) => ({ ...item })) })),
         importedCustomers: importedCustomers.map((customer) => ({ ...customer })),
         warehouseShipments: warehouseShipments.map((shipment) => ({ ...shipment, items: (shipment.items || []).map((item) => ({ ...item })) })),
@@ -5975,6 +6181,8 @@
         nextStockCardId,
         nextImportedStockCardId,
         nextImportedStockMovementId,
+        nextServiceStockCardId,
+        nextServiceStockMovementId,
         nextImportedSalesOrderId,
         nextImportedCustomerId,
         nextWarehouseShipmentId,
@@ -6061,6 +6269,10 @@
           nextImportedStockCardId = Math.max(Number(saved.nextImportedStockCardId) || 1, ...importedStockCards.map((card) => Number(card.id) + 1 || 1));
           importedStockMovements.splice(0, importedStockMovements.length, ...(Array.isArray(saved.importedStockMovements) ? saved.importedStockMovements : []));
           nextImportedStockMovementId = Math.max(Number(saved.nextImportedStockMovementId) || 1, ...importedStockMovements.map((movement) => Number(movement.id) + 1 || 1));
+          serviceStockCards.splice(0, serviceStockCards.length, ...(Array.isArray(saved.serviceStockCards) ? saved.serviceStockCards : []));
+          nextServiceStockCardId = Math.max(Number(saved.nextServiceStockCardId) || 1, ...serviceStockCards.map((card) => Number(card.id) + 1 || 1));
+          serviceStockMovements.splice(0, serviceStockMovements.length, ...(Array.isArray(saved.serviceStockMovements) ? saved.serviceStockMovements : []));
+          nextServiceStockMovementId = Math.max(Number(saved.nextServiceStockMovementId) || 1, ...serviceStockMovements.map((movement) => Number(movement.id) + 1 || 1));
           importedSalesOrders.splice(0, importedSalesOrders.length, ...(Array.isArray(saved.importedSalesOrders) ? saved.importedSalesOrders : []));
           nextImportedSalesOrderId = Math.max(Number(saved.nextImportedSalesOrderId) || 1, ...importedSalesOrders.map((order) => Number(order.id) + 1 || 1));
           importedCustomers.splice(0, importedCustomers.length, ...(Array.isArray(saved.importedCustomers) ? saved.importedCustomers : []));
@@ -6134,6 +6346,9 @@
       renderImportedStock();
       renderImportedMovementPage('entry');
       renderImportedMovementPage('exit');
+      renderServiceStock();
+      renderServiceStockTransfer();
+      renderServiceStockExit();
       renderImportedSalesOrders();
       renderImportedCustomers();
       renderImportedCustomerOptions();
@@ -6180,6 +6395,14 @@
         const saveImportedStockCardButton = event.target.closest('[data-save-import-stock-card]');
         const editImportedStockCardButton = event.target.closest('[data-edit-imported-stock-card]');
         const deleteImportedStockCardButton = event.target.closest('[data-delete-imported-stock-card]');
+        const openServiceStockCardButton = event.target.closest('[data-open-service-stock-card]');
+        const openServiceStockTransferButton = event.target.closest('[data-open-service-stock-transfer]');
+        const saveServiceStockCardButton = event.target.closest('[data-save-service-stock-card]');
+        const editServiceStockCardButton = event.target.closest('[data-edit-service-stock-card]');
+        const deleteServiceStockCardButton = event.target.closest('[data-delete-service-stock-card]');
+        const saveServiceStockExitButton = event.target.closest('[data-save-service-stock-exit]');
+        const saveServiceStockTransferButton = event.target.closest('[data-save-service-stock-transfer]');
+        const reverseServiceStockMovementButton = event.target.closest('[data-reverse-service-stock-movement]');
         const openImportedStockHistoryButton = event.target.closest('[data-open-imported-stock-history]');
         const closeImportedStockHistoryButton = event.target.closest('[data-close-imported-stock-history]');
         const saveImportedMovementButton = event.target.closest('[data-save-imported-movement]');
@@ -6438,6 +6661,21 @@
           show('imported-stock-form');
           return;
         }
+        if (openServiceStockCardButton) { resetServiceStockForm(); show('service-stock-form'); return; }
+        if (openServiceStockTransferButton) { resetServiceStockTransfer(); show('service-stock-transfer'); return; }
+        if (saveServiceStockCardButton) { if (saveServiceStockCard()) show('service-stock'); return; }
+        if (editServiceStockCardButton) { const card = serviceStockCards.find((item) => item.id === Number(editServiceStockCardButton.dataset.editServiceStockCard)); if (card) openServiceStockCardForEdit(card); return; }
+        if (deleteServiceStockCardButton) {
+          const cardId = Number(deleteServiceStockCardButton.dataset.deleteServiceStockCard);
+          const card = serviceStockCards.find((item) => item.id === cardId);
+          if (!card || !window.confirm(`${serviceStockLabel(card)} silinsin mi?`)) return;
+          serviceStockCards.splice(serviceStockCards.indexOf(card), 1);
+          for (let index = serviceStockMovements.length - 1; index >= 0; index -= 1) if (Number(serviceStockMovements[index].cardId) === cardId) serviceStockMovements.splice(index, 1);
+          renderServiceStock(); saveProductionState(); return;
+        }
+        if (saveServiceStockExitButton) { saveServiceStockExit(); return; }
+        if (saveServiceStockTransferButton) { saveServiceStockTransfer(); return; }
+        if (reverseServiceStockMovementButton) { reverseServiceStockMovement(reverseServiceStockMovementButton.dataset.reverseServiceStockMovement); return; }
         if (saveImportedStockCardButton) {
           void saveImportedStockCard().then((saved) => { if (saved) show('imported-stock'); });
           return;
@@ -7119,7 +7357,7 @@
       const setSessionLabel = (message) => { if (sessionLabel) sessionLabel.textContent = message; };
       const hasState = (value) => Boolean(value && Array.isArray(value.orders) && Array.isArray(value.stockCards));
       const hasMeaningfulRecords = (value) => Boolean(value && [
-        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords'
+        'orders', 'stockCards', 'importedStockCards', 'importedStockMovements', 'serviceStockCards', 'serviceStockMovements', 'importedSalesOrders', 'importedCustomers', 'warehouseShipments', 'manualDocuments', 'serviceHistoryRecords', 'workorderRecords'
       ].some((key) => Array.isArray(value[key]) && value[key].length));
       const safeJson = (value) => {
         try { return JSON.parse(value || 'null'); } catch (error) { return null; }
