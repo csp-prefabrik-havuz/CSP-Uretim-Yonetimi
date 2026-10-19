@@ -7478,6 +7478,7 @@
       let currentProfile = null;
       let syncTimer = 0;
       let cloudRefreshTimer = 0;
+      let lastAutomaticPullAt = 0;
       let syncInProgress = false;
       let localSyncQueued = false;
       let pendingRemoteUpdate = false;
@@ -7728,7 +7729,9 @@
             // üzerine yazmayız; aynı kayıt kısa süre sonra yeniden denenir.
             localSyncQueued = true;
             window.clearTimeout(syncTimer);
-            syncTimer = window.setTimeout(() => { syncTimer = 0; void pushState(state); }, 4000);
+            // Geçici bağlantı hatalarında saniyede bir Edge Function çağrısı
+            // yapılmasını önler; sonraki deneme bir dakika sonra yapılır.
+            syncTimer = window.setTimeout(() => { syncTimer = 0; void pushState(state); }, 60000);
             renderNotifications();
           }
         }
@@ -7737,7 +7740,8 @@
         if (suppressCloudSync || !currentUser || !hasState(state)) return;
         localSyncQueued = true;
         window.clearTimeout(syncTimer);
-        syncTimer = window.setTimeout(() => { syncTimer = 0; void pushState(state); }, 700);
+        // Aynı işlem içindeki ardışık localStorage yazılarını tek eşitlemede toplar.
+        syncTimer = window.setTimeout(() => { syncTimer = 0; void pushState(state); }, 2500);
       };
       Storage.prototype.setItem = function(key, value) {
         nativeStorageSet.call(this, key, value);
@@ -7793,18 +7797,25 @@
         }
         void pullState(true).catch(() => { renderNotifications(); });
       }
+      const refreshCloudInBackground = () => {
+        // Arka plandaki sekmeler tam panel durumunu indirmez. Sekme tekrar
+        // görünür olduğunda da en az bir dakika ara ile kontrol edilir.
+        if (document.hidden || !currentUser || syncInProgress || localSyncQueued || suppressCloudSync) return;
+        const now = Date.now();
+        if (now - lastAutomaticPullAt < 60000) return;
+        lastAutomaticPullAt = now;
+        void pullState().catch(() => { /* Bağlantı geçici olarak kesik olabilir. */ });
+      };
       const startCloudRefresh = () => {
         window.clearInterval(cloudRefreshTimer);
         if (!currentUser) return;
-        // Açık kalan diğer bilgisayarlarda da silme ve stok değişiklikleri
-        // kısa süre içinde görünür. Yerel kaydetme sürerken uzaktan veri
-        // alınmaz; önce kullanıcının değişikliği buluta gönderilir.
-        cloudRefreshTimer = window.setInterval(() => {
-          if (!currentUser || syncInProgress || localSyncQueued || suppressCloudSync) return;
-          void pullState().catch(() => { /* Bağlantı geçici olarak kesik olabilir. */ });
-          if (canAccessPage('messages')) void renderMessages();
-        }, 10000);
+        // Beş dakikalık denetim; güncelleme isteyen kullanıcı Yenile ile
+        // anında eşitleyebilir. Mesaj listesi yalnızca Mesajlar açıldığında yüklenir.
+        cloudRefreshTimer = window.setInterval(refreshCloudInBackground, 5 * 60 * 1000);
       };
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) refreshCloudInBackground();
+      });
       notificationsButton?.addEventListener('click', () => {
         if (!notificationsPanel) return;
         notificationsPanel.hidden = !notificationsPanel.hidden;
