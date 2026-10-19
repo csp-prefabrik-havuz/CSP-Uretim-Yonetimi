@@ -5361,7 +5361,7 @@
       const stockSummaryExportFileName = (extension) => {
         const selected = (root.querySelector('#stock-summary-category-filter')?.dataset.selectedCategories || '').split('\u001f').filter(Boolean);
         const category = selected.length ? selected.map(stockSummaryFileSlug).filter(Boolean).join('-ve-').slice(0, 80) : 'tum-kategoriler';
-        return `csp-genel-stok-ozeti-${category}-${new Date().toISOString().slice(0, 10)}.${extension}`;
+        return `${category}-${new Date().toISOString().slice(0, 10)}.${extension}`;
       };
       const drawStockSummaryJpgText = (context, text, x, y, maxWidth) => {
         const value = String(text || '—');
